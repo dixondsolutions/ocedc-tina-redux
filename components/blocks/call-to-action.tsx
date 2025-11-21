@@ -10,21 +10,24 @@ import { Section } from '../layout/section';
 export const CallToAction = ({ data }: { data: PageBlocksCta }) => {
     return (
         <Section>
-            <div className="text-center">
-                <h2 className="text-balance text-4xl font-semibold lg:text-5xl" data-tina-field={tinaField(data, 'title')}>{data.title}</h2>
-                <p className="mt-4" data-tina-field={tinaField(data, 'description')}>{data.description}</p>
+            <div className="mx-auto max-w-4xl rounded-3xl bg-[#1b1f24] px-8 py-16 text-center shadow-2xl md:px-16">
+                <h2 className="text-balance text-3xl font-bold uppercase tracking-wide text-white lg:text-4xl" data-tina-field={tinaField(data, 'title')}>{data.title}</h2>
+                <p className="mx-auto mt-4 max-w-2xl text-lg text-white/70" data-tina-field={tinaField(data, 'description')}>{data.description}</p>
 
-                <div className="mt-12 flex flex-wrap justify-center gap-4">
+                <div className="mt-10 flex flex-wrap justify-center gap-4">
                     {data.actions && data.actions.map(action => (
                         <div
                             key={action!.label}
-                            data-tina-field={tinaField(action)}
-                            className="bg-foreground/10 rounded-[calc(var(--radius-xl)+0.125rem)] border p-0.5">
+                            data-tina-field={tinaField(action)}>
                             <Button
                                 asChild
                                 size="lg"
                                 variant={action!.type === 'link' ? 'ghost' : 'default'}
-                                className="rounded-xl px-5 text-base">
+                                className={`rounded-full px-8 text-base transition-all duration-300 ${
+                                    action!.type === 'link'
+                                        ? 'bg-transparent text-white ring-1 ring-white/40 hover:bg-white/10'
+                                        : 'bg-primary text-[#1b1f24] hover:bg-primary/90 hover:shadow-lg'
+                                }`}>
                                 <Link href={action!.link!}>
                                     {action?.icon && (<Icon data={action?.icon} />)}
                                     <span className="text-nowrap">{action!.label}</span>

@@ -7,34 +7,34 @@ import { Section } from '../layout/section';
 export const Map = ({ data }: { data: PageBlocksMap }) => {
     return (
         <Section background={data.background!}>
-            <div className="container mx-auto px-4">
-                {data.title && (
-                    <h2
-                        data-tina-field={tinaField(data, 'title')}
-                        className="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white"
-                    >
-                        {data.title}
-                    </h2>
-                )}
-                <div className="w-full h-[400px] md:h-[500px] bg-gray-200 rounded-lg overflow-hidden shadow-md">
+            <div className="mx-auto max-w-6xl px-4 sm:px-6">
+                <div className="mb-10 text-center">
+                    {data.title && (
+                        <h2
+                            data-tina-field={tinaField(data, 'title')}
+                            className="text-3xl font-bold uppercase tracking-wide text-foreground"
+                        >
+                            {data.title}
+                        </h2>
+                    )}
+                    {data.description && (
+                        <p data-tina-field={tinaField(data, 'description')} className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
+                            {data.description}
+                        </p>
+                    )}
+                </div>
+                <div className="w-full h-[400px] md:h-[500px] overflow-hidden rounded-3xl shadow-2xl ring-1 ring-black/10 dark:ring-white/10">
                     {data.embedCode ? (
                         <div
                             className="w-full h-full"
                             dangerouslySetInnerHTML={{ __html: data.embedCode }}
                         />
                     ) : (
-                        <div className="w-full h-full flex items-center justify-center text-gray-500">
+                        <div className="w-full h-full flex items-center justify-center bg-muted text-muted-foreground">
                             <p>Map Embed Placeholder</p>
                         </div>
                     )}
                 </div>
-                {data.description && (
-                    <div className="mt-4 text-center max-w-2xl mx-auto">
-                        <p data-tina-field={tinaField(data, 'description')} className="text-gray-600 dark:text-gray-300">
-                            {data.description}
-                        </p>
-                    </div>
-                )}
             </div>
         </Section>
     );

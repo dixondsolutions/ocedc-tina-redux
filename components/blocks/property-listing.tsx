@@ -40,7 +40,7 @@ export const PropertyListing = ({ data }: { data: PageBlocksPropertyListing }) =
                         {data.title && (
                             <h2
                                 data-tina-field={tinaField(data, 'title')}
-                                className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl"
+                                className="text-3xl font-bold uppercase tracking-wide text-foreground md:text-4xl"
                             >
                                 {data.title}
                             </h2>

@@ -9,17 +9,17 @@ export const Stats = ({ data }: { data: PageBlocksStats }) => {
         <Section background={data.background!} className="py-16 md:py-24">
             <div className="mx-auto max-w-6xl space-y-12 px-4 sm:px-6">
                 <div className="text-center">
-                    <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl" data-tina-field={tinaField(data, 'title')}>{data.title}</h2>
+                    <h2 className="text-3xl font-bold uppercase tracking-wide text-foreground sm:text-4xl" data-tina-field={tinaField(data, 'title')}>{data.title}</h2>
                     {data.description && (
                         <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground" data-tina-field={tinaField(data, 'description')}>{data.description}</p>
                     )}
                 </div>
 
-                <div className="grid grid-cols-1 gap-y-8 sm:grid-cols-2 md:grid-cols-3 md:gap-x-12">
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
                     {data.stats?.map((stat) => (
-                        <div key={stat?.type} className="flex flex-col items-center text-center md:border-r md:last:border-0 border-border/50 py-4">
-                            <dt className="text-sm font-bold uppercase tracking-wider text-muted-foreground" data-tina-field={tinaField(stat, 'type')}>{stat!.type}</dt>
-                            <dd className="mt-2 text-5xl font-bold tracking-tight text-primary" data-tina-field={tinaField(stat, 'stat')}>{stat!.stat}</dd>
+                        <div key={stat?.type} className="group flex flex-col items-center text-center rounded-2xl bg-white/80 dark:bg-[#1b1f24] p-8 shadow-sm ring-1 ring-black/5 dark:ring-white/10 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl">
+                            <dt className="text-xs font-bold uppercase tracking-widest text-primary" data-tina-field={tinaField(stat, 'type')}>{stat!.type}</dt>
+                            <dd className="mt-3 text-5xl font-bold tracking-tight text-foreground group-hover:text-primary transition-colors" data-tina-field={tinaField(stat, 'stat')}>{stat!.stat}</dd>
                         </div>
                     ))}
                 </div>

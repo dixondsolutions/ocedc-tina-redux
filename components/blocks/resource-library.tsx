@@ -66,7 +66,7 @@ export const ResourceLibrary = ({ data }: { data: PageBlocksResourceLibrary }) =
       <div className="mx-auto max-w-6xl space-y-8 px-4 sm:px-6">
         <div className="space-y-4 text-center">
           {data.title && (
-            <h2 data-tina-field={tinaField(data, 'title')} className="text-pretty text-3xl font-semibold md:text-4xl">
+            <h2 data-tina-field={tinaField(data, 'title')} className="text-3xl font-bold uppercase tracking-wide text-foreground md:text-4xl">
               {data.title}
             </h2>
           )}

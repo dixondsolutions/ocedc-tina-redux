@@ -14,7 +14,7 @@ export const IndustriesGrid = ({ data }: { data: PageBlocksIndustriesGrid }) => 
                 {data.title && (
                     <h2
                         data-tina-field={tinaField(data, 'title')}
-                        className="text-3xl font-bold text-center mb-12 text-gray-900 dark:text-white"
+                        className="text-3xl font-bold uppercase tracking-wide text-center mb-12 text-foreground"
                     >
                         {data.title}
                     </h2>
