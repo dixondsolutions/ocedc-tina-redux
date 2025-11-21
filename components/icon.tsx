@@ -65,9 +65,25 @@ const iconColorClass: {
     regular: 'text-yellow-400',
     circle: 'bg-yellow-400 dark:bg-yellow-500 text-yellow-50',
   },
+  primary: {
+    regular: 'text-[#c58a32]',
+    circle: 'bg-[#c58a32] text-[#1b1f24]',
+  },
+  charcoal: {
+    regular: 'text-[#1b1f24]',
+    circle: 'bg-[#1b1f24] text-white',
+  },
+  gold: {
+    regular: 'text-[#dcbf8b]',
+    circle: 'bg-[#dcbf8b] text-[#1b1f24]',
+  },
   white: {
     regular: 'text-white opacity-80',
     circle: 'bg-white-400 dark:bg-white-500 text-white-50',
+  },
+  custom: {
+    regular: '',
+    circle: '',
   },
 };
 
@@ -97,20 +113,33 @@ export const Icon = ({ data, parentColor = '', className = '', tinaField = '' })
   //@ts-ignore
   const iconSizeClasses = typeof size === 'string' ? iconSizeClass[size] : iconSizeClass[Object.keys(iconSizeClass)[size]];
 
-  const iconColor = color ? (color === 'primary' ? theme!.color : color) : theme!.color;
+  const resolveColorKey = (value?: string) => {
+    if (!value) {
+      return theme?.color && iconColorClass[theme.color] ? theme.color : 'blue';
+    }
+    if (value === 'primary') {
+      return 'primary';
+    }
+    return iconColorClass[value] ? value : theme?.color && iconColorClass[theme.color] ? theme.color : 'blue';
+  };
+
+  const iconColor = resolveColorKey(color);
 
   if (style == 'circle') {
+    const palette = iconColorClass[iconColor] || iconColorClass.blue;
     return (
       <div
         {...(tinaField ? { 'data-tina-field': tinaField } : {})} // only render data-tina-field if it exists
-        className={`relative z-10 inline-flex items-center justify-center shrink-0 ${iconSizeClasses} rounded-full ${iconColorClass[iconColor].circle} ${className}`}
+        className={`relative z-10 inline-flex items-center justify-center shrink-0 ${iconSizeClasses} rounded-full ${palette.circle} ${className}`}
       >
         <IconSVG className='w-2/3 h-2/3' />
       </div>
     );
   } else {
+    const fallbackKey = parentColor === 'primary' && (iconColor === (theme?.color ?? '') || iconColor === 'primary') ? 'white' : iconColor;
+    const palette = iconColorClass[fallbackKey] || iconColorClass.blue;
     const iconColorClasses =
-      iconColorClass[parentColor === 'primary' && (iconColor === theme!.color || iconColor === 'primary') ? 'white' : iconColor!].regular;
+      palette.regular;
     return (
       <IconSVG
         {...(tinaField ? { 'data-tina-field': tinaField } : {})} // only render data-tina-field if it exists

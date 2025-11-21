@@ -6,18 +6,20 @@ import { sectionBlockSchemaField } from '../layout/section';
 
 export const Stats = ({ data }: { data: PageBlocksStats }) => {
     return (
-        <Section background={data.background!}>
-            <div className="mx-auto max-w-5xl space-y-8 px-6 md:space-y-16">
-                <div className="relative z-10 mx-auto max-w-xl space-y-6 text-center">
-                    <h2 className="text-4xl font-medium lg:text-5xl" data-tina-field={tinaField(data, 'title')}>{data.title}</h2>
-                    <p data-tina-field={tinaField(data, 'description')}>{data.description}</p>
+        <Section background={data.background!} className="py-16 md:py-24">
+            <div className="mx-auto max-w-6xl space-y-12 px-4 sm:px-6">
+                <div className="text-center">
+                    <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl" data-tina-field={tinaField(data, 'title')}>{data.title}</h2>
+                    {data.description && (
+                        <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground" data-tina-field={tinaField(data, 'description')}>{data.description}</p>
+                    )}
                 </div>
 
-                <div className="grid divide-y *:text-center md:grid-cols-3 md:divide-x md:divide-y-0">
+                <div className="grid grid-cols-1 gap-y-8 sm:grid-cols-2 md:grid-cols-3 md:gap-x-12">
                     {data.stats?.map((stat) => (
-                        <div key={stat?.type} className="space-y-4 py-4">
-                            <div className="text-5xl font-bold" data-tina-field={tinaField(stat, 'stat')}>{stat!.stat}</div>
-                            <p data-tina-field={tinaField(stat, 'type')}>{stat!.type}</p>
+                        <div key={stat?.type} className="flex flex-col items-center text-center md:border-r md:last:border-0 border-border/50 py-4">
+                            <dt className="text-sm font-bold uppercase tracking-wider text-muted-foreground" data-tina-field={tinaField(stat, 'type')}>{stat!.type}</dt>
+                            <dd className="mt-2 text-5xl font-bold tracking-tight text-primary" data-tina-field={tinaField(stat, 'stat')}>{stat!.stat}</dd>
                         </div>
                     ))}
                 </div>

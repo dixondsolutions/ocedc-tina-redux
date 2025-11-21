@@ -8,6 +8,16 @@ import { Video } from "./video";
 import { Callout } from "./callout";
 import { Stats } from "./stats";
 import { CallToAction } from "./call-to-action";
+import { IndustriesGrid } from "./industries-grid";
+import { NewsFeed } from "./news-feed";
+import { NewsArchive } from "./news-archive";
+import { ContactForm } from "./contact-form";
+import { Map } from "./map";
+import { PropertyListing } from "./property-listing";
+import { CommunityList } from "./community-list";
+import { BoardDirectory } from "./board-directory";
+import { ResourceLibrary } from "./resource-library";
+import { PropertyExplorer } from "./property-explorer";
 
 export const Blocks = (props: Omit<Page, "id" | "_sys" | "_values">) => {
   if (!props.blocks) return null;
@@ -24,7 +34,7 @@ export const Blocks = (props: Omit<Page, "id" | "_sys" | "_values">) => {
   );
 };
 
-const Block = (block: PageBlocks) => {
+const Block = (block: PageBlocks | any) => {
   switch (block.__typename) {
     case "PageBlocksVideo":
       return <Video data={block} />;
@@ -42,6 +52,26 @@ const Block = (block: PageBlocks) => {
       return <Testimonial data={block} />;
     case "PageBlocksCta":
       return <CallToAction data={block} />;
+    case "PageBlocksIndustriesGrid":
+      return <IndustriesGrid data={block} />;
+    case "PageBlocksNewsFeed":
+      return <NewsFeed data={block} />;
+    case "PageBlocksNewsArchive":
+      return <NewsArchive data={block} />;
+    case "PageBlocksContactForm":
+      return <ContactForm data={block} />;
+    case "PageBlocksMap":
+      return <Map data={block} />;
+    case "PageBlocksPropertyListing":
+      return <PropertyListing data={block} />;
+    case "PageBlocksCommunityList":
+      return <CommunityList data={block} />;
+    case "PageBlocksBoardDirectory":
+      return <BoardDirectory data={block} />;
+    case "PageBlocksResourceLibrary":
+      return <ResourceLibrary data={block} />;
+    case "PageBlocksPropertyExplorer":
+      return <PropertyExplorer data={block} />;
     default:
       return null;
   }

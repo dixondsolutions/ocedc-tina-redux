@@ -26,9 +26,11 @@ export default async function Page({
 
   return (
     <Layout rawPageData={data}>
-      <Section>
-        <ClientPage {...data} />
-      </Section>
+      <div className="pt-32 lg:pt-40">
+        <Section>
+          <ClientPage {...data} />
+        </Section>
+      </div>
     </Layout>
   );
 }

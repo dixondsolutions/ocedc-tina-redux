@@ -59,6 +59,72 @@ const Global: Collection = {
             },
           ],
         },
+        {
+          type: "object",
+          label: "Utility Bar",
+          name: "utility",
+          fields: [
+            {
+              type: "object",
+              label: "Utility Links",
+              name: "links",
+              list: true,
+              ui: {
+                itemProps: (item) => {
+                  return { label: item?.label };
+                },
+              },
+              fields: [
+                {
+                  type: "string",
+                  label: "Label",
+                  name: "label",
+                },
+                {
+                  type: "string",
+                  label: "Href",
+                  name: "href",
+                },
+              ],
+            },
+            {
+              type: "string",
+              label: "Phone Label",
+              name: "phoneLabel",
+            },
+            {
+              type: "string",
+              label: "Phone Number",
+              name: "phoneNumber",
+            },
+            {
+              type: "string",
+              label: "Phone Link",
+              name: "phoneHref",
+            },
+            {
+              type: "object",
+              label: "Actions",
+              name: "actions",
+              list: true,
+              ui: {
+                itemProps: (item) => ({ label: item?.label }),
+              },
+              fields: [
+                {
+                  type: "string",
+                  label: "Label",
+                  name: "label",
+                },
+                {
+                  type: "string",
+                  label: "Href",
+                  name: "href",
+                },
+              ],
+            },
+          ],
+        },
       ],
     },
     {
@@ -82,6 +148,56 @@ const Global: Collection = {
               type: "string",
               label: "Url",
               name: "url",
+            },
+          ],
+        },
+        {
+          type: "object",
+          label: "Newsletter Signup",
+          name: "newsletter",
+          fields: [
+            {
+              type: "string",
+              label: "Title",
+              name: "title",
+            },
+            {
+              type: "string",
+              label: "Description",
+              name: "description",
+              ui: {
+                component: "textarea",
+              },
+            },
+            {
+              type: "string",
+              label: "Button Text",
+              name: "buttonText",
+            },
+          ],
+        },
+        {
+          type: "object",
+          label: "Contact Information",
+          name: "contact",
+          fields: [
+            {
+              type: "string",
+              label: "Address",
+              name: "address",
+              ui: {
+                component: "textarea",
+              },
+            },
+            {
+              type: "string",
+              label: "Phone",
+              name: "phone",
+            },
+            {
+              type: "string",
+              label: "Email",
+              name: "email",
             },
           ],
         },

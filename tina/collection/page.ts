@@ -7,6 +7,16 @@ import { videoBlockSchema } from '@/components/blocks/video';
 import { calloutBlockSchema } from '@/components/blocks/callout';
 import { statsBlockSchema } from '@/components/blocks/stats';
 import { ctaBlockSchema } from '@/components/blocks/call-to-action';
+import { industriesGridBlockSchema } from '@/components/blocks/industries-grid';
+import { newsFeedBlockSchema } from '@/components/blocks/news-feed';
+import { newsArchiveBlockSchema } from '@/components/blocks/news-archive';
+import { contactFormBlockSchema } from '@/components/blocks/contact-form';
+import { mapBlockSchema } from '@/components/blocks/map';
+import { propertyListingBlockSchema } from '@/components/blocks/property-listing';
+import { communityListBlockSchema } from '@/components/blocks/community-list';
+import { boardDirectoryBlockSchema } from '@/components/blocks/board-directory';
+import { resourceLibraryBlockSchema } from '@/components/blocks/resource-library';
+import { propertyExplorerBlockSchema } from '@/components/blocks/property-explorer';
 
 const Page: Collection = {
   label: 'Pages',
@@ -40,6 +50,16 @@ const Page: Collection = {
         contentBlockSchema,
         testimonialBlockSchema,
         videoBlockSchema,
+        industriesGridBlockSchema,
+        newsFeedBlockSchema,
+        newsArchiveBlockSchema,
+        contactFormBlockSchema,
+        mapBlockSchema,
+        propertyListingBlockSchema,
+        communityListBlockSchema,
+        boardDirectoryBlockSchema,
+        resourceLibraryBlockSchema,
+        propertyExplorerBlockSchema,
       ],
     },
   ],

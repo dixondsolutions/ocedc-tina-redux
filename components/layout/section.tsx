@@ -4,13 +4,20 @@ import { cn } from '../../lib/utils';
 interface SectionProps extends React.HTMLProps<HTMLElement> {
   background?: string;
   children: ReactNode;
+  fullBleed?: boolean;
 }
 
-export const Section: React.FC<SectionProps> = ({ className, children, background, ...props }) => {
+export const Section: React.FC<SectionProps> = ({
+  className,
+  children,
+  background,
+  fullBleed = false,
+  ...props
+}) => {
   return (
     <div className={background || "bg-default"}>
       <section
-        className={cn("py-12 mx-auto max-w-7xl px-6", className)}
+        className={cn(fullBleed ? "py-12" : "py-12 mx-auto max-w-7xl px-6", className)}
         {...props}
       >
         {children}

@@ -1,26 +1,75 @@
 {
   "header": {
     "icon": {
-      "name": "Tina",
-      "color": "orange",
-      "style": "float"
+      "name": "BiBuilding",
+      "color": "blue",
+      "style": "circle"
     },
-    "name": "Tina Starter",
-    "color": "default",
+    "name": "OCEDC",
+    "color": "primary",
     "nav": [
       {
         "href": "/",
         "label": "Home"
       },
       {
+        "href": "/why-ogle-county",
+        "label": "Why Ogle County"
+      },
+      {
+        "href": "/sites-buildings",
+        "label": "Sites & Buildings"
+      },
+      {
+        "href": "/communities",
+        "label": "Communities"
+      },
+      {
+        "href": "/target-industries",
+        "label": "Target Industries"
+      },
+      {
+        "href": "/business-services",
+        "label": "Business Services"
+      },
+      {
+        "href": "/news",
+        "label": "News & Resources"
+      },
+      {
         "href": "/about",
         "label": "About"
       },
       {
-        "href": "/posts",
-        "label": "Blog"
+        "href": "/contact",
+        "label": "Contact"
       }
-    ]
+    ],
+    "utility": {
+      "links": [
+        {
+          "label": "Support OCEDC",
+          "href": "/about"
+        },
+        {
+          "label": "Investor Hub",
+          "href": "/business-services"
+        }
+      ],
+      "phoneLabel": "Call",
+      "phoneNumber": "(815) 732-1101",
+      "phoneHref": "tel:+18157321101",
+      "actions": [
+        {
+          "label": "Newsletter",
+          "href": "/news"
+        },
+        {
+          "label": "Contact Us",
+          "href": "/contact"
+        }
+      ]
+    }
   },
   "footer": {
     "social": [
@@ -28,27 +77,31 @@
         "icon": {
           "name": "FaLinkedin"
         },
-        "url": "https://www.linkedin.com/company/tinacms"
+        "url": "https://www.linkedin.com/company/ocedc-il"
       },
       {
         "icon": {
-          "name": "FaGithub"
+          "name": "FaFacebookF"
         },
-        "url": "https://github.com/tinacms/tinacms"
-      },
-      {
-        "icon": {
-          "name": "FaYoutube"
-        },
-        "url": "https://www.youtube.com/@TinaCMS"
+        "url": "https://www.facebook.com/oglecountyedc"
       },
       {
         "icon": {
           "name": "FaXTwitter"
         },
-        "url": "https://x.com/TinaCMS"
+        "url": "https://x.com/oglecountyedc"
       }
-    ]
+    ],
+    "contact": {
+      "address": "115 North 3rd Street\nOregon, IL 61061",
+      "email": "info@ocedc.org",
+      "phone": "(815) 732-1101"
+    },
+    "newsletter": {
+      "title": "Stay Informed",
+      "description": "Join our mailing list for updates on Ogle County development.",
+      "buttonText": "Subscribe"
+    }
   },
   "theme": {
     "color": "blue",
