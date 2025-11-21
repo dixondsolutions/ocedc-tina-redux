@@ -30,7 +30,7 @@ export const Hero = ({ data }: { data: PageBlocksHero }) => {
           />
         )}
         <div className="absolute inset-0 bg-gradient-to-r from-[#0b0d11] via-[#0b0d11]/80 to-[#0b0d11]/20" />
-        <div className="relative z-10 flex min-h-[85vh] flex-col justify-center gap-8 px-6 py-16 lg:px-14 lg:py-20">
+        <div className="relative z-10 flex min-h-[85vh] flex-col justify-center gap-8 px-6 pt-24 pb-16 lg:px-14 lg:pt-32 lg:pb-20">
           <div className="space-y-8 text-left max-w-5xl">
             {data.tagline && (
               <p data-tina-field={tinaField(data, 'tagline')} className="text-xs uppercase tracking-[0.6em] text-primary/80">

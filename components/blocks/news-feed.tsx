@@ -34,7 +34,7 @@ export const NewsFeed = ({ data }: { data: PageBlocksNewsFeed }) => {
                     {data.title && (
                         <h2
                             data-tina-field={tinaField(data, 'title')}
-                            className="text-3xl font-bold text-gray-900 dark:text-white"
+                            className="text-3xl font-bold uppercase tracking-wide text-foreground"
                         >
                             {data.title}
                         </h2>

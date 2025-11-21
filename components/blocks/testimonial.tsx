@@ -10,14 +10,16 @@ import { sectionBlockSchemaField } from '../layout/section';
 export const Testimonial = ({ data }: { data: PageBlocksTestimonial }) => {
   return (
     <Section background={data.background!}>
-      <div className="text-center">
-        <h2 className="text-title text-3xl font-semibold" data-tina-field={tinaField(data, 'title')}>{data.title}</h2>
-        <p className="text-body mt-6" data-tina-field={tinaField(data, 'description')}>{data.description}</p>
-      </div>
-      <div className="mt-8 [column-width:300px] [column-gap:1.5rem] md:mt-12">
-        {data.testimonials?.map((testimonial, index) => (
-          <TestimonialCard key={index} testimonial={testimonial!} />
-        ))}
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold uppercase tracking-wide text-foreground" data-tina-field={tinaField(data, 'title')}>{data.title}</h2>
+          <p className="mt-4 text-lg text-muted-foreground" data-tina-field={tinaField(data, 'description')}>{data.description}</p>
+        </div>
+        <div className="[column-width:350px] [column-gap:1.5rem]">
+          {data.testimonials?.map((testimonial, index) => (
+            <TestimonialCard key={index} testimonial={testimonial!} />
+          ))}
+        </div>
       </div>
     </Section>
   );
@@ -25,23 +27,24 @@ export const Testimonial = ({ data }: { data: PageBlocksTestimonial }) => {
 
 const TestimonialCard = ({ testimonial }: { testimonial: PageBlocksTestimonialTestimonials }) => {
   return (
-    <Card className="mb-6 break-inside-avoid">
-      <CardContent className="grid grid-cols-[auto_1fr] gap-3 pt-6">
-        <Avatar className="size-9" data-tina-field={tinaField(testimonial, 'avatar')}>
-          {testimonial.avatar && (
-            <AvatarImage alt={testimonial.author!} src={testimonial.avatar} loading="lazy" width="120" height="120" />
-          )}
-          <AvatarFallback>{testimonial.author!.split(" ").map((word) => word[0]).join("")}</AvatarFallback>
-        </Avatar>
+    <Card className="mb-6 break-inside-avoid rounded-2xl border-border/60 bg-white/80 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl dark:bg-[#1b1f24]">
+      <CardContent className="p-6">
+        <blockquote className="mb-6" data-tina-field={tinaField(testimonial, 'quote')}>
+          <p className="text-lg leading-relaxed text-foreground italic">&ldquo;{testimonial.quote}&rdquo;</p>
+        </blockquote>
 
-        <div>
-          <h3 className="font-medium" data-tina-field={tinaField(testimonial, 'author')}>{testimonial.author}</h3>
+        <div className="flex items-center gap-4 border-t border-border/40 pt-4">
+          <Avatar className="size-12 ring-2 ring-primary/20" data-tina-field={tinaField(testimonial, 'avatar')}>
+            {testimonial.avatar && (
+              <AvatarImage alt={testimonial.author!} src={testimonial.avatar} loading="lazy" width="120" height="120" />
+            )}
+            <AvatarFallback className="bg-primary/10 text-primary font-bold">{testimonial.author!.split(" ").map((word) => word[0]).join("")}</AvatarFallback>
+          </Avatar>
 
-          <span className="text-muted-foreground block text-sm tracking-wide" data-tina-field={tinaField(testimonial, 'role')}>{testimonial.role}</span>
-
-          <blockquote className="mt-3" data-tina-field={tinaField(testimonial, 'quote')}>
-            <p className="text-gray-700 dark:text-gray-300">{testimonial.quote}</p>
-          </blockquote>
+          <div>
+            <h3 className="font-bold text-foreground" data-tina-field={tinaField(testimonial, 'author')}>{testimonial.author}</h3>
+            <span className="text-xs font-bold uppercase tracking-widest text-primary" data-tina-field={tinaField(testimonial, 'role')}>{testimonial.role}</span>
+          </div>
         </div>
       </CardContent>
     </Card>

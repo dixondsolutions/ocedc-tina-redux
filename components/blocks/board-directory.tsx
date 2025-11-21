@@ -83,7 +83,7 @@ export const BoardDirectory = ({ data }: { data: PageBlocksBoardDirectory }) => 
           {data.title && (
             <h2
               data-tina-field={tinaField(data, 'title')}
-              className="text-pretty text-3xl font-semibold md:text-4xl"
+              className="text-3xl font-bold uppercase tracking-wide text-foreground md:text-4xl"
             >
               {data.title}
             </h2>
