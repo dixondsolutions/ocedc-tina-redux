@@ -1,7 +1,5 @@
-import generatedClient from "@/tina/__generated__/client";
-
-const client = generatedClient;
-const originalRequest = client.request.bind(client);
+import { createClient } from "tinacms/dist/client";
+import { queries } from "@/tina/__generated__/types";
 
 const resolveApiUrl = () => {
   if (typeof window !== "undefined") {
@@ -19,16 +17,21 @@ const resolveApiUrl = () => {
   return "http://localhost:3000/api/tina/gql";
 };
 
-client.request = (args, options = {}) => {
-  const url = resolveApiUrl();
-  return originalRequest(
+const client = createClient({
+  url: resolveApiUrl(),
+  queries,
+});
+
+const originalRequest = client.request.bind(client);
+
+client.request = (args, options = {}) =>
+  originalRequest(
     {
       ...args,
-      url,
+      url: resolveApiUrl(),
     },
     options,
   );
-};
 
 export default client;
 

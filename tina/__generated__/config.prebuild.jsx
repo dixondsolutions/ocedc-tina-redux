@@ -1731,7 +1731,7 @@ var industriesGridBlockSchema = {
 import React19, { useEffect as useEffect2, useState as useState4 } from "react";
 import { tinaField as tinaField9 } from "tinacms/dist/react";
 
-// tina/__generated__/client.ts
+// lib/tina-client.ts
 import { createClient as createClient2 } from "tinacms/dist/client";
 
 // tina/__generated__/types.ts
@@ -2844,14 +2844,14 @@ function getSdk(requester) {
     }
   };
 }
-var generateRequester = (client3) => {
+var generateRequester = (client2) => {
   const requester = async (doc, vars, options) => {
-    let url = client3.apiUrl;
+    let url = client2.apiUrl;
     if (options?.branch) {
-      const index = client3.apiUrl.lastIndexOf("/");
-      url = client3.apiUrl.substring(0, index + 1) + options.branch;
+      const index = client2.apiUrl.lastIndexOf("/");
+      url = client2.apiUrl.substring(0, index + 1) + options.branch;
     }
-    const data = await client3.request({
+    const data = await client2.request({
       query: doc,
       variables: vars,
       url
@@ -2860,18 +2860,12 @@ var generateRequester = (client3) => {
   };
   return requester;
 };
-var queries = (client3) => {
-  const requester = generateRequester(client3);
+var queries = (client2) => {
+  const requester = generateRequester(client2);
   return getSdk(requester);
 };
 
-// tina/__generated__/client.ts
-var client = createClient2({ cacheDir: "/Users/matthewlenox/Documents/ocedc-tina-redux/tina/__generated__/.cache/1763923769933", url: "http://localhost:3000/api/tina/gql", token: "***", queries });
-var client_default = client;
-
 // lib/tina-client.ts
-var client2 = client_default;
-var originalRequest = client2.request.bind(client2);
 var resolveApiUrl = () => {
   if (typeof window !== "undefined") {
     return `${window.location.origin}/api/tina/gql`;
@@ -2884,16 +2878,18 @@ var resolveApiUrl = () => {
   }
   return "http://localhost:3000/api/tina/gql";
 };
-client2.request = (args, options = {}) => {
-  const url = resolveApiUrl();
-  return originalRequest(
-    {
-      ...args,
-      url
-    },
-    options
-  );
-};
+var client = createClient2({
+  url: resolveApiUrl(),
+  queries
+});
+var originalRequest = client.request.bind(client);
+client.request = (args, options = {}) => originalRequest(
+  {
+    ...args,
+    url: resolveApiUrl()
+  },
+  options
+);
 
 // components/blocks/news-feed.tsx
 import Link6 from "next/link";
