@@ -24,14 +24,19 @@ const client = createClient({
 
 const originalRequest = client.request.bind(client);
 
-client.request = (args, options = {}) =>
-  originalRequest(
+client.request = (args, options = {}) => {
+  const url = resolveApiUrl();
+  if (typeof window === "undefined") {
+    console.log("[Tina] request url:", url);
+  }
+  return originalRequest(
     {
       ...args,
-      url: resolveApiUrl(),
+      url,
     },
     options,
   );
+};
 
 export default client;
 
