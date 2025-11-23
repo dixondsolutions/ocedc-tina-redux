@@ -138,30 +138,9 @@ export default async function CommunityDetailPage({
   );
 }
 
+// Avoid calling the Tina client during the build (no localhost server on Vercel).
+// We rely on ISR to generate community pages on-demand instead.
 export async function generateStaticParams() {
-  let communities = await client.queries.communitiesConnection();
-  const allCommunities = communities;
-
-  if (!allCommunities.data.communitiesConnection.edges) {
-    return [];
-  }
-
-  while (communities.data?.communitiesConnection.pageInfo.hasNextPage) {
-    communities = await client.queries.communitiesConnection({
-      after: communities.data.communitiesConnection.pageInfo.endCursor,
-    });
-
-    if (!communities.data.communitiesConnection.edges) {
-      break;
-    }
-
-    allCommunities.data.communitiesConnection.edges.push(...communities.data.communitiesConnection.edges);
-  }
-
-  return (
-    allCommunities.data?.communitiesConnection.edges?.map((edge) => ({
-      slug: edge?.node?._sys.filename,
-    })) || []
-  );
+  return [];
 }
 
