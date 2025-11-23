@@ -62,7 +62,7 @@ export const ResourceLibrary = ({ data }: { data: PageBlocksResourceLibrary }) =
   }, [resources, activeCategory]);
 
   return (
-    <Section background={data.background!}>
+    <Section background={data.style?.background || undefined}>
       <div className="mx-auto max-w-6xl space-y-8 px-4 sm:px-6">
         <div className="space-y-4 text-center">
           {data.title && (
@@ -153,11 +153,12 @@ export const resourceLibraryBlockSchema: Template = {
   name: 'resourceLibrary',
   label: 'Resource Library',
   ui: {
-    previewSrc: '/blocks/content.png',
+    previewSrc: '/blocks/resource-library.svg',
     defaultItem: {
       title: 'Newsroom & Resources',
       description: 'Download community profiles, strategic plans, and data briefs for Ogle County.',
     },
+    itemProps: (item) => ({ label: item.title || 'Resource Library' }),
   },
   fields: [
     sectionBlockSchemaField as any,

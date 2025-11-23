@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <!-- Background -->
+  <rect width="800" height="450" fill="#f8fafc"/>
+  
+  <!-- Title -->
+  <text x="400" y="50" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#0f172a" text-anchor="middle">
+    Our Location
+  </text>
+  
+  <!-- Map container -->
+  <rect x="100" y="80" width="600" height="320" rx="12" fill="#cbd5e1" stroke="#94a3b8" stroke-width="2"/>
+  
+  <!-- Map icon/indicator -->
+  <circle cx="400" cy="240" r="30" fill="#ef4444"/>
+  <circle cx="400" cy="240" r="20" fill="white"/>
+  <circle cx="400" cy="240" r="12" fill="#ef4444"/>
+  
+  <!-- Map grid lines -->
+  <line x1="100" y1="180" x2="700" y2="180" stroke="#94a3b8" stroke-width="1" opacity="0.3"/>
+  <line x1="100" y1="280" x2="700" y2="280" stroke="#94a3b8" stroke-width="1" opacity="0.3"/>
+  <line x1="250" y1="80" x2="250" y2="400" stroke="#94a3b8" stroke-width="1" opacity="0.3"/>
+  <line x1="400" y1="80" x2="400" y2="400" stroke="#94a3b8" stroke-width="1" opacity="0.3"/>
+  <line x1="550" y1="80" x2="550" y2="400" stroke="#94a3b8" stroke-width="1" opacity="0.3"/>
+  
+  <!-- Text -->
+  <text x="400" y="280" font-family="Arial" font-size="14" fill="#475569" text-anchor="middle">
+    Map Embed
+  </text>
+</svg>

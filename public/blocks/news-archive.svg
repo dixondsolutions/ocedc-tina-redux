@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <!-- Background -->
+  <rect width="800" height="450" fill="#f8fafc"/>
+  
+  <!-- Title -->
+  <text x="400" y="50" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#0f172a" text-anchor="middle">
+    News Archive
+  </text>
+  
+  <!-- Search and Filter Bar -->
+  <rect x="100" y="80" width="600" height="50" rx="8" fill="white" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="120" y="112" font-family="Arial" font-size="14" fill="#94a3b8">Search articles...</text>
+  <circle cx="660" cy="105" r="15" fill="#3b82f6"/>
+  
+  <!-- Category Filters -->
+  <g transform="translate(100, 150)">
+    <rect width="80" height="32" rx="16" fill="#3b82f6"/>
+    <text x="40" y="21" font-family="Arial" font-size="13" fill="white" text-anchor="middle">All</text>
+    
+    <rect x="95" width="110" height="32" rx="16" fill="#e2e8f0"/>
+    <text x="150" y="21" font-family="Arial" font-size="13" fill="#64748b" text-anchor="middle">Announcements</text>
+    
+    <rect x="220" width="80" height="32" rx="16" fill="#e2e8f0"/>
+    <text x="260" y="21" font-family="Arial" font-size="13" fill="#64748b" text-anchor="middle">Grants</text>
+    
+    <rect x="315" width="95" height="32" rx="16" fill="#e2e8f0"/>
+    <text x="362.5" y="21" font-family="Arial" font-size="13" fill="#64748b" text-anchor="middle">Meetings</text>
+  </g>
+  
+  <!-- Article List -->
+  <g transform="translate(100, 220)">
+    <rect width="600" height="70" rx="8" fill="white" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="20" y="30" font-family="Arial" font-size="16" font-weight="600" fill="#0f172a">Article Title Goes Here</text>
+    <text x="20" y="52" font-family="Arial" font-size="13" fill="#64748b">Brief description of the article content...</text>
+    
+    <rect y="90" width="600" height="70" rx="8" fill="white" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="20" y="120" font-family="Arial" font-size="16" font-weight="600" fill="#0f172a">Another Article Title</text>
+    <text x="20" y="142" font-family="Arial" font-size="13" fill="#64748b">More article content here...</text>
+  </g>
+</svg>

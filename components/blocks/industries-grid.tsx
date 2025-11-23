@@ -3,13 +3,13 @@ import Link from 'next/link';
 import type { Template } from 'tinacms';
 import { PageBlocksIndustriesGrid } from '../../tina/__generated__/types';
 import { tinaField } from 'tinacms/dist/react';
-import { Section } from '../layout/section';
+import { Section, sectionBlockSchemaField } from '../layout/section';
 import { Icon } from '../icon';
 import { iconSchema } from '../../tina/fields/icon';
 
 export const IndustriesGrid = ({ data }: { data: PageBlocksIndustriesGrid }) => {
     return (
-        <Section background={data.background!}>
+        <Section background={data.style?.background || undefined}>
             <div className="container mx-auto px-4">
                 {data.title && (
                     <h2
@@ -73,7 +73,7 @@ export const industriesGridBlockSchema: Template = {
     name: 'industriesGrid',
     label: 'Industries Grid',
     ui: {
-        previewSrc: '/blocks/features.png', // Placeholder
+        previewSrc: '/blocks/industries-grid.svg', // Placeholder
         defaultItem: {
             title: 'Target Industries',
             industries: [
@@ -84,18 +84,10 @@ export const industriesGridBlockSchema: Template = {
                 },
             ],
         },
+        itemProps: (item) => ({ label: item.title || 'Industries Grid' }),
     },
     fields: [
-        {
-            type: 'string',
-            label: 'Background',
-            name: 'background',
-            options: [
-                { label: 'Default', value: 'bg-default' },
-                { label: 'White', value: 'bg-white' },
-                { label: 'Gray', value: 'bg-gray-50' },
-            ],
-        },
+        sectionBlockSchemaField as any,
         {
             type: 'string',
             label: 'Title',

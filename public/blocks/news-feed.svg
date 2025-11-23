@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <!-- Background -->
+  <rect width="800" height="450" fill="#f8fafc"/>
+  
+  <!-- Title -->
+  <text x="400" y="60" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#0f172a" text-anchor="middle">
+    Latest News
+  </text>
+  
+  <!-- News Cards -->
+  <g transform="translate(50, 100)">
+    <!-- Card 1 -->
+    <rect width="330" height="280" rx="12" fill="white" stroke="#e2e8f0" stroke-width="1"/>
+    <rect x="15" y="15" width="300" height="160" rx="8" fill="#cbd5e1"/>
+    <text x="165" y="110" font-family="Arial" font-size="14" fill="#64748b" text-anchor="middle">Image</text>
+    <text x="20" y="200" font-family="Arial" font-size="18" font-weight="600" fill="#0f172a">News Article Title</text>
+    <text x="20" y="225" font-family="Arial" font-size="14" fill="#64748b">Article description text...</text>
+    <text x="20" y="260" font-family="Arial" font-size="12" fill="#94a3b8">March 15, 2024</text>
+    
+    <!-- Card 2 -->
+    <g transform="translate(370, 0)">
+      <rect width="330" height="280" rx="12" fill="white" stroke="#e2e8f0" stroke-width="1"/>
+      <rect x="15" y="15" width="300" height="160" rx="8" fill="#cbd5e1"/>
+      <text x="165" y="110" font-family="Arial" font-size="14" fill="#64748b" text-anchor="middle">Image</text>
+      <text x="20" y="200" font-family="Arial" font-size="18" font-weight="600" fill="#0f172a">Another Article</text>
+      <text x="20" y="225" font-family="Arial" font-size="14" fill="#64748b">More news content...</text>
+      <text x="20" y="260" font-family="Arial" font-size="12" fill="#94a3b8">March 10, 2024</text>
+    </g>
+  </g>
+</svg>

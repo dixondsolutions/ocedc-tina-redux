@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <!-- Background -->
+  <rect width="800" height="450" fill="#f8fafc"/>
+  
+  <!-- Title -->
+  <text x="400" y="50" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#0f172a" text-anchor="middle">
+    Explore Sites &amp; Buildings
+  </text>
+  
+  <!-- Search and Filters -->
+  <rect x="100" y="80" width="600" height="80" rx="12" fill="white" stroke="#e2e8f0" stroke-width="2"/>
+  
+  <g transform="translate(120, 100)">
+    <text x="0" y="0" font-family="Arial" font-size="12" font-weight="600" fill="#64748b">SEARCH</text>
+    <rect y="8" width="140" height="32" rx="6" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+    
+    <text x="160" y="0" font-family="Arial" font-size="12" font-weight="600" fill="#64748b">TYPE</text>
+    <rect x="160" y="8" width="100" height="32" rx="6" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+    
+    <text x="280" y="0" font-family="Arial" font-size="12" font-weight="600" fill="#64748b">SIZE</text>
+    <rect x="280" y="8" width="100" height="32" rx="6" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+    
+    <rect x="400" y="8" width="140" height="32" rx="6" fill="#f1f5f9"/>
+    <text x="420" y="29" font-family="Arial" font-size="12" fill="#64748b">☑ Rail Access Only</text>
+  </g>
+  
+  <!-- Property Cards -->
+  <g transform="translate(100, 190)">
+    <!-- Card 1 -->
+    <rect width="280" height="200" rx="12" fill="white" stroke="#e2e8f0" stroke-width="2"/>
+    <rect x="15" y="15" width="250" height="100" rx="8" fill="#cbd5e1"/>
+    <text x="140" y="73" font-family="Arial" font-size="13" fill="#64748b" text-anchor="middle">Site Photo</text>
+    <rect x="20" y="125" width="60" height="20" rx="10" fill="#dbeafe"/>
+    <text x="50" y="139" font-family="Arial" font-size="11" font-weight="600" fill="#2563eb" text-anchor="middle">Site</text>
+    <text x="20" y="158" font-family="Arial" font-size="15" font-weight="600" fill="#0f172a">Industrial Park Site</text>
+    <text x="20" y="178" font-family="Arial" font-size="12" fill="#64748b">25 acres • Byron, IL</text>
+    
+    <!-- Card 2 -->
+    <g transform="translate(310, 0)">
+      <rect width="280" height="200" rx="12" fill="white" stroke="#e2e8f0" stroke-width="2"/>
+      <rect x="15" y="15" width="250" height="100" rx="8" fill="#cbd5e1"/>
+      <text x="140" y="73" font-family="Arial" font-size="13" fill="#64748b" text-anchor="middle">Building Photo</text>
+      <rect x="20" y="125" width="75" height="20" rx="10" fill="#dcfce7"/>
+      <text x="57.5" y="139" font-family="Arial" font-size="11" font-weight="600" fill="#16a34a" text-anchor="middle">Building</text>
+      <text x="20" y="158" font-family="Arial" font-size="15" font-weight="600" fill="#0f172a">Warehouse Facility</text>
+      <text x="20" y="178" font-family="Arial" font-size="12" fill="#64748b">50,000 sq ft • Rochelle, IL</text>
+    </g>
+  </g>
+</svg>

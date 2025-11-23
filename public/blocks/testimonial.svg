@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <!-- Background -->
+  <rect width="800" height="450" fill="#f8fafc"/>
+  
+  <!-- Title -->
+  <text x="400" y="60" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#0f172a" text-anchor="middle">
+    What People Say
+  </text>
+  
+  <!-- Testimonial Cards -->
+  <g transform="translate(50, 100)">
+    <!-- Card 1 -->
+    <rect width="220" height="260" rx="12" fill="white" stroke="#e2e8f0" stroke-width="2"/>
+    <text x="30" y="50" font-family="Arial" font-size="40" fill="#cbd5e1">“</text>
+    <rect x="30" y="70" width="160" height="8" rx="4" fill="#94a3b8"/>
+    <rect x="30" y="90" width="150" height="8" rx="4" fill="#cbd5e1"/>
+    <rect x="30" y="110" width="140" height="8" rx="4" fill="#cbd5e1"/>
+    <circle cx="50" cy="200" r="20" fill="#cbd5e1"/>
+    <text x="80" y="195" font-family="Arial" font-size="14" font-weight="600" fill="#0f172a">Jane Doe</text>
+    <text x="80" y="215" font-family="Arial" font-size="12" fill="#64748b">CEO, Company</text>
+    
+    <!-- Card 2 -->
+    <g transform="translate(240, 0)">
+      <rect width="220" height="260" rx="12" fill="white" stroke="#e2e8f0" stroke-width="2"/>
+      <text x="30" y="50" font-family="Arial" font-size="40" fill="#cbd5e1">“</text>
+      <rect x="30" y="70" width="160" height="8" rx="4" fill="#94a3b8"/>
+      <rect x="30" y="90" width="150" height="8" rx="4" fill="#cbd5e1"/>
+      <rect x="30" y="110" width="120" height="8" rx="4" fill="#cbd5e1"/>
+      <circle cx="50" cy="200" r="20" fill="#cbd5e1"/>
+      <text x="80" y="195" font-family="Arial" font-size="14" font-weight="600" fill="#0f172a">John Smith</text>
+      <text x="80" y="215" font-family="Arial" font-size="12" fill="#64748b">Director, Corp</text>
+    </g>
+    
+    <!-- Card 3 -->
+    <g transform="translate(480, 0)">
+      <rect width="220" height="260" rx="12" fill="white" stroke="#e2e8f0" stroke-width="2"/>
+      <text x="30" y="50" font-family="Arial" font-size="40" fill="#cbd5e1">“</text>
+      <rect x="30" y="70" width="160" height="8" rx="4" fill="#94a3b8"/>
+      <rect x="30" y="90" width="140" height="8" rx="4" fill="#cbd5e1"/>
+      <rect x="30" y="110" width="150" height="8" rx="4" fill="#cbd5e1"/>
+      <circle cx="50" cy="200" r="20" fill="#cbd5e1"/>
+      <text x="80" y="195" font-family="Arial" font-size="14" font-weight="600" fill="#0f172a">Mike Jones</text>
+      <text x="80" y="215" font-family="Arial" font-size="12" fill="#64748b">Manager, Biz</text>
+    </g>
+  </g>
+</svg>

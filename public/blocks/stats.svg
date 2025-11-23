@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <!-- Background -->
+  <rect width="800" height="450" fill="#f8fafc"/>
+  
+  <!-- Stats Container -->
+  <rect x="50" y="125" width="700" height="200" rx="12" fill="white" stroke="#e2e8f0" stroke-width="2"/>
+  
+  <!-- Stat 1 -->
+  <g transform="translate(150, 200)">
+    <text x="0" y="0" font-family="Arial" font-size="48" font-weight="bold" fill="#3b82f6" text-anchor="middle">100%</text>
+    <text x="0" y="40" font-family="Arial" font-size="16" fill="#64748b" text-anchor="middle">Success Rate</text>
+  </g>
+  
+  <!-- Divider 1 -->
+  <line x1="280" y1="175" x2="280" y2="275" stroke="#e2e8f0" stroke-width="2"/>
+  
+  <!-- Stat 2 -->
+  <g transform="translate(400, 200)">
+    <text x="0" y="0" font-family="Arial" font-size="48" font-weight="bold" fill="#10b981" text-anchor="middle">50+</text>
+    <text x="0" y="40" font-family="Arial" font-size="16" fill="#64748b" text-anchor="middle">Projects</text>
+  </g>
+  
+  <!-- Divider 2 -->
+  <line x1="520" y1="175" x2="520" y2="275" stroke="#e2e8f0" stroke-width="2"/>
+  
+  <!-- Stat 3 -->
+  <g transform="translate(650, 200)">
+    <text x="0" y="0" font-family="Arial" font-size="48" font-weight="bold" fill="#f59e0b" text-anchor="middle">24/7</text>
+    <text x="0" y="40" font-family="Arial" font-size="16" fill="#64748b" text-anchor="middle">Support</text>
+  </g>
+</svg>

@@ -12,6 +12,9 @@ export const Header = () => {
   const { globalSettings } = useLayout();
   const header = globalSettings!.header!;
   const utility = header.utility;
+  const [isScrolled, setIsScrolled] = React.useState(false);
+  const [isVisible, setIsVisible] = React.useState(true);
+  const [lastScrollY, setLastScrollY] = React.useState(0);
   const [menuState, setMenuState] = React.useState(false);
 
   const mobileToggle = () => setMenuState((state) => !state);
@@ -22,11 +25,37 @@ export const Header = () => {
       ? `tel:${utility.phoneNumber.replace(/[^\d+]/g, "")}`
       : undefined);
 
+  React.useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Determine visibility based on scroll direction
+      if (currentScrollY > lastScrollY && currentScrollY > 50) {
+        setIsVisible(false); // Scrolling down
+      } else {
+        setIsVisible(true); // Scrolling up
+      }
+
+      setIsScrolled(currentScrollY > 50);
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
   return (
-    <header className="fixed inset-x-0 top-0 z-20">
+    <header
+      suppressHydrationWarning
+      className={`sticky inset-x-0 top-0 z-20 transition-all duration-300 transform ${
+        isVisible ? "translate-y-0" : "-translate-y-full"
+      } ${
+        isScrolled ? "bg-[#1b1f24]/95 backdrop-blur-sm shadow-md" : "bg-[#1b1f24]"
+      }`}
+    >
       {utility && (
         <div className="bg-primary text-[#1b1f24]">
-          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-2 text-xs sm:text-sm">
+          <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-6 py-2 text-xs sm:text-sm">
             <div className="flex flex-wrap items-center gap-4 text-[#1b1f24]/90 font-medium">
               {utility.links?.map(
                 (link) =>
@@ -73,7 +102,7 @@ export const Header = () => {
       )}
 
       <nav className="border-b border-white/10 bg-[#1b1f24] text-white">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-4">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-4">
           <Link href="/" aria-label="home" className="flex items-center gap-3">
             <Icon
               parentColor={header.color!}
@@ -93,9 +122,9 @@ export const Header = () => {
             </div>
           </Link>
 
-          <div className="hidden flex-1 items-center justify-center lg:flex">
+          <div className="hidden flex-1 items-center justify-end gap-8 lg:flex">
             <ul className="flex items-center gap-6 text-sm font-medium uppercase tracking-wide text-white/80">
-              {header.nav?.slice(0, -1).map(
+              {header.nav?.map(
                 (item) =>
                   item?.href &&
                   item?.label && (
@@ -111,15 +140,13 @@ export const Header = () => {
                   ),
               )}
             </ul>
-          </div>
 
-          <div className="hidden items-center gap-3 lg:flex">
-            <Button asChild variant="outline" className="rounded-full border-white/20 bg-transparent px-5 text-sm text-white hover:bg-white hover:text-[#1b1f24]">
-              <Link href="/sites-buildings">Sites &amp; Buildings</Link>
-            </Button>
-            <Button asChild className="rounded-full px-5 text-sm">
-              <Link href="/contact">Contact</Link>
-            </Button>
+            <Link
+              href="/contact"
+              className="inline-flex h-9 items-center justify-center rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+            >
+              Contact
+            </Link>
           </div>
 
           <button
@@ -154,13 +181,6 @@ export const Header = () => {
               )}
             </ul>
             <div className="mt-6 flex flex-col gap-3">
-              <Link
-                href="/sites-buildings"
-                onClick={() => setMenuState(false)}
-                className="rounded-full border border-foreground/20 px-4 py-2 text-center text-sm font-semibold text-foreground"
-              >
-                Sites &amp; Buildings
-              </Link>
               <Link
                 href="/contact"
                 onClick={() => setMenuState(false)}

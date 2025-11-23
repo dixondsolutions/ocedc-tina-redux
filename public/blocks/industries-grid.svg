@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <!-- Background -->
+  <rect width="800" height="450" fill="#1e293b"/>
+  
+  <!-- Content -->
+  <text x="400" y="160" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="white" text-anchor="middle">
+    Your Industry Grid
+  </text>
+  
+  <!-- Industry Cards -->
+  <g transform="translate(100, 220)">
+    <!-- Card 1 -->
+    <rect width="150" height="180" rx="12" fill="#334155"/>
+    <circle cx="75" cy="50" r="25" fill="#3b82f6"/>
+    <text x="75" y="110" font-family="Arial" font-size="16" font-weight="600" fill="white" text-anchor="middle">Manufacturing</text>
+    
+    <!-- Card 2 -->
+    <rect x="187.5" width="150" height="180" rx="12" fill="#334155"/>
+    <circle cx="262.5" cy="50" r="25" fill="#10b981"/>
+    <text x="262.5" y="110" font-family="Arial" font-size="16" font-weight="600" fill="white" text-anchor="middle">Agribusiness</text>
+    
+    <!-- Card 3 -->
+    <rect x="375" width="150" height="180" rx="12" fill="#334155"/>
+    <circle cx="450" cy="50" r="25" fill="#f59e0b"/>
+    <text x="450" y="110" font-family="Arial" font-size="16" font-weight="600" fill="white" text-anchor="middle">Logistics</text>
+    
+    <!-- Card 4 -->
+    <rect x="562.5" width="150" height="180" rx="12" fill="#334155"/>
+    <circle cx="637.5" cy="50" r="25" fill="#14b8a6"/>
+    <text x="637.5" y="110" font-family="Arial" font-size="16" font-weight="600" fill="white" text-anchor="middle">Tourism</text>
+  </g>
+</svg>

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import type { Template } from 'tinacms';
 import { PageBlocksPropertyListing } from '../../tina/__generated__/types';
 import { tinaField } from 'tinacms/dist/react';
-import { Section } from '../layout/section';
+import { Section, sectionBlockSchemaField } from '../layout/section';
 import client from '../../tina/__generated__/client';
 import Link from 'next/link';
 
@@ -33,7 +33,7 @@ export const PropertyListing = ({ data }: { data: PageBlocksPropertyListing }) =
     const ctaHref = (data as any)?.ctaHref || '/sites-buildings';
 
     return (
-        <Section background={data.background!}>
+        <Section background={data.style?.background || undefined}>
             <div className="mx-auto max-w-6xl space-y-6 px-4 sm:px-6">
                 <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                     <div>
@@ -137,22 +137,14 @@ export const propertyListingBlockSchema: Template = {
     name: 'propertyListing',
     label: 'Property Listing',
     ui: {
-        previewSrc: '/blocks/content.png', // Placeholder
+        previewSrc: '/blocks/property-listing.svg', // Placeholder
         defaultItem: {
             title: 'Featured Properties',
         },
+        itemProps: (item) => ({ label: item.title || 'Property Listing' }),
     },
     fields: [
-        {
-            type: 'string',
-            label: 'Background',
-            name: 'background',
-            options: [
-                { label: 'Default', value: 'bg-default' },
-                { label: 'White', value: 'bg-white' },
-                { label: 'Gray', value: 'bg-gray-50' },
-            ],
-        },
+        sectionBlockSchemaField as any,
         {
             type: 'string',
             label: 'Title',

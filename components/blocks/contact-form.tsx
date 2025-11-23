@@ -2,11 +2,11 @@ import React from 'react';
 import type { Template } from 'tinacms';
 import { PageBlocksContactForm } from '../../tina/__generated__/types';
 import { tinaField } from 'tinacms/dist/react';
-import { Section } from '../layout/section';
+import { Section, sectionBlockSchemaField } from '../layout/section';
 
 export const ContactForm = ({ data }: { data: PageBlocksContactForm }) => {
     return (
-        <Section background={data.background!}>
+        <Section background={data.style?.background || undefined}>
             <div className="mx-auto max-w-5xl px-4 sm:px-6">
                 <div className="mb-12 text-center">
                     {data.title && (
@@ -27,7 +27,7 @@ export const ContactForm = ({ data }: { data: PageBlocksContactForm }) => {
                     )}
                 </div>
 
-                <form className="rounded-3xl bg-white p-8 shadow-xl ring-1 ring-black/5 dark:bg-[#1b1f24] dark:ring-white/10 md:p-12">
+                <form className="rounded-3xl bg-card p-8 shadow-xl ring-1 ring-border/50 md:p-12">
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                         <div>
                             <label htmlFor="name" className="mb-2 block text-xs font-bold uppercase tracking-widest text-primary">
@@ -38,7 +38,7 @@ export const ContactForm = ({ data }: { data: PageBlocksContactForm }) => {
                                 id="name"
                                 name="name"
                                 required
-                                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+                                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30 placeholder:text-muted-foreground"
                                 placeholder="Your name"
                             />
                         </div>
@@ -50,7 +50,7 @@ export const ContactForm = ({ data }: { data: PageBlocksContactForm }) => {
                                 type="text"
                                 id="company"
                                 name="company"
-                                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+                                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30 placeholder:text-muted-foreground"
                                 placeholder="Organization"
                             />
                         </div>
@@ -63,7 +63,7 @@ export const ContactForm = ({ data }: { data: PageBlocksContactForm }) => {
                                 id="email"
                                 name="email"
                                 required
-                                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+                                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30 placeholder:text-muted-foreground"
                                 placeholder="you@email.com"
                             />
                         </div>
@@ -75,7 +75,7 @@ export const ContactForm = ({ data }: { data: PageBlocksContactForm }) => {
                                 type="tel"
                                 id="phone"
                                 name="phone"
-                                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+                                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30 placeholder:text-muted-foreground"
                                 placeholder="(555) 555-5555"
                             />
                         </div>
@@ -119,7 +119,7 @@ export const ContactForm = ({ data }: { data: PageBlocksContactForm }) => {
                             id="message"
                             name="message"
                             rows={6}
-                            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+                            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30 placeholder:text-muted-foreground"
                             placeholder="Tell us about your project, data request, or meeting needs."
                         ></textarea>
                     </div>
@@ -127,7 +127,7 @@ export const ContactForm = ({ data }: { data: PageBlocksContactForm }) => {
                     <div className="mt-10 text-center">
                         <button
                             type="submit"
-                            className="rounded-full bg-primary px-10 py-4 text-base font-bold text-[#1b1f24] shadow-lg transition-all duration-300 hover:bg-primary/90 hover:shadow-xl hover:-translate-y-0.5"
+                            className="rounded-full bg-primary px-10 py-4 text-base font-bold text-primary-foreground shadow-lg transition-all duration-300 hover:bg-primary/90 hover:shadow-xl hover:-translate-y-0.5"
                         >
                             Send Message
                         </button>
@@ -142,23 +142,15 @@ export const contactFormBlockSchema: Template = {
     name: 'contactForm',
     label: 'Contact Form',
     ui: {
-        previewSrc: '/blocks/content.png', // Placeholder
+        previewSrc: '/blocks/contact-form.svg', // Placeholder
         defaultItem: {
-            title: 'Get in Touch',
-            text: 'We would love to hear from you.',
+            title: 'Contact OCEDC',
+            text: 'Reach out to our team for assistance with site selection, incentives, or general inquiries.',
         },
+        itemProps: (item) => ({ label: item.title || 'Contact Form' }),
     },
     fields: [
-        {
-            type: 'string',
-            label: 'Background',
-            name: 'background',
-            options: [
-                { label: 'Default', value: 'bg-default' },
-                { label: 'White', value: 'bg-white' },
-                { label: 'Gray', value: 'bg-gray-50' },
-            ],
-        },
+        sectionBlockSchemaField as any,
         {
             type: 'string',
             label: 'Title',

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <!-- Background -->
+  <rect width="800" height="450" fill="#1e293b"/>
+  
+  <!-- Content -->
+  <text x="400" y="180" font-family="Arial, sans-serif" font-size="40" font-weight="bold" fill="white" text-anchor="middle">
+    Ready to Get Started?
+  </text>
+  <text x="400" y="230" font-family="Arial" font-size="18" fill="#cbd5e1" text-anchor="middle">
+    Join us today and make a difference.
+  </text>
+  
+  <!-- Button -->
+  <rect x="320" y="270" width="160" height="50" rx="25" fill="#3b82f6"/>
+  <text x="400" y="302" font-family="Arial" font-size="16" font-weight="600" fill="white" text-anchor="middle">Contact Us</text>
+</svg>

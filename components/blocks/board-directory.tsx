@@ -69,7 +69,7 @@ export const BoardDirectory = ({ data }: { data: PageBlocksBoardDirectory }) => 
   }, [members, search, sector]);
 
   return (
-    <Section background={data.background!}>
+    <Section background={data.style?.background || undefined} className="py-24 md:py-32">
       <div className="mx-auto max-w-6xl space-y-10 px-4 sm:px-6">
         <div className="space-y-4 text-center">
           {data.highlight && (
@@ -98,7 +98,7 @@ export const BoardDirectory = ({ data }: { data: PageBlocksBoardDirectory }) => 
           )}
         </div>
 
-        <div className="flex flex-col gap-4 rounded-2xl border bg-white/80 p-4 shadow-sm ring-1 ring-black/5 dark:bg-slate-900/70 dark:ring-white/10 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-4 rounded-2xl border border-border/50 bg-card/80 p-4 shadow-sm ring-1 ring-border/50 md:flex-row md:items-center md:justify-between backdrop-blur-sm">
           <div className="flex gap-2">
             {sectorFilters.map((filter) => (
               <button
@@ -107,8 +107,8 @@ export const BoardDirectory = ({ data }: { data: PageBlocksBoardDirectory }) => 
                 onClick={() => setSector(filter.value as typeof sector)}
                 className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                   sector === filter.value
-                    ? 'bg-primary text-white shadow'
-                    : 'bg-muted text-foreground hover:bg-muted/60'
+                    ? 'bg-primary text-primary-foreground shadow'
+                    : 'bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground'
                 }`}
               >
                 {filter.label}
@@ -125,7 +125,7 @@ export const BoardDirectory = ({ data }: { data: PageBlocksBoardDirectory }) => 
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Search by name or organization"
-              className="w-full rounded-full border border-border bg-white px-4 py-2 text-sm shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+              className="w-full rounded-full border border-border bg-background px-4 py-2 text-sm shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30 placeholder:text-muted-foreground"
             />
           </div>
         </div>
@@ -139,7 +139,7 @@ export const BoardDirectory = ({ data }: { data: PageBlocksBoardDirectory }) => 
             {filteredMembers.map((member) => (
               <article
                 key={member.id}
-                className="group flex flex-col gap-4 rounded-3xl border border-border/60 bg-white/60 p-6 shadow-sm transition hover:-translate-y-1 hover:border-primary/60 hover:shadow-lg dark:bg-slate-900/70"
+                className="group flex flex-col gap-4 rounded-3xl border border-border/50 bg-card p-6 shadow-sm transition hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5"
               >
                 <div className="flex items-center gap-4">
                   {member.photo ? (
@@ -148,10 +148,10 @@ export const BoardDirectory = ({ data }: { data: PageBlocksBoardDirectory }) => 
                       alt={member.name}
                       width={96}
                       height={96}
-                      className="h-20 w-20 rounded-2xl object-cover ring-2 ring-primary/20"
+                      className="h-20 w-20 rounded-2xl object-cover ring-2 ring-border group-hover:ring-primary/20 transition-all"
                     />
                   ) : (
-                    <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-muted text-2xl font-semibold">
+                    <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-muted text-2xl font-semibold text-muted-foreground">
                       {member.name
                         .split(' ')
                         .map((part) => part[0])
@@ -163,14 +163,14 @@ export const BoardDirectory = ({ data }: { data: PageBlocksBoardDirectory }) => 
                     <p className="text-sm font-semibold uppercase tracking-wide text-primary">
                       {member.sector === 'private' ? 'Private Sector' : 'Public Sector'}
                     </p>
-                    <h3 className="text-lg font-semibold">{member.name}</h3>
+                    <h3 className="text-lg font-bold text-foreground">{member.name}</h3>
                     <p className="text-sm text-muted-foreground">{member.title}</p>
                     <p className="text-sm text-muted-foreground">{member.organization}</p>
                   </div>
                 </div>
 
                 {member.term && (
-                  <p className="text-sm font-medium text-foreground/80">
+                  <p className="text-sm font-medium text-muted-foreground">
                     Term: <span className="font-semibold text-foreground">{member.term}</span>
                   </p>
                 )}
@@ -182,7 +182,7 @@ export const BoardDirectory = ({ data }: { data: PageBlocksBoardDirectory }) => 
                         committee && (
                           <span
                             key={committee}
-                            className="rounded-full bg-primary/5 px-3 py-1 text-xs font-semibold text-primary"
+                            className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary"
                           >
                             {committee}
                           </span>
@@ -203,11 +203,12 @@ export const boardDirectoryBlockSchema: Template = {
   name: 'boardDirectory',
   label: 'Board Directory',
   ui: {
-    previewSrc: '/blocks/content.png',
+    previewSrc: '/blocks/board-directory.svg',
     defaultItem: {
       title: 'Board of Directors',
       description: 'Public-private leadership guiding Ogle County’s economic agenda.',
     },
+    itemProps: (item) => ({ label: item.title || 'Board Directory' }),
   },
   fields: [
     sectionBlockSchemaField as any,

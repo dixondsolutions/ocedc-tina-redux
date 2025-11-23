@@ -2,11 +2,11 @@ import React from 'react';
 import type { Template } from 'tinacms';
 import { PageBlocksMap } from '../../tina/__generated__/types';
 import { tinaField } from 'tinacms/dist/react';
-import { Section } from '../layout/section';
+import { Section, sectionBlockSchemaField } from '../layout/section';
 
 export const Map = ({ data }: { data: PageBlocksMap }) => {
     return (
-        <Section background={data.background!}>
+        <Section background={data.style?.background || undefined}>
             <div className="mx-auto max-w-6xl px-4 sm:px-6">
                 <div className="mb-10 text-center">
                     {data.title && (
@@ -44,22 +44,14 @@ export const mapBlockSchema: Template = {
     name: 'map',
     label: 'Map',
     ui: {
-        previewSrc: '/blocks/content.png', // Placeholder
+        previewSrc: '/blocks/map.svg', // Placeholder
         defaultItem: {
             title: 'Our Location',
         },
+        itemProps: (item) => ({ label: item.title || 'Map' }),
     },
     fields: [
-        {
-            type: 'string',
-            label: 'Background',
-            name: 'background',
-            options: [
-                { label: 'Default', value: 'bg-default' },
-                { label: 'White', value: 'bg-white' },
-                { label: 'Gray', value: 'bg-gray-50' },
-            ],
-        },
+        sectionBlockSchemaField as any,
         {
             type: 'string',
             label: 'Title',

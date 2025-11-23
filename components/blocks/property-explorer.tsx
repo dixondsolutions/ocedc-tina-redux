@@ -124,7 +124,7 @@ export const PropertyExplorer = ({ data }: { data: PageBlocksPropertyExplorer })
   };
 
   return (
-    <Section background={data.background!}>
+    <Section background={data.style?.background || undefined}>
       <div className="mx-auto max-w-6xl space-y-8 px-4 sm:px-6">
         <div className="space-y-4 text-center">
           {data.title && (
@@ -203,7 +203,7 @@ export const PropertyExplorer = ({ data }: { data: PageBlocksPropertyExplorer })
                   className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide transition ${
                     utilityFilter.includes(utility.value)
                       ? 'bg-primary text-white shadow'
-                      : 'bg-muted text-foreground hover:bg-muted/70'
+                      : 'bg-transparent border border-primary/20 text-foreground hover:bg-primary/10 hover:border-primary/40'
                   }`}
                 >
                   {utility.label}
@@ -360,13 +360,14 @@ export const propertyExplorerBlockSchema: Template = {
   name: 'propertyExplorer',
   label: 'Property Explorer',
   ui: {
-    previewSrc: '/blocks/content.png',
+    previewSrc: '/blocks/property-explorer.svg',
     defaultItem: {
       title: 'Explore Sites & Buildings',
       description: 'Filter available properties by size, utilities, and rail access.',
       ctaLabel: 'Submit a project',
       ctaHref: '/contact',
     },
+    itemProps: (item) => ({ label: item.title || 'Property Explorer' }),
   },
   fields: [
     sectionBlockSchemaField as any,

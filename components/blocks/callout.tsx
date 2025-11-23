@@ -30,7 +30,7 @@ const transitionVariants = {
 
 export const Callout = ({ data }: { data: PageBlocksCallout }) => {
     return (
-        <Section background={data.background!} className='py-6'>
+        <Section background={data.style?.background || undefined} className='py-6'>
             <AnimatedGroup variants={transitionVariants}>
                 <Link
                     data-tina-field={tinaField(data, 'url')}
@@ -62,11 +62,12 @@ export const calloutBlockSchema: Template = {
     name: 'callout',
     label: 'Callout',
     ui: {
-        previewSrc: '/blocks/callout.png',
+        previewSrc: '/blocks/callout.svg',
         defaultItem: {
-            url: 'https://tina.io/editorial-workflow',
-            text: 'Support for live editing and editorial workflow',
+            url: '/news',
+            text: 'View our latest Economic Development Report',
         },
+        itemProps: (item) => ({ label: item.text || 'Callout' }),
     },
     fields: [
         sectionBlockSchemaField as any,

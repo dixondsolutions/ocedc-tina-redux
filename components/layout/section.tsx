@@ -5,6 +5,9 @@ interface SectionProps extends React.HTMLProps<HTMLElement> {
   background?: string;
   children: ReactNode;
   fullBleed?: boolean;
+  padding?: string;
+  width?: string;
+  alignment?: string;
 }
 
 export const Section: React.FC<SectionProps> = ({
@@ -12,12 +15,17 @@ export const Section: React.FC<SectionProps> = ({
   children,
   background,
   fullBleed = false,
+  padding = "py-12",
+  width = "max-w-7xl",
+  alignment = "text-left",
   ...props
 }) => {
+  const sectionWidth = fullBleed || width === "w-full" ? "w-full" : `mx-auto ${width} px-6`;
+  
   return (
     <div className={background || "bg-default"}>
       <section
-        className={cn(fullBleed ? "py-12" : "py-12 mx-auto max-w-7xl px-6", className)}
+        className={cn(padding, sectionWidth, alignment, className)}
         {...props}
       >
         {children}
@@ -51,8 +59,48 @@ export const tailwindBackgroundOptions = [
 ];
 
 export const sectionBlockSchemaField = {
-  type: "string",
-  label: "Background",
-  name: "background",
-  options: tailwindBackgroundOptions,
+  label: "Design",
+  name: "style",
+  type: "object",
+  fields: [
+    {
+      type: "string",
+      label: "Background",
+      name: "background",
+      options: tailwindBackgroundOptions,
+    },
+    {
+      type: "string",
+      label: "Padding",
+      name: "padding",
+      options: [
+        { label: "Small", value: "py-8" },
+        { label: "Medium", value: "py-12" },
+        { label: "Large", value: "py-24" },
+        { label: "Extra Large", value: "py-32" },
+        { label: "None", value: "py-0" },
+      ],
+    },
+    {
+      type: "string",
+      label: "Width",
+      name: "width",
+      options: [
+        { label: "Narrow", value: "max-w-3xl" },
+        { label: "Medium", value: "max-w-5xl" },
+        { label: "Wide", value: "max-w-7xl" },
+        { label: "Full", value: "w-full" },
+      ],
+    },
+    {
+      type: "string",
+      label: "Alignment",
+      name: "alignment",
+      options: [
+        { label: "Left", value: "text-left" },
+        { label: "Center", value: "text-center" },
+        { label: "Right", value: "text-right" },
+      ],
+    },
+  ],
 };

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import type { Template } from 'tinacms';
 import { PageBlocksNewsFeed } from '../../tina/__generated__/types';
 import { tinaField } from 'tinacms/dist/react';
-import { Section } from '../layout/section';
+import { Section, sectionBlockSchemaField } from '../layout/section';
 import client from '../../tina/__generated__/client';
 import Link from 'next/link';
 import { format } from 'date-fns';
@@ -28,7 +28,7 @@ export const NewsFeed = ({ data }: { data: PageBlocksNewsFeed }) => {
     }, []);
 
     return (
-        <Section background={data.background!}>
+        <Section background={data.style?.background || undefined}>
             <div className="container mx-auto px-4">
                 <div className="flex justify-between items-center mb-8">
                     {data.title && (
@@ -118,22 +118,14 @@ export const newsFeedBlockSchema: Template = {
     name: 'newsFeed',
     label: 'News Feed',
     ui: {
-        previewSrc: '/blocks/content.png', // Placeholder
+        previewSrc: '/blocks/news-feed.svg', // Placeholder
         defaultItem: {
             title: 'Latest News',
         },
+        itemProps: (item) => ({ label: item.title || 'News Feed' }),
     },
     fields: [
-        {
-            type: 'string',
-            label: 'Background',
-            name: 'background',
-            options: [
-                { label: 'Default', value: 'bg-default' },
-                { label: 'White', value: 'bg-white' },
-                { label: 'Gray', value: 'bg-gray-50' },
-            ],
-        },
+        sectionBlockSchemaField as any,
         {
             type: 'string',
             label: 'Title',

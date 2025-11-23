@@ -9,7 +9,7 @@ import { sectionBlockSchemaField } from '../layout/section';
 
 export const Testimonial = ({ data }: { data: PageBlocksTestimonial }) => {
   return (
-    <Section background={data.background!}>
+    <Section background={data.style?.background || undefined}>
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold uppercase tracking-wide text-foreground" data-tina-field={tinaField(data, 'title')}>{data.title}</h2>
@@ -55,16 +55,17 @@ export const testimonialBlockSchema: Template = {
   name: "testimonial",
   label: "Testimonial",
   ui: {
-    previewSrc: "/blocks/testimonial.png",
+    previewSrc: '/blocks/testimonial.svg',
     defaultItem: {
       testimonials: [
         {
           quote:
-            "There are only two hard things in Computer Science: cache invalidation and naming things.",
-          author: "Phil Karlton",
+            "OCEDC has been an invaluable partner in our expansion. Their support made the process seamless.",
+          author: "Local Business Owner",
         },
       ],
     },
+    itemProps: (item) => ({ label: item.title || 'Testimonials' }),
   },
   fields: [
     sectionBlockSchemaField as any,

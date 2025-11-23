@@ -43,7 +43,7 @@ const safeDate = (value?: string | null) => {
   return format(parsed, 'MMM dd, yyyy');
 };
 
-const excerptToText = (value: unknown) => {
+const excerptToText = (value: unknown): string => {
   if (!value) return '';
   if (typeof value === 'string') return value;
   if (Array.isArray(value)) {
@@ -125,7 +125,7 @@ export const NewsArchive = ({ data }: { data: PageBlocksNewsArchive }) => {
   }, [posts, category, searchTerm]);
 
   return (
-    <Section background={data.background!}>
+    <Section background={data.style?.background || undefined}>
       <div className="mx-auto max-w-6xl space-y-8 px-4 sm:px-6">
         <div className="space-y-4 text-center">
           {data.title && (
@@ -174,7 +174,7 @@ export const NewsArchive = ({ data }: { data: PageBlocksNewsArchive }) => {
                 type="button"
                 onClick={() => setCategory(value)}
                 className={`rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-wide transition ${
-                  category === value ? 'bg-primary text-white shadow' : 'bg-muted text-foreground hover:bg-muted/70'
+                  category === value ? 'bg-primary text-white shadow' : 'bg-transparent border border-primary/20 text-foreground hover:bg-primary/10 hover:border-primary/40'
                 }`}
               >
                 {value === 'all' ? 'All topics' : value}
@@ -276,13 +276,14 @@ export const newsArchiveBlockSchema: Template = {
   name: 'newsArchive',
   label: 'News Archive',
   ui: {
-    previewSrc: '/blocks/content.png',
+    previewSrc: '/blocks/news-archive.svg',
     defaultItem: {
       title: 'News & Resources',
       description: 'Browse announcements, incentives, grants, and meeting recaps from OCEDC.',
       postsToLoad: 24,
       searchPlaceholder: 'Search announcements, grants, or meetings',
     },
+    itemProps: (item) => ({ label: item.title || 'News Archive' }),
   },
   fields: [
     sectionBlockSchemaField as any,

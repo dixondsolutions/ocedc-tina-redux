@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <!-- Background -->
+  <rect width="800" height="450" fill="#f8fafc"/>
+  
+  <!-- Title -->
+  <text x="400" y="50" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#0f172a" text-anchor="middle">
+    Our Member Communities
+  </text>
+  
+  <!-- Community Cards -->
+  <g transform="translate(50, 100)">
+    <!-- Card 1 -->
+    <rect width="215" height="280" rx="12" fill="white" stroke="#e2e8f0" stroke-width="2"/>
+    <circle cx="107.5" cy="60" r="40" fill="#cbd5e1"/>
+    <text x="107.5" y="68" font-family="Arial" font-size="28" fill="#64748b" text-anchor="middle">🏛️</text>
+    <text x="107.5" y="130" font-family="Arial" font-size="18" font-weight="600" fill="#0f172a" text-anchor="middle">Byron</text>
+    <text x="107.5" y="155" font-family="Arial" font-size="13" fill="#64748b" text-anchor="middle">Population: 3,600</text>
+    <rect x="40" y="180" width="135" height="36" rx="8" fill="#3b82f6"/>
+    <text x="107.5" y="203" font-family="Arial" font-size="13" font-weight="600" fill="white" text-anchor="middle">View Profile</text>
+    
+    <!-- Card 2 -->
+    <g transform="translate(245, 0)">
+      <rect width="215" height="280" rx="12" fill="white" stroke="#e2e8f0" stroke-width="2"/>
+      <circle cx="107.5" cy="60" r="40" fill="#cbd5e1"/>
+      <text x="107.5" y="68" font-family="Arial" font-size="28" fill="#64748b" text-anchor="middle">🏛️</text>
+      <text x="107.5" y="130" font-family="Arial" font-size="18" font-weight="600" fill="#0f172a" text-anchor="middle">Oregon</text>
+      <text x="107.5" y="155" font-family="Arial" font-size="13" fill="#64748b" text-anchor="middle">Population: 3,700</text>
+      <rect x="40" y="180" width="135" height="36" rx="8" fill="#3b82f6"/>
+      <text x="107.5" y="203" font-family="Arial" font-size="13" font-weight="600" fill="white" text-anchor="middle">View Profile</text>
+    </g>
+    
+    <!-- Card 3 -->
+    <g transform="translate(490, 0)">
+      <rect width="215" height="280" rx="12" fill="white" stroke="#e2e8f0" stroke-width="2"/>
+      <circle cx="107.5" cy="60" r="40" fill="#cbd5e1"/>
+      <text x="107.5" y="68" font-family="Arial" font-size="28" fill="#64748b" text-anchor="middle">🏛️</text>
+      <text x="107.5" y="130" font-family="Arial" font-size="18" font-weight="600" fill="#0f172a" text-anchor="middle">Rochelle</text>
+      <text x="107.5" y="155" font-family="Arial" font-size="13" fill="#64748b" text-anchor="middle">Population: 9,400</text>
+      <rect x="40" y="180" width="135" height="36" rx="8" fill="#3b82f6"/>
+      <text x="107.5" y="203" font-family="Arial" font-size="13" font-weight="600" fill="white" text-anchor="middle">View Profile</text>
+    </g>
+  </g>
+</svg>

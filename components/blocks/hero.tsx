@@ -17,8 +17,15 @@ export const Hero = ({ data }: { data: PageBlocksHero }) => {
   const videoSrc = data.image?.videoUrl;
 
   return (
-    <Section background={data.background!} className="py-0 px-0" fullBleed>
-      <div className="relative isolate min-h-[85vh] overflow-hidden bg-[#111418] text-white" data-tina-field={tinaField(data, 'image')}>
+    <Section 
+      background={data.style?.background || (data as any).background || undefined}
+      padding={data.style?.padding || undefined}
+      width={data.style?.width || undefined}
+      alignment={data.style?.alignment || undefined}
+      className="" 
+      fullBleed={false}
+    >
+      <div className="relative isolate w-full overflow-hidden bg-background text-foreground min-h-[85vh] flex flex-col dark" data-tina-field={tinaField(data, 'image')}>
         {data.image?.src && (
           <Image
             src={data.image.src}
@@ -29,8 +36,8 @@ export const Hero = ({ data }: { data: PageBlocksHero }) => {
             priority
           />
         )}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0b0d11] via-[#0b0d11]/80 to-[#0b0d11]/20" />
-        <div className="relative z-10 flex min-h-[85vh] flex-col justify-center gap-8 px-6 pt-24 pb-16 lg:px-14 lg:pt-32 lg:pb-20">
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-background/20" />
+        <div className="relative z-10 flex flex-grow flex-col justify-center gap-8 px-6 py-16 lg:px-14 lg:py-24">
           <div className="space-y-8 text-left max-w-5xl">
             {data.tagline && (
               <p data-tina-field={tinaField(data, 'tagline')} className="text-xs uppercase tracking-[0.6em] text-primary/80">
@@ -43,14 +50,14 @@ export const Hero = ({ data }: { data: PageBlocksHero }) => {
                   preset="fade-in-blur"
                   speedSegment={0.3}
                   as="h1"
-                  className="text-pretty text-4xl font-semibold tracking-tight md:text-6xl xl:text-[4.25rem]"
+                  className="text-pretty text-4xl font-semibold tracking-tight md:text-6xl xl:text-7xl leading-[1.1]"
                 >
                   {data.headline}
                 </TextEffect>
               </div>
             )}
             {data.subheadline && (
-              <p data-tina-field={tinaField(data, 'subheadline')} className="max-w-2xl text-lg text-white/80">
+              <p data-tina-field={tinaField(data, 'subheadline')} className="max-w-2xl text-lg text-muted-foreground md:text-xl leading-relaxed">
                 {data.subheadline}
               </p>
             )}
@@ -65,10 +72,10 @@ export const Hero = ({ data }: { data: PageBlocksHero }) => {
                         asChild
                         size="lg"
                         variant={action.type === 'link' ? 'secondary' : 'default'}
-                        className={`rounded-full px-6 text-base ${
+                        className={`rounded-full px-8 text-lg font-semibold ${
                           action.type === 'link'
-                            ? 'bg-transparent text-white ring-1 ring-white/40 hover:bg-white/10'
-                            : 'bg-primary text-[#1b1f24] hover:bg-primary/90'
+                            ? 'bg-transparent text-foreground ring-1 ring-foreground/40 hover:bg-foreground/10'
+                            : 'bg-primary text-primary-foreground hover:bg-primary/90 hover:-translate-y-0.5 transition-transform shadow-lg shadow-primary/20'
                         }`}
                       >
                         <Link href={action.link}>
@@ -100,12 +107,13 @@ export const heroBlockSchema: Template = {
   name: 'hero',
   label: 'Hero',
   ui: {
-    previewSrc: '/blocks/hero.png',
+    previewSrc: '/blocks/hero.svg',
     defaultItem: {
-      tagline: "Here's some text above the other text",
-      headline: 'This Big Text is Totally Awesome',
-      subheadline: 'Phasellus scelerisque, libero eu finibus rutrum, risus risus accumsan libero, nec molestie urna dui a leo.',
+      tagline: "Welcome to Ogle County",
+      headline: 'Building a Brighter Future',
+      subheadline: 'Your partner for economic growth, business expansion, and community development in Northern Illinois.',
     },
+    itemProps: (item) => ({ label: item.headline }),
   },
   fields: [
     sectionBlockSchemaField as any,

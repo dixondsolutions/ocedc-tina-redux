@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import type { Template } from 'tinacms';
 import { PageBlocksCommunityList } from '../../tina/__generated__/types';
 import { tinaField } from 'tinacms/dist/react';
-import { Section } from '../layout/section';
+import { Section, sectionBlockSchemaField } from '../layout/section';
 import client from '../../tina/__generated__/client';
 import Link from 'next/link';
 
@@ -32,7 +32,7 @@ export const CommunityList = ({ data }: { data: PageBlocksCommunityList }) => {
     const ctaLabel = (data as any)?.ctaLabel || 'View Profile';
 
     return (
-        <Section background={data.background!}>
+        <Section background={data.style?.background || undefined}>
             <div className="mx-auto max-w-6xl space-y-6 px-4 sm:px-6">
                 <div className="space-y-4 text-center">
                     {data.title && (
@@ -113,23 +113,15 @@ export const communityListBlockSchema: Template = {
     name: 'communityList',
     label: 'Community List',
     ui: {
-        previewSrc: '/blocks/content.png', // Placeholder
+        previewSrc: '/blocks/community-list.svg', // Placeholder
         defaultItem: {
             title: 'Our Member Communities',
             description: 'Six municipalities collaborate through OCEDC to provide a seamless service area.',
         },
+        itemProps: (item) => ({ label: item.title || 'Community List' }),
     },
     fields: [
-        {
-            type: 'string',
-            label: 'Background',
-            name: 'background',
-            options: [
-                { label: 'Default', value: 'bg-default' },
-                { label: 'White', value: 'bg-white' },
-                { label: 'Gray', value: 'bg-gray-50' },
-            ],
-        },
+        sectionBlockSchemaField as any,
         {
             type: 'string',
             label: 'Title',

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <!-- Background -->
+  <rect width="800" height="450" fill="#f8fafc"/>
+  
+  <!-- Title -->
+  <text x="400" y="60" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#0f172a" text-anchor="middle">
+    Get in Touch
+  </text>
+  <text x="400" y="90" font-family="Arial, sans-serif" font-size="16" fill="#64748b" text-anchor="middle">
+    We would love to hear from you
+  </text>
+  
+  <!-- Form -->
+  <g transform="translate(200, 120)">
+    <!-- Name field -->
+    <text x="0" y="15" font-family="Arial" font-size="14" font-weight="600" fill="#334155">Name</text>
+    <rect y="25" width="400" height="40" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+    
+    <!-- Email field -->
+    <text x="0" y="85" font-family="Arial" font-size="14" font-weight="600" fill="#334155">Email</text>
+    <rect y="95" width="400" height="40" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+    
+    <!-- Message field -->
+    <text x="0" y="155" font-family="Arial" font-size="14" font-weight="600" fill="#334155">Message</text>
+    <rect y="165" width="400" height="100" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+    
+    <!-- Submit button -->
+    <rect y="285" width="160" height="44" rx="8" fill="#3b82f6"/>
+    <text x="80" y="313" font-family="Arial" font-size="15" font-weight="600" fill="white" text-anchor="middle">Send Message</text>
+  </g>
+</svg>

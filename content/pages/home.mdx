@@ -1,10 +1,16 @@
 ---
 title: Ogle County Economic Development Corporation
 blocks:
-  - background: bg-transparent
+  - style:
+      background: bg-black/80
+      padding: py-0
+      width: w-full
+      alignment: ''
     tagline: Northern Illinois Advantage
-    headline: Ogle County, Illinois — an economic destination for growth and prosperity
-    subheadline: 90 miles from 9 million people with direct access to I-39/I-88, Class I rail, and a ready workforce.
+    headline: 'Ogle County, Illinois — an economic destination for growth and prosperity'
+    subheadline: >-
+      90 miles from 9 million people with direct access to I-39/I-88, Class I
+      rail, and a ready workforce.
     actions:
       - label: Explore Sites & Buildings
         type: button
@@ -21,104 +27,135 @@ blocks:
           style: circle
         link: /contact
     image:
-      src: https://images.unsplash.com/photo-1472553386322-19b8d87a6940?auto=format&fit=crop&w=2000&q=80
+      src: /images/home-hero.png
       alt: Rail infrastructure in Ogle County
     _template: hero
-  - background: bg-white
+  - style:
+      background: bg-default
+      padding: py-32
+      width: w-full
+      alignment: text-center
     title: Regional reach with small-town responsiveness
-    description: OCEDC unites municipalities, utilities, and private investors to deliver shovel-ready opportunities across Ogle County.
+    description: >-
+      OCEDC unites municipalities, utilities, and private investors to deliver
+      shovel-ready opportunities across Ogle County.
     stats:
       - stat: 51K+
         type: County residents
-      - stat: 6
+      - stat: '6'
         type: Member communities
       - stat: 90 mi
         type: To Chicago & Madison
     _template: stats
   - title: Strategic Development Resources
-    description: Access essential data and support for your business expansion in Ogle County.
+    description: >-
+      Access essential data and support for your business expansion in Ogle
+      County.
     items:
       - icon:
           name: BiRocket
           color: blue
           style: circle
         title: Supporting New Businesses
-        text: Entrepreneurial support, small business grants, and startup resources.
+        text: |
+          Entrepreneurial support, small business grants, and startup resources.
         link: /business-services
       - icon:
           name: BiBarChartAlt2
           color: green
           style: circle
         title: Ogle County Stats
-        text: Demographics, labor shed data, and regional economic indicators.
+        text: |
+          Demographics, labor shed data, and regional economic indicators.
         link: /why-ogle-county
       - icon:
           name: BiBriefcase
           color: orange
           style: circle
         title: Investor Directory
-        text: Meet our partners and see who is investing in the region's future.
+        text: |
+          Meet our partners and see who is investing in the region's future.
         link: /about
     _template: features
   - background: bg-sky-50/80
     title: Target Industries
     industries:
-      - title: Manufacturing
-        description: Fabricated metals, food processing, and advanced machinery with rail-served campuses.
-        icon:
+      - icon:
           name: BiFactory
           color: blue
           style: circle
-      - title: Agribusiness & Food Distribution
-        description: Grain handling, cold storage, and logistics centered on Northern Illinois production.
-        icon:
+        title: Manufacturing
+        description: >-
+          Fabricated metals, food processing, and advanced machinery with
+          rail-served campuses.
+      - icon:
           name: BiLeaf
           color: green
           style: circle
-      - title: Warehousing & Logistics
-        description: I-39 Logistics Corridor membership, certified sites, and proximity to intermodal assets.
-        icon:
+        title: Agribusiness & Food Distribution
+        description: >-
+          Grain handling, cold storage, and logistics centered on Northern
+          Illinois production.
+      - icon:
           name: BiTruck
           color: orange
           style: circle
-      - title: Agricultural Tourism
-        description: State parks, river towns, and agritourism trails that blend commerce with quality of life.
-        icon:
+        title: Warehousing & Logistics
+        description: >-
+          I-39 Logistics Corridor membership, certified sites, and proximity to
+          intermodal assets.
+      - icon:
           name: BiMap
           color: teal
           style: circle
+        title: Agricultural Tourism
+        description: >-
+          State parks, river towns, and agritourism trails that blend commerce
+          with quality of life.
     _template: industriesGrid
   - title: Featured Properties
-    description: Curated, project-ready properties with utilities, permitting partners, and due diligence support.
+    description: >-
+      Curated, project-ready properties with utilities, permitting partners, and
+      due diligence support.
     ctaLabel: View all sites & buildings →
     ctaHref: /sites-buildings
     _template: propertyListing
   - title: Why companies choose Ogle County
-    description: Competitive cost structure, authentic communities, and a single point of contact for every project stage.
+    description: >-
+      Competitive cost structure, authentic communities, and a single point of
+      contact for every project stage.
     items:
       - icon:
           name: BiRocket
           color: blue
           style: circle
         title: Speed-to-permit
-        text: Coordinated permitting, zoning, and engineering reviews shorten the path to groundbreaking.
+        text: >
+          Coordinated permitting, zoning, and engineering reviews shorten the
+          path to groundbreaking.
       - icon:
           name: BiShieldQuarter
           color: green
           style: circle
         title: Predictable costs
-        text: Lower land values, modest tax rates, and modern infrastructure keep total project investments in check.
+        text: >
+          Lower land values, modest tax rates, and modern infrastructure keep
+          total project investments in check.
       - icon:
           name: BiTree
           color: teal
           style: circle
         title: Quality of life
-        text: River towns, trail systems, and safe neighborhoods help recruit and retain talent.
+        text: >
+          River towns, trail systems, and safe neighborhoods help recruit and
+          retain talent.
     _template: features
   - title: Latest News
     _template: newsFeed
   - title: Invest where Illinois meets the Rock River
-    description: OCEDC coordinates regional partners across Byron, Mt. Morris, Oregon, Polo, Rochelle, and Stillman Valley.
+    description: >-
+      OCEDC coordinates regional partners across Byron, Mt. Morris, Oregon,
+      Polo, Rochelle, and Stillman Valley.
     actions:
       - label: Meet our team
         type: button
@@ -128,10 +165,14 @@ blocks:
         link: /news
     _template: cta
   - title: Locate your next project
-    description: 115 North 3rd Street, Oregon, IL 61061 — centrally located for regional coverage.
     embedCode: >-
       <iframe
       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d190255.3385834626!2d-89.5572836!3d42.0405672!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x880890098e98c55f%3A0x6040856098480!2sOgle%20County%2C%20IL!5e0!3m2!1sen!2sus!4v1629482758293!5m2!1sen!2sus"
-      width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+      width="100%" height="450" style="border:0;" allowfullscreen=""
+      loading="lazy"></iframe>
+    description: >-
+      115 North 3rd Street, Oregon, IL 61061 — centrally located for regional
+      coverage.
     _template: map
 ---
+

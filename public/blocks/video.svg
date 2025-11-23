@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <!-- Background -->
+  <rect width="800" height="450" fill="#1e293b"/>
+  
+  <!-- Video Container -->
+  <rect x="100" y="50" width="600" height="350" rx="12" fill="black" stroke="#334155" stroke-width="2"/>
+  
+  <!-- Play Button -->
+  <circle cx="400" cy="225" r="40" fill="white" opacity="0.9"/>
+  <path d="M415 225 L390 240 L390 210 Z" fill="#0f172a"/>
+  
+  <!-- Progress Bar -->
+  <rect x="120" y="370" width="560" height="6" rx="3" fill="#334155"/>
+  <rect x="120" y="370" width="200" height="6" rx="3" fill="#ef4444"/>
+  
+  <!-- Text -->
+  <text x="400" y="430" font-family="Arial" font-size="16" fill="#94a3b8" text-anchor="middle">Video Embed</text>
+</svg>

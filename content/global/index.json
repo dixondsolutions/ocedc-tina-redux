@@ -25,14 +25,6 @@
         "label": "Communities"
       },
       {
-        "href": "/target-industries",
-        "label": "Target Industries"
-      },
-      {
-        "href": "/business-services",
-        "label": "Business Services"
-      },
-      {
         "href": "/news",
         "label": "News & Resources"
       },
@@ -41,8 +33,8 @@
         "label": "About"
       },
       {
-        "href": "/contact",
-        "label": "Contact"
+        "href": "/tourism",
+        "label": "Tourism"
       }
     ],
     "utility": {
@@ -92,20 +84,20 @@
         "url": "https://x.com/oglecountyedc"
       }
     ],
-    "contact": {
-      "address": "115 North 3rd Street\nOregon, IL 61061",
-      "email": "info@ocedc.org",
-      "phone": "(815) 732-1101"
-    },
     "newsletter": {
       "title": "Stay Informed",
       "description": "Join our mailing list for updates on Ogle County development.",
       "buttonText": "Subscribe"
+    },
+    "contact": {
+      "address": "115 North 3rd Street\nOregon, IL 61061",
+      "phone": "(815) 732-1101",
+      "email": "info@ocedc.org"
     }
   },
   "theme": {
     "color": "blue",
     "font": "sans",
-    "darkMode": "light"
+    "darkMode": "system"
   }
 }

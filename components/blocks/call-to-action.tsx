@@ -9,10 +9,11 @@ import { Section } from '../layout/section';
 
 export const CallToAction = ({ data }: { data: PageBlocksCta }) => {
     return (
-        <Section>
-            <div className="mx-auto max-w-4xl rounded-3xl bg-[#1b1f24] px-8 py-16 text-center shadow-2xl md:px-16">
-                <h2 className="text-balance text-3xl font-bold uppercase tracking-wide text-white lg:text-4xl" data-tina-field={tinaField(data, 'title')}>{data.title}</h2>
-                <p className="mx-auto mt-4 max-w-2xl text-lg text-white/70" data-tina-field={tinaField(data, 'description')}>{data.description}</p>
+    <Section fullBleed className="py-16 md:py-24">
+      <div className="mx-auto w-full max-w-[95%] rounded-[2.5rem] bg-gradient-to-br from-sidebar to-sidebar-border px-8 py-20 text-center shadow-2xl md:px-16 lg:py-24 relative overflow-hidden dark">
+        <div className="absolute inset-0 bg-[url('/texture.png')] opacity-5 mix-blend-overlay"></div>
+                <h2 className="text-balance text-3xl font-bold uppercase tracking-wide text-foreground lg:text-5xl" data-tina-field={tinaField(data, 'title')}>{data.title}</h2>
+                <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground" data-tina-field={tinaField(data, 'description')}>{data.description}</p>
 
                 <div className="mt-10 flex flex-wrap justify-center gap-4">
                     {data.actions && data.actions.map(action => (
@@ -23,10 +24,10 @@ export const CallToAction = ({ data }: { data: PageBlocksCta }) => {
                                 asChild
                                 size="lg"
                                 variant={action!.type === 'link' ? 'ghost' : 'default'}
-                                className={`rounded-full px-8 text-base transition-all duration-300 ${
+                                className={`rounded-full px-8 text-lg font-semibold transition-all duration-300 ${
                                     action!.type === 'link'
-                                        ? 'bg-transparent text-white ring-1 ring-white/40 hover:bg-white/10'
-                                        : 'bg-primary text-[#1b1f24] hover:bg-primary/90 hover:shadow-lg'
+                                        ? 'bg-transparent text-foreground ring-1 ring-foreground/40 hover:bg-foreground/10'
+                                        : 'bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5'
                                 }`}>
                                 <Link href={action!.link!}>
                                     {action?.icon && (<Icon data={action?.icon} />)}
@@ -46,23 +47,24 @@ export const ctaBlockSchema: Template = {
     name: "cta",
     label: "CTA",
     ui: {
-        previewSrc: "/blocks/cta.png",
+        previewSrc: '/blocks/cta.svg',
         defaultItem: {
-            title: "Start Building",
-            description: "Get started with TinaCMS today and take your content management to the next level.",
+            title: "Ready to Grow in Ogle County?",
+            description: "Connect with us to explore opportunities, incentives, and sites available for your business.",
             actions: [
                 {
-                    label: 'Get Started',
+                    label: 'Contact Us',
                     type: 'button',
-                    link: '/',
+                    link: '/contact',
                 },
                 {
-                    label: 'Book Demo',
+                    label: 'View Sites',
                     type: 'link',
-                    link: '/',
+                    link: '/sites-buildings',
                 },
             ],
         },
+        itemProps: (item) => ({ label: item.title || 'CTA' }),
     },
     fields: [
         {

@@ -594,6 +594,18 @@ pnpm build
 
 ---
 
+## Deployment to Vercel
+
+1. Push your code to a Git repository (GitHub, GitLab, etc.).
+2. Import the project into Vercel.
+3. In the "Environment Variables" section, add the following:
+   - `NEXT_PUBLIC_TINA_CLIENT_ID`: Your TinaCMS Client ID
+   - `TINA_TOKEN`: Your TinaCMS Read-Only Token
+   - `NEXT_PUBLIC_TINA_BRANCH`: `main` (or your branch name)
+4. Click "Deploy".
+
+---
+
 ## Troubleshooting
 
 ### "My changes aren't showing up"
