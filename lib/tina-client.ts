@@ -24,17 +24,40 @@ const client = createClient({
 
 const originalRequest = client.request.bind(client);
 
+const getBypassHeaders = (): Record<string, string> => {
+  const token =
+    process.env.VERCEL_PROTECTION_BYPASS ||
+    process.env.VERCEL_DEPLOYMENT_PROTECTION_BYPASS;
+  if (!token) {
+    return {};
+  }
+  return {
+    "x-vercel-protection-bypass": token,
+    cookie: `__vercel_protection_bypass=${token}`,
+  };
+};
+
 client.request = (args, options = {}) => {
   const url = resolveApiUrl();
-  if (typeof window === "undefined") {
-    console.log("[Tina] request url:", url);
-  }
+  const serverOptions =
+    typeof window === "undefined"
+      ? {
+          ...options,
+          fetchOptions: {
+            ...(options.fetchOptions || {}),
+            headers: {
+              ...(options.fetchOptions?.headers || {}),
+              ...getBypassHeaders(),
+            },
+          },
+        }
+      : options;
   return originalRequest(
     {
       ...args,
       url,
     },
-    options,
+    serverOptions,
   );
 };
 

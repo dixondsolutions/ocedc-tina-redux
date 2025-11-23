@@ -2883,13 +2883,36 @@ var client = createClient2({
   queries
 });
 var originalRequest = client.request.bind(client);
-client.request = (args, options = {}) => originalRequest(
-  {
-    ...args,
-    url: resolveApiUrl()
-  },
-  options
-);
+var getBypassHeaders = () => {
+  const token = process.env.VERCEL_PROTECTION_BYPASS || process.env.VERCEL_DEPLOYMENT_PROTECTION_BYPASS;
+  if (!token) {
+    return {};
+  }
+  return {
+    "x-vercel-protection-bypass": token,
+    cookie: `__vercel_protection_bypass=${token}`
+  };
+};
+client.request = (args, options = {}) => {
+  const url = resolveApiUrl();
+  const serverOptions = typeof window === "undefined" ? {
+    ...options,
+    fetchOptions: {
+      ...options.fetchOptions || {},
+      headers: {
+        ...options.fetchOptions?.headers || {},
+        ...getBypassHeaders()
+      }
+    }
+  } : options;
+  return originalRequest(
+    {
+      ...args,
+      url
+    },
+    serverOptions
+  );
+};
 
 // components/blocks/news-feed.tsx
 import Link6 from "next/link";
