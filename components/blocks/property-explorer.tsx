@@ -5,7 +5,7 @@ import Link from 'next/link';
 import type { Template } from 'tinacms';
 import { tinaField } from 'tinacms/dist/react';
 import { MapPin, SlidersHorizontal } from 'lucide-react';
-import client from '@/tina/__generated__/client';
+import client from '@/tina/client';
 import { PageBlocksPropertyExplorer } from '@/tina/__generated__/types';
 import { Section, sectionBlockSchemaField } from '../layout/section';
 

@@ -4,7 +4,7 @@ import type { Template } from 'tinacms';
 import { PageBlocksPropertyListing } from '../../tina/__generated__/types';
 import { tinaField } from 'tinacms/dist/react';
 import { Section, sectionBlockSchemaField } from '../layout/section';
-import client from '../../tina/__generated__/client';
+import client from '@/tina/client';
 import Link from 'next/link';
 
 export const PropertyListing = ({ data }: { data: PageBlocksPropertyListing }) => {

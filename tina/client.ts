@@ -1,11 +1,20 @@
 import { createClient } from "tinacms/dist/client";
 import { queries } from "./__generated__/types";
 
-// Use the standard Tina client which talks to the self-hosted API route.
-// The API route (`/api/tina/gql`) is backed by the datalayer defined in `tina/database.ts`,
-// so we don't need to call `@tinacms/graphql`'s `resolve` directly here.
+const browserApiUrl = typeof window !== "undefined" ? `${window.location.origin}/api/tina/gql` : undefined;
+const serverApiUrl =
+  typeof window === "undefined" && process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}/api/tina/gql`
+    : undefined;
+
+const apiUrl =
+  process.env.NEXT_PUBLIC_TINA_API_URL ||
+  serverApiUrl ||
+  browserApiUrl ||
+  "http://localhost:3000/api/tina/gql";
+
 const client = createClient({
-  url: process.env.NEXT_PUBLIC_TINA_API_URL || "http://localhost:3000/api/tina/gql",
+  url: apiUrl,
   queries,
 });
 

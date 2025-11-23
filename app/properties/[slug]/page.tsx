@@ -174,30 +174,9 @@ export default async function PropertyDetailPage({
   );
 }
 
+// Same reasoning as other dynamic routes: querying Tina during the Vercel build
+// would hit http://localhost:3000 and fail. We rely on ISR instead.
 export async function generateStaticParams() {
-  let properties = await client.queries.propertiesConnection();
-  const allProperties = properties;
-
-  if (!allProperties.data.propertiesConnection.edges) {
-    return [];
-  }
-
-  while (properties.data?.propertiesConnection.pageInfo.hasNextPage) {
-    properties = await client.queries.propertiesConnection({
-      after: properties.data.propertiesConnection.pageInfo.endCursor,
-    });
-
-    if (!properties.data.propertiesConnection.edges) {
-      break;
-    }
-
-    allProperties.data.propertiesConnection.edges.push(...properties.data.propertiesConnection.edges);
-  }
-
-  return (
-    allProperties.data?.propertiesConnection.edges?.map((edge) => ({
-      slug: edge?.node?._sys.filename,
-    })) || []
-  );
+  return [];
 }
 

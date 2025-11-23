@@ -9,7 +9,7 @@ import { tinaField } from 'tinacms/dist/react';
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import { ArrowRight, Search } from 'lucide-react';
 
-import client from '@/tina/__generated__/client';
+import client from '@/tina/client';
 import { PageBlocksNewsArchive } from '@/tina/__generated__/types';
 import { Section, sectionBlockSchemaField } from '../layout/section';
 import { Card } from '../ui/card';
