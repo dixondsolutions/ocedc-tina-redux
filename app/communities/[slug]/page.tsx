@@ -4,8 +4,9 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import Layout from '@/components/layout/layout';
-import client from '@/tina/client';
+import client from '@/lib/tina-client';
 
+export const dynamic = 'force-dynamic';
 export const revalidate = 300;
 
 export default async function CommunityDetailPage({

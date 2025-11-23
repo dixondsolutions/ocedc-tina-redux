@@ -5,7 +5,7 @@ import type { Template } from 'tinacms';
 import { format } from 'date-fns';
 import { tinaField } from 'tinacms/dist/react';
 import Link from 'next/link';
-import client from '@/tina/client';
+import client from '@/lib/tina-client';
 import { PageBlocksResourceLibrary } from '@/tina/__generated__/types';
 import { Section, sectionBlockSchemaField } from '../layout/section';
 

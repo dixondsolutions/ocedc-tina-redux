@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from "react";
 import { LayoutProvider } from "./layout-context";
-import client from "@/tina/client";
+import client from "@/lib/tina-client";
 import { Header } from "./nav/header";
 import { Footer } from "./nav/footer";
 

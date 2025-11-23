@@ -5,7 +5,7 @@ import Image from 'next/image';
 import type { Template } from 'tinacms';
 import { tinaField } from 'tinacms/dist/react';
 import { PageBlocksBoardDirectory } from '@/tina/__generated__/types';
-import client from '@/tina/client';
+import client from '@/lib/tina-client';
 import { Section, sectionBlockSchemaField } from '../layout/section';
 
 const fallbackId = () =>

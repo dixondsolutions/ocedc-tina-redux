@@ -1,8 +1,9 @@
 import React from 'react';
-import client from '@/tina/client';
+import client from '@/lib/tina-client';
 import Layout from '@/components/layout/layout';
 import NewsArticleClientPage from './client-page';
 
+export const dynamic = 'force-dynamic';
 export const revalidate = 300;
 
 export default async function PostPage({
