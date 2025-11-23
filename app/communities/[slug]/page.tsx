@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import Layout from '@/components/layout/layout';
-import client from '@/tina/__generated__/client';
+import client from '@/tina/client';
 
 export const revalidate = 300;
 
@@ -50,7 +50,7 @@ export default async function CommunityDetailPage({
             {community.gallery && community.gallery.length > 0 && (
               <div className="grid gap-4 md:grid-cols-2">
                 {community.gallery.map(
-                  (image: string, index: number) =>
+                  (image: string | null, index: number) =>
                     image && (
                       <div key={`${image}-${index}`} className="overflow-hidden rounded-3xl border border-border/60 bg-white shadow">
                         <Image
@@ -84,7 +84,7 @@ export default async function CommunityDetailPage({
                   <div className="mt-6">
                     <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Key Employers</h3>
                     <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
-                      {community.keyEmployers.map((employer: string) => (
+                      {community.keyEmployers.map((employer: string | null) => (
                         <li key={employer}>{employer}</li>
                       ))}
                     </ul>

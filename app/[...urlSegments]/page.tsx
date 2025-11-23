@@ -1,6 +1,6 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
-import client from '@/tina/__generated__/client';
+import client from '@/tina/client';
 import Layout from '@/components/layout/layout';
 
 import ClientPage from './client-page';

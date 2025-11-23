@@ -12,7 +12,11 @@ import BoardMembers from "./collection/board-members";
 import Resources from "./collection/resources";
 
 const config = defineConfig({
-  clientId: process.env.NEXT_PUBLIC_TINA_CLIENT_ID!,
+  contentApiUrlOverride:
+    process.env.NEXT_PUBLIC_TINA_API_URL ||
+    (process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}/api/tina/gql`
+      : "http://localhost:3000/api/tina/gql"),
   branch:
     process.env.NEXT_PUBLIC_TINA_BRANCH! || // custom branch env override
     process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF! || // Vercel branch env

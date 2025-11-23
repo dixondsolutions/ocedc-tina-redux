@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import Layout from '@/components/layout/layout';
-import client from '@/tina/__generated__/client';
+import client from '@/tina/client';
 
 export const revalidate = 300;
 
@@ -64,7 +64,7 @@ export default async function PropertyDetailPage({
               {property.gallery && property.gallery.length > 0 && (
                 <div className="grid gap-4 md:grid-cols-2">
                   {property.gallery.map(
-                    (image: string, index: number) =>
+                    (image: string | null, index: number) =>
                       image && (
                         <div key={`${image}-${index}`} className="overflow-hidden rounded-3xl border border-border/70 bg-white shadow">
                           <Image
@@ -104,7 +104,7 @@ export default async function PropertyDetailPage({
                     <dd className="mt-1 flex flex-wrap gap-2">
                       {property.utilities && property.utilities.length > 0 ? (
                         property.utilities.map(
-                          (utility: string) =>
+                          (utility: string | null) =>
                             utility && (
                               <span key={utility} className="rounded-full bg-muted px-3 py-1 text-xs font-semibold uppercase tracking-wide">
                                 {utility}
