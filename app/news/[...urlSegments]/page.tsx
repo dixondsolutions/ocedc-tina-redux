@@ -25,30 +25,9 @@ export default async function PostPage({
   );
 }
 
+// See note in `app/[...urlSegments]/page.tsx` – calling the Tina client at build
+// time in this function will fail on Vercel because there is no HTTP server
+// listening on localhost. We instead rely on on-demand generation for posts.
 export async function generateStaticParams() {
-  let posts = await client.queries.postConnection();
-  const allPosts = posts;
-
-  if (!allPosts.data.postConnection.edges) {
-    return [];
-  }
-
-  while (posts.data?.postConnection.pageInfo.hasNextPage) {
-    posts = await client.queries.postConnection({
-      after: posts.data.postConnection.pageInfo.endCursor,
-    });
-
-    if (!posts.data.postConnection.edges) {
-      break;
-    }
-
-    allPosts.data.postConnection.edges.push(...posts.data.postConnection.edges);
-  }
-
-  const params =
-    allPosts.data?.postConnection.edges.map((edge) => ({
-      urlSegments: edge?.node?._sys.breadcrumbs,
-    })) || [];
-
-  return params;
+  return [];
 }
