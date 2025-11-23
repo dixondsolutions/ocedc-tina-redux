@@ -2866,7 +2866,7 @@ var queries = (client3) => {
 };
 
 // tina/__generated__/client.ts
-var client = createClient2({ cacheDir: "/Users/matthewlenox/Documents/ocedc-tina-redux/tina/__generated__/.cache/1763923634421", url: "http://localhost:3000/api/tina/gql", token: "***", queries });
+var client = createClient2({ cacheDir: "/Users/matthewlenox/Documents/ocedc-tina-redux/tina/__generated__/.cache/1763923769933", url: "http://localhost:3000/api/tina/gql", token: "***", queries });
 var client_default = client;
 
 // lib/tina-client.ts
