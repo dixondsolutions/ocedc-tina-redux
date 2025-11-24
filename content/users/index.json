@@ -1,0 +1,10 @@
+{
+  "users": [
+    {
+      "name": "Admin User",
+      "email": "admin@ocedc.org",
+      "username": "admin",
+      "password": "changeme123"
+    }
+  ]
+}
