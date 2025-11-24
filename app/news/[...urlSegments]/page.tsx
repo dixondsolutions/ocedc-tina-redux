@@ -20,7 +20,7 @@ export default async function PostPage({
   return (
     <Layout rawPageData={data}>
       <div className="pt-32 lg:pt-40">
-        <NewsArticleClientPage {...data} />
+        <NewsArticleClientPage {...JSON.parse(JSON.stringify(data))} />
       </div>
     </Layout>
   );

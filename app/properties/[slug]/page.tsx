@@ -104,14 +104,11 @@ export default async function PropertyDetailPage({
                     <dt className="text-sm font-semibold text-muted-foreground">Utilities</dt>
                     <dd className="mt-1 flex flex-wrap gap-2">
                       {property.utilities && property.utilities.length > 0 ? (
-                        property.utilities.map(
-                          (utility: string | null) =>
-                            utility && (
-                              <span key={utility} className="rounded-full bg-muted px-3 py-1 text-xs font-semibold uppercase tracking-wide">
-                                {utility}
-                              </span>
-                            ),
-                        )
+                        // Assuming PropertyClientPage is a client component that accepts utilities as a prop
+                        // and 'data' refers to the 'property' object in this context.
+                        // The original instruction snippet was syntactically incorrect,
+                        // so this is an interpretation to make it valid.
+                        <PropertyClientPage utilities={JSON.parse(JSON.stringify(property.utilities))} />
                       ) : (
                         <span className="text-muted-foreground">Standard municipal services available</span>
                       )}

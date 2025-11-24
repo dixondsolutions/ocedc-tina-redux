@@ -27,7 +27,7 @@ export default async function Page({
 
   return (
     <Layout rawPageData={data}>
-      <ClientPage {...data} />
+      <ClientPage {...JSON.parse(JSON.stringify(data))} />
     </Layout>
   );
 }

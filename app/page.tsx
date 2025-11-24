@@ -13,7 +13,7 @@ export default async function Home() {
 
   return (
     <Layout rawPageData={data}>
-      <ClientPage {...data} />
+      <ClientPage {...JSON.parse(JSON.stringify(data))} />
     </Layout>
   );
 }
