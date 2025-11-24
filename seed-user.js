@@ -14,11 +14,20 @@ const bcrypt = require("bcryptjs"); // You might need to install bcryptjs if not
 // The collection name is 'tina_user'.
 
 async function run() {
+  console.log("Starting seed script...");
+  const mongoUri = process.env.MONGODB_URI;
+  if (!mongoUri) {
+    console.error("Error: MONGODB_URI is not set in .env file.");
+    process.exit(1);
+  }
+  console.log(`Using MongoDB URI: ${mongoUri.replace(/:([^:@]+)@/, ':****@')}`);
+
   const databaseAdapter = new MongodbLevel({
         collectionName: "tinacms",
         dbName: "tinacms",
-        mongoUri: process.env.MONGODB_URI || "",
+        mongoUri: mongoUri,
       });
+  
   const database = createDatabase({
       gitProvider: new GitHubProvider({
         branch: process.env.GITHUB_BRANCH || "",
@@ -92,13 +101,24 @@ async function run() {
   
   // Let's assume `content/users/${username}.json`.
   
-  // Use the adapter directly to bypass indexing logic which requires full schema
-  await databaseAdapter.put(`content/users/${username}.json`, {
-    username,
-    password: hashedPassword,
-  });
+  // TinaUserCollection seems to be a single-document collection (global: true in ui?)
+  // The grep output showed:
+  // path: "content/users",
+  // fields: [{ name: "users", list: true, ... }]
+  // This implies all users are stored in one file, likely content/users/index.json
+  
+  await databaseAdapter.put(`content/users/index.json`, JSON.stringify({
+    users: [
+      {
+        username,
+        password: hashedPassword,
+        id: username,
+      }
+    ]
+  }));
   
   console.log("User created!");
+  process.exit(0);
 }
 
 run().catch(console.error);

@@ -1,44 +1,41 @@
 require('dotenv').config();
-const { createDatabase, createLocalDatabase } = require("@tinacms/datalayer");
 const { MongodbLevel } = require("mongodb-level");
-const { GitHubProvider } = require("tinacms-gitprovider-github");
-
-const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
-
-const database = isLocal
-  ? createLocalDatabase()
-  : createDatabase({
-      gitProvider: new GitHubProvider({
-        branch: process.env.GITHUB_BRANCH || "",
-        owner: process.env.GITHUB_OWNER || "",
-        repo: process.env.GITHUB_REPO || "",
-        token: process.env.GITHUB_PERSONAL_ACCESS_TOKEN || "",
-      }),
-      databaseAdapter: new MongodbLevel({
-        collectionName: "tinacms",
-        dbName: "tinacms",
-        mongoUri: process.env.MONGODB_URI || "",
-      }),
-    });
 
 async function run() {
-  try {
-    console.log('Getting schema...');
-    const schema = await database.getSchema();
-    console.log('Schema collections:', schema ? schema.getCollections().map(c => c.name) : 'No schema found');
-
-    console.log('Using resolve from @tinacms/graphql...');
-    const { resolve } = require('@tinacms/graphql');
-    const result = await resolve({
-      database,
-      query: 'query { postConnection { edges { node { id } } } }',
-      variables: {},
-    });
-    
-    console.log('Resolve result:', JSON.stringify(result, null, 2));
-  } catch (e) {
-    console.error('Error:', e);
+  const mongoUri = process.env.MONGODB_URI;
+  if (!mongoUri) {
+    console.error("Error: MONGODB_URI is not set in .env file.");
+    process.exit(1);
   }
+  console.log(`Using MongoDB URI: ${mongoUri.replace(/:([^:@]+)@/, ':****@')}`);
+
+  const databaseAdapter = new MongodbLevel({
+        collectionName: "tinacms",
+        dbName: "tinacms",
+        mongoUri: mongoUri,
+      });
+  
+  console.log("Listing keys in database...");
+  const iterator = databaseAdapter.iterator();
+  let count = 0;
+  for await (const [key, value] of iterator) {
+    if (key.includes('content/users')) {
+        console.log(`\nKey: ${key}`);
+        let displayValue = value;
+        if (typeof value === 'string') {
+            try {
+                displayValue = JSON.parse(value);
+            } catch (e) {
+                // Not JSON, display as is
+            }
+        }
+        console.log(`Value:`, JSON.stringify(displayValue, null, 2));
+    }
+    count++;
+    if (count > 1000) break; // Limit output
+  }
+  console.log(`Total keys listed: ${count}`);
+  process.exit(0);
 }
 
-run();
+run().catch(console.error);

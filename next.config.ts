@@ -52,6 +52,21 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      // Ignore MongoDB's optional native dependencies
+      config.externals.push({
+        'bson-ext': 'commonjs bson-ext',
+        'kerberos': 'commonjs kerberos',
+        'snappy': 'commonjs snappy',
+        'snappy/package.json': 'commonjs snappy/package.json',
+        '@mongodb-js/zstd': 'commonjs @mongodb-js/zstd',
+        'aws4': 'commonjs aws4',
+        'mongodb-client-encryption': 'commonjs mongodb-client-encryption',
+      });
+    }
+    return config;
+  },
 };
 
 export default nextConfig
