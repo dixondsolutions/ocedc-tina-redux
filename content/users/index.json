@@ -4,7 +4,10 @@
       "username": "admin",
       "name": "Admin User",
       "email": "admin@ocedc.org",
-      "password": "$2b$10$MEfne8iKysZMxJNj82HSLudKDZaz3OSvZ4bPUVefP1qZYB7ohf1my"
+      "password": {
+        "value": "changeme123",
+        "passwordChangeRequired": true
+      }
     }
   ]
 }
