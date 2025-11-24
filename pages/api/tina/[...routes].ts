@@ -10,6 +10,7 @@ const authProvider = AuthJsBackendAuthProvider({
 
 const handler = TinaNodeBackend({
   authProvider: {
+    ...authProvider,
     isAuthorized: async (req: any, res: any) => {
       const user = await authProvider.isAuthorized(req, res);
       if (user && user.isAuthorized) return user;
