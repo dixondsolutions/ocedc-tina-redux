@@ -1,10 +1,13 @@
 import { TinaNodeBackend } from "@tinacms/datalayer";
 import databaseClient from "@/tina/__generated__/databaseClient";
 
+import { AuthJsBackendAuthProvider } from "tinacms-authjs";
+import { authOptions } from "../../../tina/auth";
+
 const handler = TinaNodeBackend({
-  authProvider: {
-    isAuthorized: async () => ({ isAuthorized: true }),
-  },
+  authProvider: AuthJsBackendAuthProvider({
+    authOptions,
+  }),
   databaseClient,
 });
 

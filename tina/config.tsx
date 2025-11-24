@@ -11,7 +11,13 @@ import Communities from "./collection/communities";
 import BoardMembers from "./collection/board-members";
 import Resources from "./collection/resources";
 
+import { UsernamePasswordAuthJSProvider, TinaUserCollection } from "tinacms-authjs/dist/tinacms";
+
 const config = defineConfig({
+  admin: {
+    // auth: { ... } - relying on authProvider
+  },
+  authProvider: new UsernamePasswordAuthJSProvider(),
   contentApiUrlOverride:
     process.env.NEXT_PUBLIC_TINA_API_URL ||
     (process.env.VERCEL_URL
@@ -40,7 +46,7 @@ const config = defineConfig({
     basePath: nextConfig.basePath?.replace(/^\//, '') || '', // The base path of the app (could be /blog)
   },
   schema: {
-    collections: [Page, Post, Author, Tag, Global, Properties, Communities, BoardMembers, Resources],
+    collections: [TinaUserCollection, Page, Post, Author, Tag, Global, Properties, Communities, BoardMembers, Resources],
   },
 });
 

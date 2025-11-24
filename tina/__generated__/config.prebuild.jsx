@@ -2216,6 +2216,21 @@ var ResourcesPartsFragmentDoc = gql`
   date
 }
     `;
+var UserPartsFragmentDoc = gql`
+    fragment UserParts on User {
+  __typename
+  users {
+    __typename
+    username
+    name
+    email
+    password {
+      value
+      passwordChangeRequired
+    }
+  }
+}
+    `;
 var PageQueryDocument = gql`
     query pageQuery {
   ...LayoutQueryFragment
@@ -2777,6 +2792,63 @@ var ResourcesConnectionDocument = gql`
   }
 }
     ${ResourcesPartsFragmentDoc}`;
+var UserDocument = gql`
+    query user($relativePath: String!) {
+  user(relativePath: $relativePath) {
+    ... on Document {
+      _sys {
+        filename
+        basename
+        hasReferences
+        breadcrumbs
+        path
+        relativePath
+        extension
+      }
+      id
+    }
+    ...UserParts
+  }
+}
+    ${UserPartsFragmentDoc}`;
+var UserConnectionDocument = gql`
+    query userConnection($before: String, $after: String, $first: Float, $last: Float, $sort: String, $filter: UserFilter) {
+  userConnection(
+    before: $before
+    after: $after
+    first: $first
+    last: $last
+    sort: $sort
+    filter: $filter
+  ) {
+    pageInfo {
+      hasPreviousPage
+      hasNextPage
+      startCursor
+      endCursor
+    }
+    totalCount
+    edges {
+      cursor
+      node {
+        ... on Document {
+          _sys {
+            filename
+            basename
+            hasReferences
+            breadcrumbs
+            path
+            relativePath
+            extension
+          }
+          id
+        }
+        ...UserParts
+      }
+    }
+  }
+}
+    ${UserPartsFragmentDoc}`;
 function getSdk(requester) {
   return {
     pageQuery(variables, options) {
@@ -2841,6 +2913,12 @@ function getSdk(requester) {
     },
     resourcesConnection(variables, options) {
       return requester(ResourcesConnectionDocument, variables, options);
+    },
+    user(variables, options) {
+      return requester(UserDocument, variables, options);
+    },
+    userConnection(variables, options) {
+      return requester(UserConnectionDocument, variables, options);
     }
   };
 }
@@ -3613,7 +3691,12 @@ var Resources = {
 var resources_default = Resources;
 
 // tina/config.tsx
+import { UsernamePasswordAuthJSProvider, TinaUserCollection } from "tinacms-authjs/dist/tinacms";
 var config = defineConfig({
+  admin: {
+    // auth: { ... } - relying on authProvider
+  },
+  authProvider: new UsernamePasswordAuthJSProvider(),
   contentApiUrlOverride: process.env.NEXT_PUBLIC_TINA_API_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/api/tina/gql` : "http://localhost:3000/api/tina/gql"),
   branch: process.env.NEXT_PUBLIC_TINA_BRANCH || // custom branch env override
   process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF || // Vercel branch env
@@ -3641,7 +3724,7 @@ var config = defineConfig({
     // The base path of the app (could be /blog)
   },
   schema: {
-    collections: [page_default, post_default, author_default, tag_default, global_default, properties_default, communities_default, board_members_default, resources_default]
+    collections: [TinaUserCollection, page_default, post_default, author_default, tag_default, global_default, properties_default, communities_default, board_members_default, resources_default]
   }
 });
 var config_default = config;
