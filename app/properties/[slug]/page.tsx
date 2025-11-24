@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import Layout from '@/components/layout/layout';
-import client from '@/lib/tina-client';
+import client from '@/tina/__generated__/databaseClient';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 300;

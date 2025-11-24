@@ -3,7 +3,7 @@ import { MongodbLevel } from "mongodb-level";
 import { GitHubProvider } from "tinacms-gitprovider-github";
 
 console.log('tina/database.ts: TINA_PUBLIC_IS_LOCAL=', process.env.TINA_PUBLIC_IS_LOCAL);
-const isLocal = false; // process.env.TINA_PUBLIC_IS_LOCAL === "true";
+const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
 
 export default isLocal
   ? createLocalDatabase()
