@@ -1,4 +1,4 @@
-import { defineConfig } from "tinacms";
+import { defineConfig, LocalAuthProvider } from "tinacms";
 import nextConfig from '../next.config'
 
 import Post from "./collection/post";
@@ -13,31 +13,23 @@ import Resources from "./collection/resources";
 
 import { UsernamePasswordAuthJSProvider, TinaUserCollection } from "tinacms-authjs/dist/tinacms";
 
+const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true";
+
 const config = defineConfig({
-  admin: {
-    // auth: { ... } - relying on authProvider
-  },
-  authProvider: new UsernamePasswordAuthJSProvider(),
-  contentApiUrlOverride:
-    process.env.NEXT_PUBLIC_TINA_API_URL ||
-    (process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}/api/tina/gql`
-      : "http://localhost:3000/api/tina/gql"),
+  authProvider: isLocal
+    ? new LocalAuthProvider()
+    : new UsernamePasswordAuthJSProvider(),
+  contentApiUrlOverride: "/api/tina/gql",
   branch:
     process.env.NEXT_PUBLIC_TINA_BRANCH! || // custom branch env override
     process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF! || // Vercel branch env
     process.env.HEAD!, // Netlify branch env
   token: process.env.TINA_TOKEN!,
   media: {
-    // If you wanted cloudinary do this
-    // loadCustomStore: async () => {
-    //   const pack = await import("next-tinacms-cloudinary");
-    //   return pack.TinaCloudCloudinaryMediaStore;
-    // },
-    // this is the config for the tina cloud media store
-    tina: {
-      publicFolder: "public",
-      mediaRoot: "uploads",
+    // Use Cloudinary for media storage (required for Vercel deployment)
+    loadCustomStore: async () => {
+      const pack = await import("next-tinacms-cloudinary");
+      return pack.TinaCloudCloudinaryMediaStore;
     },
   },
   build: {
