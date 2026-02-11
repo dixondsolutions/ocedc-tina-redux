@@ -33,6 +33,10 @@ const handler = TinaNodeBackend({
 
 import { NextApiRequest, NextApiResponse } from 'next';
 
+export const config = {
+  maxDuration: 60,
+};
+
 export default (req: NextApiRequest, res: NextApiResponse) => {
   // Add CORS headers to allow TinaCMS admin UI to access the API
   res.setHeader('Access-Control-Allow-Credentials', 'true');
