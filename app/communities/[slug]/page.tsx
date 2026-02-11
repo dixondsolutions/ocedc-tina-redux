@@ -6,7 +6,6 @@ import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import Layout from '@/components/layout/layout';
 import client from '@/tina/__generated__/databaseClient';
 
-export const dynamic = 'force-dynamic';
 export const revalidate = 300;
 
 export default async function CommunityDetailPage({
