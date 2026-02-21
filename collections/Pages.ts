@@ -28,7 +28,12 @@ export const Pages: CollectionConfig = {
   access: {
     read: ({ req }) => {
       if (req.user) return true
-      return { _status: { equals: 'published' } }
+      return {
+        or: [
+          { _status: { equals: 'published' } },
+          { _status: { exists: false } },
+        ],
+      }
     },
   },
   versions: {
