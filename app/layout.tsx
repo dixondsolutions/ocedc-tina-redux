@@ -101,26 +101,26 @@ export default async function RootLayout({
   const scriptOrigins = getScriptOrigins(scriptsData);
   const extraSrc = scriptOrigins.length > 0 ? ' ' + scriptOrigins.join(' ') : '';
 
-  // When LOIS mode is active, allow the LOIS domain + its CDN dependencies
-  let loisSrc = '';
+  // When LOIS mode is active, allow the LOIS domain in frame-src
+  let loisFrame = '';
   const loisData = listingsData as any;
   if (loisData?.listingsSource === 'lois' && loisData?.lois?.baseUrl) {
     try {
       const raw = loisData.lois.baseUrl as string;
       const withProtocol = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
-      const loisOrigin = new URL(withProtocol).origin;
-      loisSrc = ` ${loisOrigin} https://unpkg.com https://fonts.googleapis.com https://fonts.gstatic.com`;
+      loisFrame = ` ${new URL(withProtocol).origin}`;
     } catch {
       // skip invalid LOIS URL
     }
   }
 
   const cspContent = [
-    `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com${extraSrc}${loisSrc}`,
-    `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com${loisSrc}`,
-    `connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://*.convex.site${extraSrc}${loisSrc}`,
+    `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com${extraSrc}`,
+    `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
+    `connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://*.convex.site${extraSrc}`,
     `font-src 'self' https://fonts.gstatic.com`,
-    `img-src 'self' data: blob: https://www.google-analytics.com https://*.public.blob.vercel-storage.com${loisSrc}`,
+    `img-src 'self' data: blob: https://www.google-analytics.com https://*.public.blob.vercel-storage.com`,
+    `frame-src 'self' https://www.google.com https://www.youtube.com${loisFrame}`,
   ].join('; ');
 
   return (
