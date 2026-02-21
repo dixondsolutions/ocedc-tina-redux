@@ -241,20 +241,20 @@ export const Header = () => {
                   ),
               )}
             </div>
-            {utility.phoneNumber && (
-              <a
-                href={phoneHref}
-                className="font-bold tracking-wide text-[#1b1f24] hover:text-[#1b1f24]/70 transition-colors"
-              >
-                {utility.phoneLabel && (
-                  <span className="text-[#1b1f24]/70 mr-1">
-                    {utility.phoneLabel}:
-                  </span>
-                )}
-                {utility.phoneNumber}
-              </a>
-            )}
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-4">
+              {utility.phoneNumber && (
+                <a
+                  href={phoneHref}
+                  className="font-bold tracking-wide text-[#1b1f24] hover:text-[#1b1f24]/70 transition-colors"
+                >
+                  {utility.phoneLabel && (
+                    <span className="text-[#1b1f24]/70 mr-1">
+                      {utility.phoneLabel}:
+                    </span>
+                  )}
+                  {utility.phoneNumber}
+                </a>
+              )}
               {utility.actions?.map(
                 (action) =>
                   action?.label &&
@@ -274,14 +274,14 @@ export const Header = () => {
       )}
 
       <nav className="border-b border-white/10 bg-[#1b1f24] text-white">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-3">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-2">
           <Link href="/" aria-label="home" className="flex shrink-0 items-center">
             <Image
               src={logoUrl}
               alt="OCEDC - Ogle County Economic Development Corporation"
-              width={240}
-              height={72}
-              className="h-14 w-auto"
+              width={496}
+              height={130}
+              className="h-10 w-auto"
               priority
               unoptimized={logoUrl.startsWith("http")}
             />
