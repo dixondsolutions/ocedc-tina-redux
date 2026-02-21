@@ -4,6 +4,11 @@ import { useField, FieldLabel } from '@payloadcms/ui'
 import type { SelectFieldClientComponent } from 'payload'
 import { BG_COLOR_HEX_MAP } from './color-map'
 
+function labelToString(label: string | Record<string, string>, fallback: string): string {
+  if (typeof label === 'string') return label
+  return Object.values(label)[0] || fallback
+}
+
 export const BackgroundColorField: SelectFieldClientComponent = ({ field, path }) => {
   const { value, setValue } = useField<string>({ path })
 
@@ -76,7 +81,7 @@ export const BackgroundColorField: SelectFieldClientComponent = ({ field, path }
                   width: '100%',
                 }}
               >
-                {typeof opt.label === 'string' ? opt.label : opt.value}
+                {labelToString(opt.label, opt.value)}
               </span>
             </button>
           )

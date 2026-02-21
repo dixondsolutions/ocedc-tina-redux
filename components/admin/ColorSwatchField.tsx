@@ -4,6 +4,11 @@ import { useField, FieldLabel } from '@payloadcms/ui'
 import type { SelectFieldClientComponent } from 'payload'
 import { COLOR_HEX_MAP } from './color-map'
 
+function labelToString(label: string | Record<string, string>, fallback: string): string {
+  if (typeof label === 'string') return label
+  return Object.values(label)[0] || fallback
+}
+
 export const ColorSwatchField: SelectFieldClientComponent = ({ field, path }) => {
   const { value, setValue } = useField<string>({ path })
 
@@ -24,7 +29,7 @@ export const ColorSwatchField: SelectFieldClientComponent = ({ field, path }) =>
             <button
               key={opt.value}
               type="button"
-              title={typeof opt.label === 'string' ? opt.label : opt.value}
+              title={labelToString(opt.label, opt.value)}
               onClick={() => setValue(isSelected ? '' : opt.value)}
               style={{
                 width: 32,
@@ -44,7 +49,7 @@ export const ColorSwatchField: SelectFieldClientComponent = ({ field, path }) =>
       </div>
       {value && (
         <div style={{ marginTop: 6, fontSize: 13, color: '#6b7280' }}>
-          Selected: {options.find((o) => o.value === value)?.label || value}
+          Selected: {labelToString(options.find((o) => o.value === value)?.label || value, value)}
         </div>
       )}
     </div>
