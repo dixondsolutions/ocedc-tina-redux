@@ -26,7 +26,12 @@ const nextConfig: NextConfig = {
       },
       {
         key: 'Content-Security-Policy',
-        value: "frame-ancestors 'self'",
+        value: [
+          "frame-ancestors 'self'",
+          "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com",
+          "connect-src 'self' https://www.google-analytics.com https://analytics.google.com",
+          "img-src 'self' data: blob: https://www.google-analytics.com https://*.public.blob.vercel-storage.com",
+        ].join('; '),
       },
     ]
     return [

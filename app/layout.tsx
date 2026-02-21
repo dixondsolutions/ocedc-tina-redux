@@ -1,5 +1,7 @@
 import React from "react";
-import { Metadata } from "next";
+import type { Metadata } from "next";
+import { getPayload } from "payload";
+import config from "@payload-config";
 import { Inter as FontSans, Lato, Nunito, Playfair_Display } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { VideoDialogProvider } from "@/components/ui/VideoDialogContext";
@@ -29,27 +31,45 @@ const playfair = Playfair_Display({
   variable: "--font-serif",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL("https://ocedc.org"),
-  title: {
-    default: "Ogle County Economic Development Corporation",
-    template: "%s | Ogle County Economic Development Corporation",
-  },
-  description:
-    "Official site of the Ogle County Economic Development Corporation—connecting site selectors, businesses, and community partners across Northern Illinois.",
-  openGraph: {
-    title: "Ogle County Economic Development Corporation",
+export async function generateMetadata(): Promise<Metadata> {
+  const payload = await getPayload({ config });
+  const scriptsData = await payload.findGlobal({ slug: 'scripts' });
+  const verification = (scriptsData as any)?.verification;
+
+  return {
+    metadataBase: new URL("https://ocedc.org"),
+    title: {
+      default: "Ogle County Economic Development Corporation",
+      template: "%s | Ogle County Economic Development Corporation",
+    },
     description:
-      "Explore shovel-ready sites, target industries, and business support services in Ogle County, Illinois.",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Ogle County Economic Development Corporation",
-    description:
-      "Economic destination for growth and prosperity in Northern Illinois.",
-  },
-};
+      "Official site of the Ogle County Economic Development Corporation—connecting site selectors, businesses, and community partners across Northern Illinois.",
+    openGraph: {
+      title: "Ogle County Economic Development Corporation",
+      description:
+        "Explore shovel-ready sites, target industries, and business support services in Ogle County, Illinois.",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Ogle County Economic Development Corporation",
+      description:
+        "Economic destination for growth and prosperity in Northern Illinois.",
+    },
+    verification: {
+      google: verification?.googleSearchConsole || undefined,
+      yandex: verification?.yandex || undefined,
+      other: {
+        ...(verification?.bingWebmaster
+          ? { 'msvalidate.01': verification.bingWebmaster }
+          : {}),
+        ...(verification?.pinterest
+          ? { 'p:domain_verify': verification.pinterest }
+          : {}),
+      },
+    },
+  };
+}
 
 export default function RootLayout({
   children,

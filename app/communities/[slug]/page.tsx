@@ -1,4 +1,5 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -6,8 +7,25 @@ import { getPayload } from 'payload';
 import config from '@payload-config';
 import Layout from '@/components/layout/layout';
 import { RichText } from '@/components/rich-text';
+import { generatePageMetadata } from '@/lib/generate-page-metadata';
 
 export const revalidate = 300;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const payload = await getPayload({ config });
+  const { docs } = await payload.find({
+    collection: 'communities',
+    where: { slug: { equals: slug } },
+    depth: 1,
+    limit: 1,
+  });
+  return generatePageMetadata(docs[0] as any);
+}
 
 export default async function CommunityDetailPage({
   params,

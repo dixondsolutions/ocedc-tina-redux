@@ -2,6 +2,7 @@ import { buildConfig } from 'payload'
 import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
+import { seoPlugin } from '@payloadcms/plugin-seo'
 import sharp from 'sharp'
 
 import { Media } from './collections/Media'
@@ -18,6 +19,7 @@ import { Resources } from './collections/Resources'
 import { Header } from './globals/Header'
 import { Footer } from './globals/Footer'
 import { Theme } from './globals/Theme'
+import { Scripts } from './globals/Scripts'
 
 export default buildConfig({
   admin: {
@@ -41,7 +43,7 @@ export default buildConfig({
     BoardMembers,
     Resources,
   ],
-  globals: [Header, Footer, Theme],
+  globals: [Header, Footer, Theme, Scripts],
   secret: process.env.PAYLOAD_SECRET || 'default-secret-change-me',
   plugins: [
     vercelBlobStorage({
@@ -49,6 +51,25 @@ export default buildConfig({
         media: true,
       },
       token: process.env.BLOB_READ_WRITE_TOKEN || '',
+    }),
+    seoPlugin({
+      collections: ['pages', 'posts', 'properties', 'communities'],
+      uploadsCollection: 'media',
+      generateTitle: ({ doc }) =>
+        `${(doc as any)?.title || (doc as any)?.name || ''} | Ogle County EDC`,
+      generateDescription: ({ doc }) => (doc as any)?.excerpt || '',
+      generateURL: ({ doc, collectionSlug }) => {
+        const slug = (doc as any)?.slug
+        if (!slug) return ''
+        const prefixes: Record<string, string> = {
+          pages: '',
+          posts: '/news',
+          properties: '/properties',
+          communities: '/communities',
+        }
+        const prefix = prefixes[collectionSlug ?? ''] ?? ''
+        return `https://ocedc.org${prefix}/${slug}`
+      },
     }),
   ],
   sharp,

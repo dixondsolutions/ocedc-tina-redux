@@ -223,7 +223,7 @@ export async function GET() {
             author: authorId || undefined,
             tags: tagIds.length > 0 ? tagIds : undefined,
             content: textToLexical(content),
-            status: 'published' as const,
+            _status: 'published',
           },
         })
         log(`  Created post: ${frontmatter.title}`)

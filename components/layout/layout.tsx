@@ -4,6 +4,7 @@ import config from "@payload-config";
 import { LayoutProvider, type GlobalSettings } from "./layout-context";
 import { Header } from "./nav/header";
 import { Footer } from "./nav/footer";
+import { SiteScripts } from "./site-scripts";
 
 type LayoutProps = PropsWithChildren & {
   rawPageData?: any;
@@ -12,16 +13,18 @@ type LayoutProps = PropsWithChildren & {
 export default async function Layout({ children, rawPageData }: LayoutProps) {
   const payload = await getPayload({ config });
 
-  const [headerData, footerData, themeData] = await Promise.all([
+  const [headerData, footerData, themeData, scriptsData] = await Promise.all([
     payload.findGlobal({ slug: 'header' }),
     payload.findGlobal({ slug: 'footer' }),
     payload.findGlobal({ slug: 'theme' }),
+    payload.findGlobal({ slug: 'scripts' }),
   ]);
 
   const globalSettings: GlobalSettings = {
     header: headerData as any,
     footer: footerData as any,
     theme: themeData as any,
+    scripts: scriptsData as any,
   };
 
   return (
@@ -34,6 +37,7 @@ export default async function Layout({ children, rawPageData }: LayoutProps) {
         {children}
       </main>
       <Footer />
+      <SiteScripts scripts={globalSettings.scripts} />
     </LayoutProvider>
   );
 }

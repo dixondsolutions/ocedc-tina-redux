@@ -23,10 +23,20 @@ export const Pages: CollectionConfig = {
   labels: { singular: 'Page', plural: 'Pages' },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'slug'],
+    defaultColumns: ['title', 'slug', '_status'],
   },
   access: {
-    read: () => true,
+    read: ({ req }) => {
+      if (req.user) return true
+      return { _status: { equals: 'published' } }
+    },
+  },
+  versions: {
+    drafts: {
+      autosave: true,
+      schedulePublish: true,
+    },
+    maxPerDoc: 25,
   },
   fields: [
     {

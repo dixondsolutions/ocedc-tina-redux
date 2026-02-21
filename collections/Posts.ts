@@ -5,10 +5,20 @@ export const Posts: CollectionConfig = {
   labels: { singular: 'Post', plural: 'Posts' },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'author', 'date', 'status'],
+    defaultColumns: ['title', 'author', 'date', '_status'],
   },
   access: {
-    read: () => true,
+    read: ({ req }) => {
+      if (req.user) return true
+      return { _status: { equals: 'published' } }
+    },
+  },
+  versions: {
+    drafts: {
+      autosave: true,
+      schedulePublish: true,
+    },
+    maxPerDoc: 25,
   },
   fields: [
     {
@@ -62,16 +72,6 @@ export const Posts: CollectionConfig = {
       name: 'content',
       type: 'richText',
       label: 'Body',
-    },
-    {
-      name: 'status',
-      type: 'select',
-      label: 'Status',
-      defaultValue: 'published',
-      options: [
-        { label: 'Draft', value: 'draft' },
-        { label: 'Published', value: 'published' },
-      ],
     },
   ],
 }

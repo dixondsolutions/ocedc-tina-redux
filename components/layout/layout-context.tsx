@@ -39,10 +39,32 @@ export interface ThemeData {
   darkMode?: string | null;
 }
 
+export interface ScriptsData {
+  googleTagManager?: {
+    enabled?: boolean | null;
+    containerId?: string | null;
+  } | null;
+  verification?: {
+    googleSearchConsole?: string | null;
+    bingWebmaster?: string | null;
+    yandex?: string | null;
+    pinterest?: string | null;
+  } | null;
+  customScripts?: Array<{
+    name?: string | null;
+    enabled?: boolean | null;
+    placement?: string | null;
+    strategy?: string | null;
+    code?: string | null;
+    id?: string | null;
+  }> | null;
+}
+
 export interface GlobalSettings {
   header: HeaderData;
   footer: FooterData;
   theme: ThemeData;
+  scripts: ScriptsData;
 }
 
 interface LayoutState {
