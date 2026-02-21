@@ -1,5 +1,3 @@
-import { tinaField } from "tinacms/dist/react";
-import { Page, PageBlocks } from "../../tina/__generated__/types";
 import { Hero } from "./hero";
 import { Content } from "./content";
 import { Features } from "./features";
@@ -19,13 +17,17 @@ import { BoardDirectory } from "./board-directory";
 import { ResourceLibrary } from "./resource-library";
 import { PropertyExplorer } from "./property-explorer";
 
-export const Blocks = (props: Omit<Page, "id" | "_sys" | "_values">) => {
-  if (!props.blocks) return null;
+interface BlocksProps {
+  blocks: any[];
+}
+
+export const Blocks = ({ blocks }: BlocksProps) => {
+  if (!blocks) return null;
   return (
     <>
-      {props.blocks.map(function (block, i) {
+      {blocks.map(function (block, i) {
         return (
-          <div key={i} data-tina-field={tinaField(block)}>
+          <div key={block.id || i}>
             <Block {...block} />
           </div>
         );
@@ -34,43 +36,43 @@ export const Blocks = (props: Omit<Page, "id" | "_sys" | "_values">) => {
   );
 };
 
-const Block = (block: PageBlocks | any) => {
-  switch (block.__typename) {
-    case "PageBlocksVideo":
+const Block = (block: any) => {
+  switch (block.blockType) {
+    case "video":
       return <Video data={block} />;
-    case "PageBlocksHero":
+    case "hero":
       return <Hero data={block} />;
-    case "PageBlocksCallout":
+    case "callout":
       return <Callout data={block} />;
-    case "PageBlocksStats":
+    case "stats":
       return <Stats data={block} />;
-    case "PageBlocksContent":
+    case "content":
       return <Content data={block} />;
-    case "PageBlocksFeatures":
+    case "features":
       return <Features data={block} />;
-    case "PageBlocksTestimonial":
+    case "testimonial":
       return <Testimonial data={block} />;
-    case "PageBlocksCta":
+    case "cta":
       return <CallToAction data={block} />;
-    case "PageBlocksIndustriesGrid":
+    case "industriesGrid":
       return <IndustriesGrid data={block} />;
-    case "PageBlocksNewsFeed":
+    case "newsFeed":
       return <NewsFeed data={block} />;
-    case "PageBlocksNewsArchive":
+    case "newsArchive":
       return <NewsArchive data={block} />;
-    case "PageBlocksContactForm":
+    case "contactForm":
       return <ContactForm data={block} />;
-    case "PageBlocksMap":
+    case "map":
       return <Map data={block} />;
-    case "PageBlocksPropertyListing":
+    case "propertyListing":
       return <PropertyListing data={block} />;
-    case "PageBlocksCommunityList":
+    case "communityList":
       return <CommunityList data={block} />;
-    case "PageBlocksBoardDirectory":
+    case "boardDirectory":
       return <BoardDirectory data={block} />;
-    case "PageBlocksResourceLibrary":
+    case "resourceLibrary":
       return <ResourceLibrary data={block} />;
-    case "PageBlocksPropertyExplorer":
+    case "propertyExplorer":
       return <PropertyExplorer data={block} />;
     default:
       return null;

@@ -2,9 +2,10 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { TinaMarkdown } from 'tinacms/dist/rich-text';
+import { getPayload } from 'payload';
+import config from '@payload-config';
 import Layout from '@/components/layout/layout';
-import client from '@/tina/__generated__/databaseClient';
+import { RichText } from '@/components/rich-text';
 
 export const revalidate = 300;
 
@@ -15,29 +16,29 @@ export default async function PropertyDetailPage({
 }) {
   const { slug } = await params;
 
-  let propertyData;
-  try {
-    propertyData = await client.queries.properties({
-      relativePath: `${slug}.md`,
-    });
-  } catch (error) {
-    notFound();
-  }
+  const payload = await getPayload({ config });
 
-  const property = propertyData?.data?.properties;
+  const { docs } = await payload.find({
+    collection: 'properties',
+    where: { slug: { equals: slug } },
+    depth: 2,
+    limit: 1,
+  });
+
+  const property = docs[0];
   if (!property) {
     notFound();
   }
 
-  const descriptionContent = property.description;
+  const specSheetUrl = typeof property.specSheet === 'object' && property.specSheet?.url ? property.specSheet.url : null;
 
   return (
-    <Layout rawPageData={propertyData}>
+    <Layout>
       <section className="bg-default">
         <div className="mx-auto flex max-w-6xl flex-col gap-10 px-6 py-16">
           <div className="space-y-4">
             <Link href="/sites-buildings" className="text-sm font-semibold text-primary hover:underline">
-              ← Back to Sites &amp; Buildings
+              &larr; Back to Sites &amp; Buildings
             </Link>
             <div className="flex flex-wrap items-center gap-3">
               <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
@@ -63,20 +64,20 @@ export default async function PropertyDetailPage({
             <div className="space-y-6">
               {property.gallery && property.gallery.length > 0 && (
                 <div className="grid gap-4 md:grid-cols-2">
-                  {property.gallery.map(
-                    (image: string | null, index: number) =>
-                      image && (
-                        <div key={`${image}-${index}`} className="overflow-hidden rounded-3xl border border-border/70 bg-white shadow">
-                          <Image
-                            src={image}
-                            alt={`${property.name} photo ${index + 1}`}
-                            width={1200}
-                            height={900}
-                            className="h-64 w-full object-cover"
-                          />
-                        </div>
-                      ),
-                  )}
+                  {property.gallery.map((item: any, index: number) => {
+                    const imageUrl = typeof item.image === 'object' && item.image?.url ? item.image.url : null;
+                    return imageUrl ? (
+                      <div key={`gallery-${index}`} className="overflow-hidden rounded-3xl border border-border/70 bg-white shadow">
+                        <Image
+                          src={imageUrl}
+                          alt={item.image?.alt || `${property.name} photo ${index + 1}`}
+                          width={1200}
+                          height={900}
+                          className="h-64 w-full object-cover"
+                        />
+                      </div>
+                    ) : null;
+                  })}
                 </div>
               )}
 
@@ -103,14 +104,11 @@ export default async function PropertyDetailPage({
                     <dt className="text-sm font-semibold text-muted-foreground">Utilities</dt>
                     <dd className="mt-1 flex flex-wrap gap-2">
                       {property.utilities && property.utilities.length > 0 ? (
-                        property.utilities.map(
-                          (utility: string | null) =>
-                            utility && (
-                              <span key={utility} className="rounded-full bg-muted px-3 py-1 text-xs font-semibold uppercase tracking-wide">
-                                {utility}
-                              </span>
-                            ),
-                        )
+                        property.utilities.map((utility: string) => (
+                          <span key={utility} className="rounded-full bg-muted px-3 py-1 text-xs font-semibold uppercase tracking-wide">
+                            {utility}
+                          </span>
+                        ))
                       ) : (
                         <span className="text-muted-foreground">Standard municipal services available</span>
                       )}
@@ -122,10 +120,10 @@ export default async function PropertyDetailPage({
               <div className="rounded-3xl border border-border/70 bg-white/90 p-6 shadow-sm dark:bg-slate-900/70">
                 <h2 className="text-2xl font-semibold">Property Overview</h2>
                 <div className="prose mt-4 max-w-none dark:prose-invert">
-                  {descriptionContent && typeof descriptionContent === 'object' ? (
-                    <TinaMarkdown content={descriptionContent as any} />
+                  {property.description ? (
+                    <RichText data={property.description} />
                   ) : (
-                    <p>{descriptionContent || 'Detailed description coming soon.'}</p>
+                    <p>Detailed description coming soon.</p>
                   )}
                 </div>
               </div>
@@ -145,9 +143,9 @@ export default async function PropertyDetailPage({
                   <Link href="/contact" className="rounded-full bg-primary px-4 py-2 text-center text-sm font-semibold text-white shadow hover:bg-primary/90">
                     Start a Site Selection Conversation
                   </Link>
-                  {property.specSheet && (
+                  {specSheetUrl && (
                     <a
-                      href={property.specSheet}
+                      href={specSheetUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="rounded-full border border-border px-4 py-2 text-center text-sm font-semibold text-foreground hover:border-primary/60 hover:text-primary"
@@ -174,9 +172,6 @@ export default async function PropertyDetailPage({
   );
 }
 
-// Same reasoning as other dynamic routes: querying Tina during the Vercel build
-// would hit http://localhost:3000 and fail. We rely on ISR instead.
 export async function generateStaticParams() {
   return [];
 }
-

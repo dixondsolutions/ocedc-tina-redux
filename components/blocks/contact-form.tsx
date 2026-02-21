@@ -1,17 +1,13 @@
 import React from 'react';
-import type { Template } from 'tinacms';
-import { PageBlocksContactForm } from '../../tina/__generated__/types';
-import { tinaField } from 'tinacms/dist/react';
-import { Section, sectionBlockSchemaField } from '../layout/section';
+import { Section } from '../layout/section';
 
-export const ContactForm = ({ data }: { data: PageBlocksContactForm }) => {
+export const ContactForm = ({ data }: { data: any }) => {
     return (
         <Section background={data.style?.background || undefined}>
             <div className="mx-auto max-w-5xl px-4 sm:px-6">
                 <div className="mb-12 text-center">
                     {data.title && (
                         <h2
-                            data-tina-field={tinaField(data, 'title')}
                             className="text-3xl font-bold uppercase tracking-wide text-foreground"
                         >
                             {data.title}
@@ -19,7 +15,6 @@ export const ContactForm = ({ data }: { data: PageBlocksContactForm }) => {
                     )}
                     {data.text && (
                         <p
-                            data-tina-field={tinaField(data, 'text')}
                             className="mt-4 text-lg text-muted-foreground"
                         >
                             {data.text}
@@ -136,33 +131,4 @@ export const ContactForm = ({ data }: { data: PageBlocksContactForm }) => {
             </div>
         </Section>
     );
-};
-
-export const contactFormBlockSchema: Template = {
-    name: 'contactForm',
-    label: 'Contact Form',
-    ui: {
-        previewSrc: '/blocks/contact-form.svg', // Placeholder
-        defaultItem: {
-            title: 'Contact OCEDC',
-            text: 'Reach out to our team for assistance with site selection, incentives, or general inquiries.',
-        },
-        itemProps: (item) => ({ label: item.title || 'Contact Form' }),
-    },
-    fields: [
-        sectionBlockSchemaField as any,
-        {
-            type: 'string',
-            label: 'Title',
-            name: 'title',
-        },
-        {
-            type: 'string',
-            label: 'Text',
-            name: 'text',
-            ui: {
-                component: 'textarea',
-            },
-        },
-    ],
 };

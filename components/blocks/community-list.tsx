@@ -1,23 +1,24 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import type { Template } from 'tinacms';
-import { PageBlocksCommunityList } from '../../tina/__generated__/types';
-import { tinaField } from 'tinacms/dist/react';
-import { Section, sectionBlockSchemaField } from '../layout/section';
-import client from '@/lib/tina-client';
+import { Section } from '../layout/section';
 import Link from 'next/link';
 
-export const CommunityList = ({ data }: { data: PageBlocksCommunityList }) => {
+const getMediaUrl = (media: any): string | null => {
+    if (!media) return null;
+    if (typeof media === 'string') return media;
+    return media.url || null;
+};
+
+export const CommunityList = ({ data }: { data: any }) => {
     const [communities, setCommunities] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchCommunities = async () => {
             try {
-                const communitiesData = await client.queries.communitiesConnection({
-                    last: 12,
-                });
-                setCommunities(communitiesData.data.communitiesConnection.edges?.map((edge) => edge?.node) || []);
+                const response = await fetch('/api/communities?limit=12&depth=1');
+                const result = await response.json();
+                setCommunities(result.docs || []);
             } catch (error) {
                 console.error('Error fetching communities:', error);
                 setCommunities([]);
@@ -31,13 +32,20 @@ export const CommunityList = ({ data }: { data: PageBlocksCommunityList }) => {
 
     const ctaLabel = (data as any)?.ctaLabel || 'View Profile';
 
+    const getGalleryImage = (community: any): string | null => {
+        if (!community.gallery || community.gallery.length === 0) return null;
+        const first = community.gallery[0];
+        if (typeof first === 'string') return first;
+        if (first?.image) return getMediaUrl(first.image);
+        return getMediaUrl(first);
+    };
+
     return (
         <Section background={data.style?.background || undefined}>
             <div className="mx-auto max-w-6xl space-y-6 px-4 sm:px-6">
                 <div className="space-y-4 text-center">
                     {data.title && (
                         <h2
-                            data-tina-field={tinaField(data, 'title')}
                             className="text-3xl font-bold uppercase tracking-wide text-foreground md:text-4xl"
                         >
                             {data.title}
@@ -45,7 +53,6 @@ export const CommunityList = ({ data }: { data: PageBlocksCommunityList }) => {
                     )}
                     {data.description && (
                         <p
-                            data-tina-field={tinaField(data, 'description')}
                             className="mx-auto max-w-3xl text-base text-muted-foreground md:text-lg"
                         >
                             {data.description}
@@ -58,14 +65,16 @@ export const CommunityList = ({ data }: { data: PageBlocksCommunityList }) => {
                     ) : communities.length === 0 ? (
                         <div className="col-span-3 py-12 text-center text-gray-500">No communities available at this time.</div>
                     ) : (
-                        communities.map((community) => (
+                        communities.map((community) => {
+                            const galleryImg = getGalleryImage(community);
+                            return (
                             <div
                                 key={community.id}
                                 className="overflow-hidden rounded-3xl border border-border/70 bg-white shadow-sm transition hover:-translate-y-1 hover:border-primary/60 hover:shadow-lg dark:bg-slate-900/80"
                             >
-                                {community.gallery && community.gallery.length > 0 && (
+                                {galleryImg && (
                                     <img
-                                        src={community.gallery[0]}
+                                        src={galleryImg}
                                         alt={community.name}
                                         className="h-48 w-full object-cover"
                                         loading="lazy"
@@ -75,7 +84,7 @@ export const CommunityList = ({ data }: { data: PageBlocksCommunityList }) => {
                                     <div>
                                         <p className="text-xs font-semibold uppercase tracking-wide text-primary">Member Community</p>
                                         <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                                            <Link href={`/communities/${community._sys.filename}`} className="hover:text-primary transition-colors">
+                                            <Link href={`/communities/${community.slug || community.id}`} className="hover:text-primary transition-colors">
                                                 {community.name}
                                             </Link>
                                         </h3>
@@ -94,51 +103,17 @@ export const CommunityList = ({ data }: { data: PageBlocksCommunityList }) => {
                                         </div>
                                     )}
                                     <Link
-                                        href={`/communities/${community._sys.filename}`}
+                                        href={`/communities/${community.slug || community.id}`}
                                         className="inline-flex w-full items-center justify-center rounded-full border border-primary px-4 py-2 text-sm font-semibold text-primary transition hover:bg-primary hover:text-white"
                                     >
                                         {ctaLabel}
                                     </Link>
                                 </div>
                             </div>
-                        ))
+                        )})
                     )}
                 </div>
             </div>
         </Section>
     );
-};
-
-export const communityListBlockSchema: Template = {
-    name: 'communityList',
-    label: 'Community List',
-    ui: {
-        previewSrc: '/blocks/community-list.svg', // Placeholder
-        defaultItem: {
-            title: 'Our Member Communities',
-            description: 'Six municipalities collaborate through OCEDC to provide a seamless service area.',
-        },
-        itemProps: (item) => ({ label: item.title || 'Community List' }),
-    },
-    fields: [
-        sectionBlockSchemaField as any,
-        {
-            type: 'string',
-            label: 'Title',
-            name: 'title',
-        },
-        {
-            type: 'string',
-            label: 'Description',
-            name: 'description',
-            ui: {
-                component: 'textarea',
-            },
-        },
-        {
-            type: 'string',
-            label: 'Button Label',
-            name: 'ctaLabel',
-        },
-    ],
 };

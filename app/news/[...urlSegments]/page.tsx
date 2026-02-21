@@ -1,7 +1,9 @@
 import React from 'react';
-import client from '@/tina/__generated__/databaseClient';
+import { notFound } from 'next/navigation';
+import { getPayload } from 'payload';
+import config from '@payload-config';
 import Layout from '@/components/layout/layout';
-import NewsArticleClientPage from './client-page';
+import PostContent from './post-content';
 
 export const revalidate = 300;
 
@@ -11,23 +13,31 @@ export default async function PostPage({
   params: Promise<{ urlSegments: string[] }>;
 }) {
   const resolvedParams = await params;
-  const filepath = resolvedParams.urlSegments.join('/');
-  const data = await client.queries.post({
-    relativePath: `${filepath}.mdx`,
+  const slug = resolvedParams.urlSegments.join('/');
+
+  const payload = await getPayload({ config });
+
+  const { docs } = await payload.find({
+    collection: 'posts',
+    where: { slug: { equals: slug } },
+    depth: 2,
+    limit: 1,
   });
 
+  const post = docs[0];
+  if (!post) {
+    notFound();
+  }
+
   return (
-    <Layout rawPageData={data}>
+    <Layout>
       <div className="pt-32 lg:pt-40">
-        <NewsArticleClientPage {...JSON.parse(JSON.stringify(data))} />
+        <PostContent post={JSON.parse(JSON.stringify(post))} />
       </div>
     </Layout>
   );
 }
 
-// See note in `app/[...urlSegments]/page.tsx` – calling the Tina client at build
-// time in this function will fail on Vercel because there is no HTTP server
-// listening on localhost. We instead rely on on-demand generation for posts.
 export async function generateStaticParams() {
   return [];
 }

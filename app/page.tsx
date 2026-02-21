@@ -1,18 +1,27 @@
 import React from "react";
-import client from '@/tina/__generated__/databaseClient';
+import { getPayload } from "payload";
+import config from "@payload-config";
 import Layout from "@/components/layout/layout";
-import ClientPage from "./[...urlSegments]/client-page";
+import { Blocks } from "@/components/blocks";
 
+export const dynamic = 'force-dynamic';
 export const revalidate = 300;
 
 export default async function Home() {
-  const data = await client.queries.page({
-    relativePath: `home.mdx`,
+  const payload = await getPayload({ config });
+
+  const { docs } = await payload.find({
+    collection: 'pages',
+    where: { slug: { equals: 'home' } },
+    depth: 2,
+    limit: 1,
   });
 
+  const page = docs[0];
+
   return (
-    <Layout rawPageData={data}>
-      <ClientPage {...JSON.parse(JSON.stringify(data))} />
+    <Layout>
+      <Blocks blocks={page?.blocks || []} />
     </Layout>
   );
 }

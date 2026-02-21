@@ -2,9 +2,10 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { TinaMarkdown } from 'tinacms/dist/rich-text';
+import { getPayload } from 'payload';
+import config from '@payload-config';
 import Layout from '@/components/layout/layout';
-import client from '@/tina/__generated__/databaseClient';
+import { RichText } from '@/components/rich-text';
 
 export const revalidate = 300;
 
@@ -15,27 +16,27 @@ export default async function CommunityDetailPage({
 }) {
   const { slug } = await params;
 
-  let communityData;
-  try {
-    communityData = await client.queries.communities({
-      relativePath: `${slug}.md`,
-    });
-  } catch (error) {
-    notFound();
-  }
+  const payload = await getPayload({ config });
 
-  const community = communityData?.data?.communities;
+  const { docs } = await payload.find({
+    collection: 'communities',
+    where: { slug: { equals: slug } },
+    depth: 2,
+    limit: 1,
+  });
+
+  const community = docs[0];
   if (!community) {
     notFound();
   }
 
   return (
-    <Layout rawPageData={communityData}>
+    <Layout>
       <section className="bg-default">
         <div className="mx-auto flex max-w-5xl flex-col gap-10 px-6 py-16">
           <div className="space-y-4 text-center">
             <Link href="/communities" className="text-sm font-semibold text-primary hover:underline">
-              ← Back to Communities
+              &larr; Back to Communities
             </Link>
             <p className="text-xs font-semibold uppercase tracking-wide text-primary">Member Community</p>
             <h1 className="text-pretty text-4xl font-semibold md:text-5xl">{community.name}</h1>
@@ -49,20 +50,20 @@ export default async function CommunityDetailPage({
           <div className="space-y-6">
             {community.gallery && community.gallery.length > 0 && (
               <div className="grid gap-4 md:grid-cols-2">
-                {community.gallery.map(
-                  (image: string | null, index: number) =>
-                    image && (
-                      <div key={`${image}-${index}`} className="overflow-hidden rounded-3xl border border-border/60 bg-white shadow">
-                        <Image
-                          src={image}
-                          alt={`${community.name} photo ${index + 1}`}
-                          width={1200}
-                          height={900}
-                          className="h-64 w-full object-cover"
-                        />
-                      </div>
-                    ),
-                )}
+                {community.gallery.map((item: any, index: number) => {
+                  const imageUrl = typeof item.image === 'object' && item.image?.url ? item.image.url : null;
+                  return imageUrl ? (
+                    <div key={`gallery-${index}`} className="overflow-hidden rounded-3xl border border-border/60 bg-white shadow">
+                      <Image
+                        src={imageUrl}
+                        alt={item.image?.alt || `${community.name} photo ${index + 1}`}
+                        width={1200}
+                        height={900}
+                        className="h-64 w-full object-cover"
+                      />
+                    </div>
+                  ) : null;
+                })}
               </div>
             )}
 
@@ -71,11 +72,7 @@ export default async function CommunityDetailPage({
                 <h2 className="text-2xl font-semibold">Community Snapshot</h2>
                 <div className="prose mt-4 max-w-none text-sm text-muted-foreground dark:prose-invert">
                   {community.description ? (
-                    typeof community.description === 'object' ? (
-                      <TinaMarkdown content={community.description as any} />
-                    ) : (
-                      <p>{community.description}</p>
-                    )
+                    <RichText data={community.description} />
                   ) : (
                     <p>Additional narrative coming soon.</p>
                   )}
@@ -84,8 +81,8 @@ export default async function CommunityDetailPage({
                   <div className="mt-6">
                     <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Key Employers</h3>
                     <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
-                      {community.keyEmployers.map((employer: string | null) => (
-                        <li key={employer}>{employer}</li>
+                      {community.keyEmployers.map((employer: any) => (
+                        <li key={employer.id || employer.name}>{employer.name}</li>
                       ))}
                     </ul>
                   </div>
@@ -93,14 +90,10 @@ export default async function CommunityDetailPage({
               </article>
 
               <article className="rounded-3xl border border-border/70 bg-white/90 p-6 shadow-sm dark:bg-slate-900/70">
-                <h2 className="text-2xl font-semibold">Demographics & Quality of Life</h2>
+                <h2 className="text-2xl font-semibold">Demographics &amp; Quality of Life</h2>
                 <div className="prose mt-4 max-w-none text-sm text-muted-foreground dark:prose-invert">
                   {community.demographics ? (
-                    typeof community.demographics === 'object' ? (
-                      <TinaMarkdown content={community.demographics as any} />
-                    ) : (
-                      <p>{community.demographics}</p>
-                    )
+                    <RichText data={community.demographics} />
                   ) : (
                     <p>Demographic profile available upon request.</p>
                   )}
@@ -109,19 +102,15 @@ export default async function CommunityDetailPage({
                   <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Municipal Contact</h3>
                   <div className="prose mt-3 max-w-none text-sm text-muted-foreground dark:prose-invert">
                     {community.contactInfo ? (
-                      typeof community.contactInfo === 'object' ? (
-                        <TinaMarkdown content={community.contactInfo as any} />
-                      ) : (
-                        <p>{community.contactInfo}</p>
-                      )
+                      <RichText data={community.contactInfo} />
                     ) : (
                       <p>Email info@ocedc.org for direct introductions.</p>
                     )}
                   </div>
                 </div>
-                {community.profilePdf && (
+                {community.profilePdf && typeof community.profilePdf === 'object' && community.profilePdf.url && (
                   <a
-                    href={community.profilePdf}
+                    href={community.profilePdf.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="mt-6 inline-flex w-full items-center justify-center rounded-full border border-primary px-4 py-2 text-sm font-semibold text-primary transition hover:bg-primary hover:text-white"
@@ -138,9 +127,6 @@ export default async function CommunityDetailPage({
   );
 }
 
-// Avoid calling the Tina client during the build (no localhost server on Vercel).
-// We rely on ISR to generate community pages on-demand instead.
 export async function generateStaticParams() {
   return [];
 }
-

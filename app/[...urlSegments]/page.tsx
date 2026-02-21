@@ -1,9 +1,9 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
-import client from '@/tina/__generated__/databaseClient';
+import { getPayload } from 'payload';
+import config from '@payload-config';
 import Layout from '@/components/layout/layout';
-
-import ClientPage from './client-page';
+import { Blocks } from '@/components/blocks';
 
 export const revalidate = 300;
 
@@ -13,28 +13,29 @@ export default async function Page({
   params: Promise<{ urlSegments: string[] }>;
 }) {
   const resolvedParams = await params;
-  const filepath = resolvedParams.urlSegments.join('/');
+  const slug = resolvedParams.urlSegments.join('/');
 
-  let data;
-  try {
-    data = await client.queries.page({
-      relativePath: `${filepath}.mdx`,
-    });
-  } catch (error) {
+  const payload = await getPayload({ config });
+
+  const { docs } = await payload.find({
+    collection: 'pages',
+    where: { slug: { equals: slug } },
+    depth: 2,
+    limit: 1,
+  });
+
+  const page = docs[0];
+  if (!page) {
     notFound();
   }
 
   return (
-    <Layout rawPageData={data}>
-      <ClientPage {...JSON.parse(JSON.stringify(data))} />
+    <Layout>
+      <Blocks blocks={page.blocks || []} />
     </Layout>
   );
 }
 
-// During the build on platforms like Vercel there is no local HTTP server running,
-// so calling the Tina client here would fail. Instead, we skip pre-generating
-// any dynamic `[...urlSegments]` paths and let Next.js generate them on-demand
-// at runtime using ISR (`revalidate` above).
 export async function generateStaticParams() {
   return [];
 }

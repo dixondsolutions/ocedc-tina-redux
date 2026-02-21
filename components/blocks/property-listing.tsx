@@ -1,23 +1,24 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import type { Template } from 'tinacms';
-import { PageBlocksPropertyListing } from '../../tina/__generated__/types';
-import { tinaField } from 'tinacms/dist/react';
-import { Section, sectionBlockSchemaField } from '../layout/section';
-import client from '@/lib/tina-client';
+import { Section } from '../layout/section';
 import Link from 'next/link';
 
-export const PropertyListing = ({ data }: { data: PageBlocksPropertyListing }) => {
+const getMediaUrl = (media: any): string | null => {
+    if (!media) return null;
+    if (typeof media === 'string') return media;
+    return media.url || null;
+};
+
+export const PropertyListing = ({ data }: { data: any }) => {
     const [properties, setProperties] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchProperties = async () => {
             try {
-                const propertiesData = await client.queries.propertiesConnection({
-                    last: 6,
-                });
-                setProperties(propertiesData.data.propertiesConnection.edges?.map((edge) => edge?.node) || []);
+                const response = await fetch('/api/properties?limit=6&depth=1');
+                const result = await response.json();
+                setProperties(result.docs || []);
             } catch (error) {
                 console.error('Error fetching properties:', error);
                 setProperties([]);
@@ -32,6 +33,14 @@ export const PropertyListing = ({ data }: { data: PageBlocksPropertyListing }) =
     const ctaLabel = (data as any)?.ctaLabel || 'View all sites & buildings →';
     const ctaHref = (data as any)?.ctaHref || '/sites-buildings';
 
+    const getGalleryImage = (property: any): string | null => {
+        if (!property.gallery || property.gallery.length === 0) return null;
+        const first = property.gallery[0];
+        if (typeof first === 'string') return first;
+        if (first?.image) return getMediaUrl(first.image);
+        return getMediaUrl(first);
+    };
+
     return (
         <Section background={data.style?.background || undefined}>
             <div className="mx-auto max-w-6xl space-y-6 px-4 sm:px-6">
@@ -39,7 +48,6 @@ export const PropertyListing = ({ data }: { data: PageBlocksPropertyListing }) =
                     <div>
                         {data.title && (
                             <h2
-                                data-tina-field={tinaField(data, 'title')}
                                 className="text-3xl font-bold uppercase tracking-wide text-foreground md:text-4xl"
                             >
                                 {data.title}
@@ -47,7 +55,6 @@ export const PropertyListing = ({ data }: { data: PageBlocksPropertyListing }) =
                         )}
                         {data.description && (
                             <p
-                                data-tina-field={tinaField(data, 'description')}
                                 className="mt-2 text-base text-muted-foreground"
                             >
                                 {data.description}
@@ -65,14 +72,16 @@ export const PropertyListing = ({ data }: { data: PageBlocksPropertyListing }) =
                     ) : properties.length === 0 ? (
                         <div className="col-span-3 py-12 text-center text-gray-500">No properties available at this time.</div>
                     ) : (
-                        properties.map((property) => (
+                        properties.map((property) => {
+                            const galleryImg = getGalleryImage(property);
+                            return (
                             <div
                                 key={property.id}
                                 className="overflow-hidden rounded-3xl border border-border/70 bg-white shadow-sm transition hover:-translate-y-1 hover:border-primary/60 hover:shadow-lg dark:bg-slate-900/80"
                             >
-                                {property.gallery && property.gallery.length > 0 && (
+                                {galleryImg && (
                                     <img
-                                        src={property.gallery[0]}
+                                        src={galleryImg}
                                         alt={property.name}
                                         className="h-48 w-full object-cover"
                                         loading="lazy"
@@ -97,7 +106,7 @@ export const PropertyListing = ({ data }: { data: PageBlocksPropertyListing }) =
                                     </div>
                                     <div>
                                         <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                                            <Link href={`/properties/${property._sys.filename}`} className="hover:text-primary transition-colors">
+                                            <Link href={`/properties/${property.slug || property.id}`} className="hover:text-primary transition-colors">
                                                 {property.name}
                                             </Link>
                                         </h3>
@@ -125,48 +134,10 @@ export const PropertyListing = ({ data }: { data: PageBlocksPropertyListing }) =
                                     </div>
                                 </div>
                             </div>
-                        ))
+                        )})
                     )}
                 </div>
             </div>
         </Section>
     );
-};
-
-export const propertyListingBlockSchema: Template = {
-    name: 'propertyListing',
-    label: 'Property Listing',
-    ui: {
-        previewSrc: '/blocks/property-listing.svg', // Placeholder
-        defaultItem: {
-            title: 'Featured Properties',
-        },
-        itemProps: (item) => ({ label: item.title || 'Property Listing' }),
-    },
-    fields: [
-        sectionBlockSchemaField as any,
-        {
-            type: 'string',
-            label: 'Title',
-            name: 'title',
-        },
-        {
-            type: 'string',
-            label: 'Description',
-            name: 'description',
-            ui: {
-                component: 'textarea',
-            },
-        },
-        {
-            type: 'string',
-            label: 'CTA Label',
-            name: 'ctaLabel',
-        },
-        {
-            type: 'string',
-            label: 'CTA Link',
-            name: 'ctaHref',
-        },
-    ],
 };

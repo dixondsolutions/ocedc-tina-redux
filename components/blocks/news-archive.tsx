@@ -4,28 +4,31 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { format } from 'date-fns';
-import type { Template } from 'tinacms';
-import { tinaField } from 'tinacms/dist/react';
-import { TinaMarkdown } from 'tinacms/dist/rich-text';
 import { ArrowRight, Search } from 'lucide-react';
 
-import client from '@/lib/tina-client';
-import { PageBlocksNewsArchive } from '@/tina/__generated__/types';
-import { Section, sectionBlockSchemaField } from '../layout/section';
+import { Section } from '../layout/section';
 import { Card } from '../ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { RichText } from '@/components/rich-text';
+
+const getMediaUrl = (media: any): string | null => {
+  if (!media) return null;
+  if (typeof media === 'string') return media;
+  return media.url || null;
+};
 
 type PostRecord = {
   id: string;
   title: string;
+  slug?: string;
   date?: string | null;
   excerpt?: unknown;
-  heroImg?: string | null;
+  heroImg?: any;
   tags: string[];
   url: string;
   author?: {
     name?: string | null;
-    avatar?: string | null;
+    avatar?: any;
   };
 };
 
@@ -57,7 +60,7 @@ const excerptToText = (value: unknown): string => {
   return '';
 };
 
-export const NewsArchive = ({ data }: { data: PageBlocksNewsArchive }) => {
+export const NewsArchive = ({ data }: { data: any }) => {
   const [posts, setPosts] = useState<PostRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -67,33 +70,30 @@ export const NewsArchive = ({ data }: { data: PageBlocksNewsArchive }) => {
     const fetchPosts = async () => {
       try {
         const limit = Math.max(3, Math.min(100, data.postsToLoad || 24));
-        const response = await client.queries.postConnection({
-          sort: 'date',
-          last: limit,
-        });
+        const response = await fetch(`/api/posts?limit=${limit}&sort=-date&depth=2`);
+        const result = await response.json();
         const normalized =
-          response.data.postConnection.edges
-            ?.map((edge) => edge?.node)
+          (result.docs || [])
             .filter(Boolean)
-            .map((node) => {
-              const slug = node?._sys?.breadcrumbs?.join('/') || '';
+            .map((node: any) => {
+              const slug = node?.slug || node?.id || '';
               return {
-              id: node?.id || fallbackId(),
-              title: node?.title || 'Untitled update',
-              date: node?.date,
-              excerpt: node?.excerpt,
-              heroImg: node?.heroImg,
-              tags:
-                node?.tags
-                  ?.map((tag) => tag?.tag?.name)
-                  .filter((tag): tag is string => Boolean(tag)) || [],
-              url: slug ? `/news/${slug}` : '/news',
-              author: {
-                name: node?.author?.name,
-                avatar: node?.author?.avatar,
-              },
-            };
-          }) || [];
+                id: node?.id || fallbackId(),
+                title: node?.title || 'Untitled update',
+                date: node?.date,
+                excerpt: node?.excerpt,
+                heroImg: node?.heroImg,
+                tags:
+                  node?.tags
+                    ?.map((tag: any) => (typeof tag === 'string' ? tag : tag?.tag?.name || tag?.name))
+                    .filter((tag: any): tag is string => Boolean(tag)) || [],
+                url: slug ? `/news/${slug}` : '/news',
+                author: {
+                  name: node?.author?.name,
+                  avatar: node?.author?.avatar,
+                },
+              };
+            }) || [];
         setPosts(normalized);
       } catch (error) {
         console.error('Error loading news posts', error);
@@ -129,13 +129,12 @@ export const NewsArchive = ({ data }: { data: PageBlocksNewsArchive }) => {
       <div className="mx-auto max-w-6xl space-y-8 px-4 sm:px-6">
         <div className="space-y-4 text-center">
           {data.title && (
-            <h2 data-tina-field={tinaField(data, 'title')} className="text-pretty text-3xl font-semibold md:text-4xl">
+            <h2 className="text-pretty text-3xl font-semibold md:text-4xl">
               {data.title}
             </h2>
           )}
           {data.description && (
             <p
-              data-tina-field={tinaField(data, 'description')}
               className="mx-auto max-w-3xl text-base text-muted-foreground md:text-lg"
             >
               {data.description}
@@ -158,7 +157,6 @@ export const NewsArchive = ({ data }: { data: PageBlocksNewsArchive }) => {
           {data.ctaLabel && data.ctaHref && (
             <Link
               href={data.ctaHref}
-              data-tina-field={tinaField(data, 'ctaLabel')}
               className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white shadow transition hover:bg-primary/90"
             >
               {data.ctaLabel}
@@ -191,7 +189,10 @@ export const NewsArchive = ({ data }: { data: PageBlocksNewsArchive }) => {
           </div>
         ) : (
           <div className="grid gap-y-10 sm:grid-cols-12 sm:gap-y-12 md:gap-y-16 lg:gap-y-20">
-            {filteredPosts.map((post) => (
+            {filteredPosts.map((post) => {
+              const heroUrl = getMediaUrl(post.heroImg);
+              const authorAvatarUrl = getMediaUrl(post.author?.avatar);
+              return (
               <Card
                 key={post.id}
                 className="order-last border-0 bg-transparent shadow-none sm:order-first sm:col-span-12 lg:col-span-10 lg:col-start-2"
@@ -223,14 +224,14 @@ export const NewsArchive = ({ data }: { data: PageBlocksNewsArchive }) => {
                         typeof post.excerpt === 'string' ? (
                           <p>{post.excerpt}</p>
                         ) : (
-                          <TinaMarkdown content={post.excerpt as any} />
+                          <RichText data={post.excerpt} />
                         )
                       ) : null}
                     </div>
                     <div className="mt-6 flex items-center space-x-4 text-sm md:mt-8">
                       <Avatar>
-                        {post.author?.avatar && (
-                          <AvatarImage src={post.author.avatar} alt={post.author?.name || 'OCEDC'} className="h-8 w-8" />
+                        {authorAvatarUrl && (
+                          <AvatarImage src={authorAvatarUrl} alt={post.author?.name || 'OCEDC'} className="h-8 w-8" />
                         )}
                         <AvatarFallback>
                           {(post.author?.name || 'OC').slice(0, 2).toUpperCase()}
@@ -247,14 +248,14 @@ export const NewsArchive = ({ data }: { data: PageBlocksNewsArchive }) => {
                       </Link>
                     </div>
                   </div>
-                  {post.heroImg && (
+                  {heroUrl && (
                     <div className="order-first sm:order-last sm:col-span-5">
                       <Link href={post.url} className="block">
                         <div className="aspect-[16/9] overflow-clip rounded-lg border border-border">
                           <Image
                             width={533}
                             height={300}
-                            src={post.heroImg}
+                            src={heroUrl}
                             alt={post.title}
                             className="h-full w-full object-cover transition-opacity duration-200 hover:opacity-80"
                           />
@@ -264,68 +265,10 @@ export const NewsArchive = ({ data }: { data: PageBlocksNewsArchive }) => {
                   )}
                 </div>
               </Card>
-            ))}
+            )})}
           </div>
         )}
       </div>
     </Section>
   );
 };
-
-export const newsArchiveBlockSchema: Template = {
-  name: 'newsArchive',
-  label: 'News Archive',
-  ui: {
-    previewSrc: '/blocks/news-archive.svg',
-    defaultItem: {
-      title: 'News & Resources',
-      description: 'Browse announcements, incentives, grants, and meeting recaps from OCEDC.',
-      postsToLoad: 24,
-      searchPlaceholder: 'Search announcements, grants, or meetings',
-    },
-    itemProps: (item) => ({ label: item.title || 'News Archive' }),
-  },
-  fields: [
-    sectionBlockSchemaField as any,
-    {
-      type: 'string',
-      label: 'Title',
-      name: 'title',
-    },
-    {
-      type: 'string',
-      label: 'Description',
-      name: 'description',
-      ui: {
-        component: 'textarea',
-      },
-    },
-    {
-      type: 'string',
-      label: 'Search Placeholder',
-      name: 'searchPlaceholder',
-    },
-    {
-      type: 'string',
-      label: 'Empty State Text',
-      name: 'emptyState',
-    },
-    {
-      type: 'string',
-      label: 'CTA Label',
-      name: 'ctaLabel',
-    },
-    {
-      type: 'string',
-      label: 'CTA Link',
-      name: 'ctaHref',
-    },
-    {
-      type: 'number',
-      label: 'Maximum Posts to Load',
-      name: 'postsToLoad',
-    },
-  ],
-};
-
-

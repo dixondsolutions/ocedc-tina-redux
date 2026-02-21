@@ -97,7 +97,7 @@ const iconSizeClass = {
 };
 
 //@ts-ignore
-export const Icon = ({ data, parentColor = '', className = '', tinaField = '' }) => {
+export const Icon = ({ data, parentColor = '', className = '' }: { data: any; parentColor?: string; className?: string }) => {
   const { theme } = useLayout();
 
   //@ts-ignore
@@ -129,7 +129,6 @@ export const Icon = ({ data, parentColor = '', className = '', tinaField = '' })
     const palette = iconColorClass[iconColor] || iconColorClass.blue;
     return (
       <div
-        {...(tinaField ? { 'data-tina-field': tinaField } : {})} // only render data-tina-field if it exists
         className={`relative z-10 inline-flex items-center justify-center shrink-0 ${iconSizeClasses} rounded-full ${palette.circle} ${className}`}
       >
         <IconSVG className='w-2/3 h-2/3' />
@@ -142,7 +141,6 @@ export const Icon = ({ data, parentColor = '', className = '', tinaField = '' })
       palette.regular;
     return (
       <IconSVG
-        {...(tinaField ? { 'data-tina-field': tinaField } : {})} // only render data-tina-field if it exists
         className={`${iconSizeClasses} ${iconColorClasses} ${className}`}
       />
     );

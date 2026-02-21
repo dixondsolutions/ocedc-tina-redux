@@ -2,11 +2,13 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
-import type { Template } from 'tinacms';
-import { tinaField } from 'tinacms/dist/react';
-import { PageBlocksBoardDirectory } from '@/tina/__generated__/types';
-import client from '@/lib/tina-client';
-import { Section, sectionBlockSchemaField } from '../layout/section';
+import { Section } from '../layout/section';
+
+const getMediaUrl = (media: any): string | null => {
+  if (!media) return null;
+  if (typeof media === 'string') return media;
+  return media.url || null;
+};
 
 const fallbackId = () =>
   typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : `id-${Math.random().toString(16).slice(2)}`;
@@ -17,7 +19,7 @@ type BoardMember = {
   title?: string | null;
   organization?: string | null;
   sector?: string | null;
-  photo?: string | null;
+  photo?: any;
   term?: string | null;
   committees?: (string | null)[] | null;
 };
@@ -28,7 +30,7 @@ const sectorFilters = [
   { label: 'Private', value: 'private' },
 ];
 
-export const BoardDirectory = ({ data }: { data: PageBlocksBoardDirectory }) => {
+export const BoardDirectory = ({ data }: { data: any }) => {
   const [members, setMembers] = useState<BoardMember[]>([]);
   const [search, setSearch] = useState('');
   const [sector, setSector] = useState<'all' | 'public' | 'private'>('all');
@@ -37,14 +39,18 @@ export const BoardDirectory = ({ data }: { data: PageBlocksBoardDirectory }) => 
   useEffect(() => {
     const fetchMembers = async () => {
       try {
-        const boardData = await client.queries.boardMembersConnection({
-          last: 50,
-        });
-        const docs =
-          boardData.data.boardMembersConnection.edges?.map((edge) => ({
-            id: edge?.node?.id || edge?.cursor || fallbackId(),
-            ...edge?.node,
-          })) || [];
+        const response = await fetch('/api/board-members?limit=100&depth=1');
+        const result = await response.json();
+        const docs = (result.docs || []).map((doc: any) => ({
+          id: doc.id || fallbackId(),
+          name: doc.name,
+          title: doc.title,
+          organization: doc.organization,
+          sector: doc.sector,
+          photo: doc.photo,
+          term: doc.term,
+          committees: doc.committees,
+        }));
         setMembers(docs as BoardMember[]);
       } catch (error) {
         console.error('Error loading board members', error);
@@ -74,7 +80,6 @@ export const BoardDirectory = ({ data }: { data: PageBlocksBoardDirectory }) => 
         <div className="space-y-4 text-center">
           {data.highlight && (
             <span
-              data-tina-field={tinaField(data, 'highlight')}
               className="mx-auto inline-flex rounded-full border border-primary/30 bg-primary/5 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-primary"
             >
               {data.highlight}
@@ -82,7 +87,6 @@ export const BoardDirectory = ({ data }: { data: PageBlocksBoardDirectory }) => 
           )}
           {data.title && (
             <h2
-              data-tina-field={tinaField(data, 'title')}
               className="text-3xl font-bold uppercase tracking-wide text-foreground md:text-4xl"
             >
               {data.title}
@@ -90,7 +94,6 @@ export const BoardDirectory = ({ data }: { data: PageBlocksBoardDirectory }) => 
           )}
           {data.description && (
             <p
-              data-tina-field={tinaField(data, 'description')}
               className="mx-auto max-w-3xl text-base text-muted-foreground md:text-lg"
             >
               {data.description}
@@ -136,15 +139,17 @@ export const BoardDirectory = ({ data }: { data: PageBlocksBoardDirectory }) => 
           <div className="py-12 text-center text-muted-foreground">No board members match your filters.</div>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2">
-            {filteredMembers.map((member) => (
+            {filteredMembers.map((member) => {
+              const photoUrl = getMediaUrl(member.photo);
+              return (
               <article
                 key={member.id}
                 className="group flex flex-col gap-4 rounded-3xl border border-border/50 bg-card p-6 shadow-sm transition hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5"
               >
                 <div className="flex items-center gap-4">
-                  {member.photo ? (
+                  {photoUrl ? (
                     <Image
-                      src={member.photo}
+                      src={photoUrl}
                       alt={member.name}
                       width={96}
                       height={96}
@@ -191,45 +196,10 @@ export const BoardDirectory = ({ data }: { data: PageBlocksBoardDirectory }) => 
                   </div>
                 )}
               </article>
-            ))}
+            )})}
           </div>
         )}
       </div>
     </Section>
   );
 };
-
-export const boardDirectoryBlockSchema: Template = {
-  name: 'boardDirectory',
-  label: 'Board Directory',
-  ui: {
-    previewSrc: '/blocks/board-directory.svg',
-    defaultItem: {
-      title: 'Board of Directors',
-      description: 'Public-private leadership guiding Ogle County’s economic agenda.',
-    },
-    itemProps: (item) => ({ label: item.title || 'Board Directory' }),
-  },
-  fields: [
-    sectionBlockSchemaField as any,
-    {
-      type: 'string',
-      label: 'Highlight',
-      name: 'highlight',
-    },
-    {
-      type: 'string',
-      label: 'Title',
-      name: 'title',
-    },
-    {
-      type: 'string',
-      label: 'Description',
-      name: 'description',
-      ui: {
-        component: 'textarea',
-      },
-    },
-  ],
-};
-

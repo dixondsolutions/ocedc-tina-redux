@@ -1,13 +1,15 @@
 'use client';
 
 import React, { useEffect, useMemo, useState } from 'react';
-import type { Template } from 'tinacms';
 import { format } from 'date-fns';
-import { tinaField } from 'tinacms/dist/react';
 import Link from 'next/link';
-import client from '@/lib/tina-client';
-import { PageBlocksResourceLibrary } from '@/tina/__generated__/types';
-import { Section, sectionBlockSchemaField } from '../layout/section';
+import { Section } from '../layout/section';
+
+const getMediaUrl = (media: any): string | null => {
+  if (!media) return null;
+  if (typeof media === 'string') return media;
+  return media.url || null;
+};
 
 const fallbackId = () =>
   typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : `resource-${Math.random().toString(16).slice(2)}`;
@@ -17,11 +19,11 @@ type ResourceRecord = {
   title: string;
   description?: string | null;
   category?: string | null;
-  file?: string | null;
+  file?: any;
   date?: string | null;
 };
 
-export const ResourceLibrary = ({ data }: { data: PageBlocksResourceLibrary }) => {
+export const ResourceLibrary = ({ data }: { data: any }) => {
   const [resources, setResources] = useState<ResourceRecord[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [loading, setLoading] = useState(true);
@@ -29,14 +31,16 @@ export const ResourceLibrary = ({ data }: { data: PageBlocksResourceLibrary }) =
   useEffect(() => {
     const fetchResources = async () => {
       try {
-        const resourceData = await client.queries.resourcesConnection({
-          last: 100,
-        });
-        const docs =
-          resourceData.data.resourcesConnection.edges?.map((edge) => ({
-            id: edge?.node?.id || edge?.cursor || fallbackId(),
-            ...edge?.node,
-          })) || [];
+        const response = await fetch('/api/resources?limit=100&depth=1');
+        const result = await response.json();
+        const docs = (result.docs || []).map((doc: any) => ({
+          id: doc.id || fallbackId(),
+          title: doc.title,
+          description: doc.description,
+          category: doc.category,
+          file: doc.file,
+          date: doc.date,
+        }));
         setResources(docs as ResourceRecord[]);
       } catch (error) {
         console.error('Error loading resources', error);
@@ -66,13 +70,12 @@ export const ResourceLibrary = ({ data }: { data: PageBlocksResourceLibrary }) =
       <div className="mx-auto max-w-6xl space-y-8 px-4 sm:px-6">
         <div className="space-y-4 text-center">
           {data.title && (
-            <h2 data-tina-field={tinaField(data, 'title')} className="text-3xl font-bold uppercase tracking-wide text-foreground md:text-4xl">
+            <h2 className="text-3xl font-bold uppercase tracking-wide text-foreground md:text-4xl">
               {data.title}
             </h2>
           )}
           {data.description && (
             <p
-              data-tina-field={tinaField(data, 'description')}
               className="mx-auto max-w-3xl text-base text-muted-foreground md:text-lg"
             >
               {data.description}
@@ -99,7 +102,6 @@ export const ResourceLibrary = ({ data }: { data: PageBlocksResourceLibrary }) =
           {data.ctaLabel && data.ctaHref && (
             <Link
               href={data.ctaHref}
-              data-tina-field={tinaField(data, 'ctaHref')}
               className="rounded-full border border-primary bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition hover:bg-primary hover:text-white"
             >
               {data.ctaLabel}
@@ -113,7 +115,9 @@ export const ResourceLibrary = ({ data }: { data: PageBlocksResourceLibrary }) =
           <div className="py-12 text-center text-muted-foreground">No resources in this category yet.</div>
         ) : (
           <div className="grid gap-6 md:grid-cols-2">
-            {filteredResources.map((resource) => (
+            {filteredResources.map((resource) => {
+              const fileUrl = getMediaUrl(resource.file);
+              return (
               <article
                 key={resource.id}
                 className="flex h-full flex-col justify-between rounded-3xl border border-border bg-white/90 p-6 shadow-sm transition hover:-translate-y-1 hover:border-primary/60 hover:shadow-lg dark:bg-slate-900/80"
@@ -129,9 +133,9 @@ export const ResourceLibrary = ({ data }: { data: PageBlocksResourceLibrary }) =
                 </div>
                 <div className="mt-6 flex items-center justify-between text-sm text-muted-foreground">
                   <span>{resource.date ? format(new Date(resource.date), 'MMM dd, yyyy') : 'Updated quarterly'}</span>
-                  {resource.file && (
+                  {fileUrl && (
                     <a
-                      href={resource.file}
+                      href={fileUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="font-semibold text-primary hover:underline"
@@ -141,50 +145,10 @@ export const ResourceLibrary = ({ data }: { data: PageBlocksResourceLibrary }) =
                   )}
                 </div>
               </article>
-            ))}
+            )})}
           </div>
         )}
       </div>
     </Section>
   );
 };
-
-export const resourceLibraryBlockSchema: Template = {
-  name: 'resourceLibrary',
-  label: 'Resource Library',
-  ui: {
-    previewSrc: '/blocks/resource-library.svg',
-    defaultItem: {
-      title: 'Newsroom & Resources',
-      description: 'Download community profiles, strategic plans, and data briefs for Ogle County.',
-    },
-    itemProps: (item) => ({ label: item.title || 'Resource Library' }),
-  },
-  fields: [
-    sectionBlockSchemaField as any,
-    {
-      type: 'string',
-      label: 'Title',
-      name: 'title',
-    },
-    {
-      type: 'string',
-      label: 'Description',
-      name: 'description',
-      ui: {
-        component: 'textarea',
-      },
-    },
-    {
-      type: 'string',
-      label: 'CTA Label',
-      name: 'ctaLabel',
-    },
-    {
-      type: 'string',
-      label: 'CTA Link',
-      name: 'ctaHref',
-    },
-  ],
-};
-

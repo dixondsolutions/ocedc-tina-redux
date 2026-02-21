@@ -2,12 +2,8 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import type { Template } from 'tinacms';
-import { tinaField } from 'tinacms/dist/react';
 import { MapPin, SlidersHorizontal } from 'lucide-react';
-import client from '@/lib/tina-client';
-import { PageBlocksPropertyExplorer } from '@/tina/__generated__/types';
-import { Section, sectionBlockSchemaField } from '../layout/section';
+import { Section } from '../layout/section';
 
 const fallbackId = () =>
   typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : `property-${Math.random().toString(16).slice(2)}`;
@@ -15,6 +11,7 @@ const fallbackId = () =>
 type PropertyRecord = {
   id: string;
   name: string;
+  slug?: string;
   location?: string | null;
   type?: string | null;
   size?: string | null;
@@ -23,10 +20,7 @@ type PropertyRecord = {
   railAccess?: boolean | null;
   zoning?: string | null;
   status?: string | null;
-  gallery?: (string | null)[] | null;
-  _sys: {
-    filename: string;
-  };
+  gallery?: any[] | null;
 };
 
 const utilityOptions = [
@@ -68,7 +62,7 @@ const sizeMatcher = (size: string | null | undefined, filter: string) => {
   return true;
 };
 
-export const PropertyExplorer = ({ data }: { data: PageBlocksPropertyExplorer }) => {
+export const PropertyExplorer = ({ data }: { data: any }) => {
   const [properties, setProperties] = useState<PropertyRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -81,14 +75,22 @@ export const PropertyExplorer = ({ data }: { data: PageBlocksPropertyExplorer })
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const propertyData = await client.queries.propertiesConnection({
-          last: 100,
-        });
-        const docs =
-          propertyData.data.propertiesConnection.edges?.map((edge) => ({
-            id: edge?.node?.id || edge?.cursor || fallbackId(),
-            ...edge?.node,
-          })) || [];
+        const response = await fetch('/api/properties?limit=100&depth=1');
+        const result = await response.json();
+        const docs = (result.docs || []).map((doc: any) => ({
+          id: doc.id || fallbackId(),
+          name: doc.name,
+          slug: doc.slug,
+          location: doc.location,
+          type: doc.type,
+          size: doc.size,
+          price: doc.price,
+          utilities: doc.utilities,
+          railAccess: doc.railAccess,
+          zoning: doc.zoning,
+          status: doc.status,
+          gallery: doc.gallery,
+        }));
         setProperties(docs as PropertyRecord[]);
       } catch (error) {
         console.error('Error loading properties', error);
@@ -128,13 +130,12 @@ export const PropertyExplorer = ({ data }: { data: PageBlocksPropertyExplorer })
       <div className="mx-auto max-w-6xl space-y-8 px-4 sm:px-6">
         <div className="space-y-4 text-center">
           {data.title && (
-            <h2 data-tina-field={tinaField(data, 'title')} className="text-pretty text-3xl font-semibold md:text-4xl">
+            <h2 className="text-pretty text-3xl font-semibold md:text-4xl">
               {data.title}
             </h2>
           )}
           {data.description && (
             <p
-              data-tina-field={tinaField(data, 'description')}
               className="mx-auto max-w-3xl text-base text-muted-foreground md:text-lg"
             >
               {data.description}
@@ -233,7 +234,6 @@ export const PropertyExplorer = ({ data }: { data: PageBlocksPropertyExplorer })
           {data.ctaHref && data.ctaLabel && (
             <Link
               href={data.ctaHref}
-              data-tina-field={tinaField(data, 'ctaHref')}
               className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white shadow hover:bg-primary/90"
             >
               {data.ctaLabel}
@@ -271,7 +271,7 @@ export const PropertyExplorer = ({ data }: { data: PageBlocksPropertyExplorer })
 
                 <div>
                   <h3 className="text-2xl font-semibold text-foreground">
-                    <Link href={`/properties/${property._sys.filename}`} className="hover:underline">
+                    <Link href={`/properties/${property.slug || property.id}`} className="hover:underline">
                       {property.name}
                     </Link>
                   </h3>
@@ -311,7 +311,7 @@ export const PropertyExplorer = ({ data }: { data: PageBlocksPropertyExplorer })
                 )}
 
                 <div className="flex items-center justify-between pt-2 text-sm font-semibold">
-                  <Link href={`/properties/${property._sys.filename}`} className="text-primary hover:underline">
+                  <Link href={`/properties/${property.slug || property.id}`} className="text-primary hover:underline">
                     View details →
                   </Link>
                   <Link href="/contact" className="text-muted-foreground hover:text-primary">
@@ -341,7 +341,7 @@ export const PropertyExplorer = ({ data }: { data: PageBlocksPropertyExplorer })
                 {filtered.map((property) => (
                   <Link
                     key={property.id}
-                    href={`/properties/${property._sys.filename}`}
+                    href={`/properties/${property.slug || property.id}`}
                     className="rounded-2xl border border-border/60 bg-white px-4 py-3 text-sm font-semibold text-foreground shadow hover:border-primary/60 hover:text-primary dark:bg-slate-900/70"
                   >
                     {property.name} · {property.size} · {property.location}
@@ -355,45 +355,3 @@ export const PropertyExplorer = ({ data }: { data: PageBlocksPropertyExplorer })
     </Section>
   );
 };
-
-export const propertyExplorerBlockSchema: Template = {
-  name: 'propertyExplorer',
-  label: 'Property Explorer',
-  ui: {
-    previewSrc: '/blocks/property-explorer.svg',
-    defaultItem: {
-      title: 'Explore Sites & Buildings',
-      description: 'Filter available properties by size, utilities, and rail access.',
-      ctaLabel: 'Submit a project',
-      ctaHref: '/contact',
-    },
-    itemProps: (item) => ({ label: item.title || 'Property Explorer' }),
-  },
-  fields: [
-    sectionBlockSchemaField as any,
-    {
-      type: 'string',
-      label: 'Title',
-      name: 'title',
-    },
-    {
-      type: 'string',
-      label: 'Description',
-      name: 'description',
-      ui: {
-        component: 'textarea',
-      },
-    },
-    {
-      type: 'string',
-      label: 'CTA Label',
-      name: 'ctaLabel',
-    },
-    {
-      type: 'string',
-      label: 'CTA Link',
-      name: 'ctaHref',
-    },
-  ],
-};
-

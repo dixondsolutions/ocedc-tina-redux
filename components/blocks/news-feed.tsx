@@ -1,24 +1,24 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import type { Template } from 'tinacms';
-import { PageBlocksNewsFeed } from '../../tina/__generated__/types';
-import { tinaField } from 'tinacms/dist/react';
-import { Section, sectionBlockSchemaField } from '../layout/section';
-import client from '@/lib/tina-client';
+import { Section } from '../layout/section';
 import Link from 'next/link';
 import { format } from 'date-fns';
 
-export const NewsFeed = ({ data }: { data: PageBlocksNewsFeed }) => {
+const getMediaUrl = (media: any): string | null => {
+    if (!media) return null;
+    if (typeof media === 'string') return media;
+    return media.url || null;
+};
+
+export const NewsFeed = ({ data }: { data: any }) => {
     const [posts, setPosts] = useState<any[]>([]);
 
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const postsData = await client.queries.postConnection({
-                    last: 3,
-                    sort: 'date',
-                });
-                setPosts(postsData.data.postConnection.edges?.map((edge) => edge?.node) || []);
+                const response = await fetch('/api/posts?limit=3&sort=-date&depth=2');
+                const result = await response.json();
+                setPosts(result.docs || []);
             } catch (error) {
                 console.error('Error fetching posts:', error);
             }
@@ -33,7 +33,6 @@ export const NewsFeed = ({ data }: { data: PageBlocksNewsFeed }) => {
                 <div className="flex justify-between items-center mb-8">
                     {data.title && (
                         <h2
-                            data-tina-field={tinaField(data, 'title')}
                             className="text-3xl font-bold uppercase tracking-wide text-foreground"
                         >
                             {data.title}
@@ -52,9 +51,9 @@ export const NewsFeed = ({ data }: { data: PageBlocksNewsFeed }) => {
                         {posts[0] && (
                             <div className="group relative overflow-hidden rounded-2xl">
                                 <div className="relative aspect-video w-full overflow-hidden">
-                                    {posts[0].heroImg ? (
+                                    {getMediaUrl(posts[0].heroImg) ? (
                                         <img
-                                            src={posts[0].heroImg}
+                                            src={getMediaUrl(posts[0].heroImg)!}
                                             alt={posts[0].title}
                                             className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                                         />
@@ -69,7 +68,7 @@ export const NewsFeed = ({ data }: { data: PageBlocksNewsFeed }) => {
                                             {posts[0].date ? format(new Date(posts[0].date), 'MMMM d, yyyy') : ''}
                                         </p>
                                         <h3 className="text-2xl font-bold leading-tight md:text-3xl">
-                                            <Link href={`/news/${posts[0]._sys.filename}`} className="hover:text-primary transition-colors">
+                                            <Link href={`/news/${posts[0].slug || posts[0].id}`} className="hover:text-primary transition-colors">
                                                 {posts[0].title}
                                             </Link>
                                         </h3>
@@ -83,9 +82,9 @@ export const NewsFeed = ({ data }: { data: PageBlocksNewsFeed }) => {
                         {posts.slice(1).map((post) => (
                             <div key={post.id} className="group flex items-start gap-4 border-b border-border/40 pb-6 last:border-0">
                                 <div className="relative aspect-square size-24 shrink-0 overflow-hidden rounded-lg bg-muted md:size-32">
-                                    {post.heroImg ? (
+                                    {getMediaUrl(post.heroImg) ? (
                                         <img
-                                            src={post.heroImg}
+                                            src={getMediaUrl(post.heroImg)!}
                                             alt={post.title}
                                             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                                         />
@@ -100,7 +99,7 @@ export const NewsFeed = ({ data }: { data: PageBlocksNewsFeed }) => {
                                         {post.date ? format(new Date(post.date), 'MMMM d, yyyy') : ''}
                                     </p>
                                     <h3 className="text-lg font-bold leading-snug text-foreground group-hover:text-primary transition-colors">
-                                        <Link href={`/news/${post._sys.filename}`}>
+                                        <Link href={`/news/${post.slug || post.id}`}>
                                             {post.title}
                                         </Link>
                                     </h3>
@@ -112,24 +111,4 @@ export const NewsFeed = ({ data }: { data: PageBlocksNewsFeed }) => {
             </div>
         </Section>
     );
-};
-
-export const newsFeedBlockSchema: Template = {
-    name: 'newsFeed',
-    label: 'News Feed',
-    ui: {
-        previewSrc: '/blocks/news-feed.svg', // Placeholder
-        defaultItem: {
-            title: 'Latest News',
-        },
-        itemProps: (item) => ({ label: item.title || 'News Feed' }),
-    },
-    fields: [
-        sectionBlockSchemaField as any,
-        {
-            type: 'string',
-            label: 'Title',
-            name: 'title',
-        },
-    ],
 };
