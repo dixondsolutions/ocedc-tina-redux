@@ -32,7 +32,7 @@ const nextConfig: NextConfig = {
     ]
     return [
       {
-        source: '/(.*)',
+        source: '/((?!admin).*)',
         headers,
       },
     ]
