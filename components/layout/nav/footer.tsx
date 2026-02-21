@@ -1,12 +1,20 @@
 "use client";
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Icon } from "../../icon";
 import { useLayout } from "../layout-context";
+
+const getLogoUrl = (logo: any): string | null => {
+  if (!logo) return null;
+  if (typeof logo === 'string') return null;
+  return logo.url || null;
+};
 
 export const Footer = () => {
   const { globalSettings } = useLayout();
   const { header, footer } = globalSettings!;
+  const logoUrl = getLogoUrl(header?.logo) || "/images/ocedc-logo-gold.png";
 
   return (
     <footer className="bg-[#1b1f24] text-white">
@@ -14,21 +22,14 @@ export const Footer = () => {
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-4">
           <div className="space-y-6">
             <Link href="/" aria-label="go home" className="inline-block">
-              <div className="flex items-center gap-3">
-                <div className="flex size-12 items-center justify-center rounded-full bg-primary text-[#1b1f24]">
-                  <Icon
-                    data={{
-                      name: header?.icon?.name || "BiBuilding",
-                      size: "custom",
-                      color: "custom",
-                    }}
-                    className="size-8 fill-current"
-                  />
-                </div>
-                <span className="text-xl font-bold tracking-tight text-white">
-                  {header?.name}
-                </span>
-              </div>
+              <Image
+                src={logoUrl}
+                alt="OCEDC - Ogle County Economic Development Corporation"
+                width={180}
+                height={54}
+                className="h-12 w-auto"
+                unoptimized={logoUrl.startsWith("http")}
+              />
             </Link>
             {footer?.contact && (
               <div className="space-y-4 text-sm text-gray-400">
@@ -64,19 +65,38 @@ export const Footer = () => {
               Quick Links
             </h3>
             <ul className="space-y-4 text-sm">
-              {header?.nav?.map(
-                (item) =>
-                  item?.href && (
-                    <li key={item.href}>
-                      <Link
-                        href={item.href}
-                        className="text-gray-400 transition-colors hover:text-white"
-                      >
-                        {item.label}
-                      </Link>
-                    </li>
-                  ),
-              )}
+              {header?.nav?.map((item) => {
+                if (!item?.label) return null;
+                const kids = Array.isArray(item.children) ? item.children : [];
+                return (
+                  <React.Fragment key={item.id || item.href || item.label}>
+                    {item.href && (
+                      <li>
+                        <Link
+                          href={item.href}
+                          className="text-gray-400 transition-colors hover:text-white"
+                        >
+                          {item.label}
+                        </Link>
+                      </li>
+                    )}
+                    {kids.map(
+                      (child) =>
+                        child?.href &&
+                        child?.label && (
+                          <li key={child.href}>
+                            <Link
+                              href={child.href}
+                              className="text-gray-400 transition-colors hover:text-white"
+                            >
+                              {child.label}
+                            </Link>
+                          </li>
+                        ),
+                    )}
+                  </React.Fragment>
+                );
+              })}
             </ul>
           </div>
 

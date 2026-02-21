@@ -2,10 +2,16 @@
 import React, { useState, useContext } from "react";
 
 export interface HeaderData {
+  logo?: { url?: string | null; alt?: string | null } | string | null;
   icon?: { name?: string | null; color?: string | null; style?: string | null } | null;
   name?: string | null;
   color?: string | null;
-  nav?: Array<{ href?: string | null; label?: string | null; id?: string | null }> | null;
+  nav?: Array<{
+    href?: string | null;
+    label?: string | null;
+    id?: string | null;
+    children?: Array<{ href?: string | null; label?: string | null; id?: string | null }> | null;
+  }> | null;
   utility?: {
     links?: Array<{ label?: string | null; href?: string | null; id?: string | null }> | null;
     phoneLabel?: string | null;

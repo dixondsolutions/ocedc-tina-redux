@@ -65,6 +65,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description:
         "Explore shovel-ready sites, target industries, and business support services in Ogle County, Illinois.",
       type: "website",
+      images: [{ url: "/images/ocedc-logo-gold.png", width: 843, height: 595 }],
     },
     twitter: {
       card: "summary_large_image",

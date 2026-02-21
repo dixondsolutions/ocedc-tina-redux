@@ -8,6 +8,15 @@ export const Header: GlobalConfig = {
     read: () => true,
   },
   fields: [
+    {
+      name: 'logo',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Site Logo',
+      admin: {
+        description: 'Upload a transparent PNG logo. Used in the header and footer on dark backgrounds.',
+      },
+    },
     iconField,
     {
       name: 'name',
@@ -37,6 +46,26 @@ export const Header: GlobalConfig = {
           name: 'label',
           type: 'text',
           label: 'Label',
+        },
+        {
+          name: 'children',
+          type: 'array',
+          label: 'Dropdown Items',
+          admin: {
+            description: 'Add sub-links to create a dropdown menu under this item.',
+          },
+          fields: [
+            {
+              name: 'href',
+              type: 'text',
+              label: 'Link',
+            },
+            {
+              name: 'label',
+              type: 'text',
+              label: 'Label',
+            },
+          ],
         },
       ],
     },
