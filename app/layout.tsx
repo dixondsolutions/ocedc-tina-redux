@@ -94,14 +94,31 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const payload = await getPayload({ config });
-  const scriptsData = await payload.findGlobal({ slug: 'scripts' });
+  const [scriptsData, listingsData] = await Promise.all([
+    payload.findGlobal({ slug: 'scripts' }),
+    payload.findGlobal({ slug: 'listings' }),
+  ]);
   const scriptOrigins = getScriptOrigins(scriptsData);
   const extraSrc = scriptOrigins.length > 0 ? ' ' + scriptOrigins.join(' ') : '';
 
+  // When LOIS mode is active, allow the LOIS domain + its CDN dependencies
+  let loisSrc = '';
+  const loisData = listingsData as any;
+  if (loisData?.listingsSource === 'lois' && loisData?.lois?.baseUrl) {
+    try {
+      const loisOrigin = new URL(loisData.lois.baseUrl).origin;
+      loisSrc = ` ${loisOrigin} https://unpkg.com https://fonts.googleapis.com https://fonts.gstatic.com`;
+    } catch {
+      // skip invalid LOIS URL
+    }
+  }
+
   const cspContent = [
-    `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com${extraSrc}`,
-    `connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://*.convex.site${extraSrc}`,
-    "img-src 'self' data: blob: https://www.google-analytics.com https://*.public.blob.vercel-storage.com",
+    `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com${extraSrc}${loisSrc}`,
+    `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com${loisSrc}`,
+    `connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://*.convex.site${extraSrc}${loisSrc}`,
+    `font-src 'self' https://fonts.gstatic.com`,
+    `img-src 'self' data: blob: https://www.google-analytics.com https://*.public.blob.vercel-storage.com${loisSrc}`,
   ].join('; ');
 
   return (

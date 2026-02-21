@@ -13,11 +13,12 @@ type LayoutProps = PropsWithChildren & {
 export default async function Layout({ children, rawPageData }: LayoutProps) {
   const payload = await getPayload({ config });
 
-  const [headerData, footerData, themeData, scriptsData] = await Promise.all([
+  const [headerData, footerData, themeData, scriptsData, listingsData] = await Promise.all([
     payload.findGlobal({ slug: 'header' }),
     payload.findGlobal({ slug: 'footer' }),
     payload.findGlobal({ slug: 'theme' }),
     payload.findGlobal({ slug: 'scripts' }),
+    payload.findGlobal({ slug: 'listings' }),
   ]);
 
   const globalSettings: GlobalSettings = {
@@ -25,6 +26,7 @@ export default async function Layout({ children, rawPageData }: LayoutProps) {
     footer: footerData as any,
     theme: themeData as any,
     scripts: scriptsData as any,
+    listings: listingsData as any,
   };
 
   return (

@@ -1,3 +1,5 @@
+'use client';
+
 import { Hero } from "./hero";
 import { Content } from "./content";
 import { Features } from "./features";
@@ -16,6 +18,8 @@ import { CommunityList } from "./community-list";
 import { BoardDirectory } from "./board-directory";
 import { ResourceLibrary } from "./resource-library";
 import { PropertyExplorer } from "./property-explorer";
+import { LoisWidget } from "./lois-widget";
+import { useLayout } from "../layout/layout-context";
 
 interface BlocksProps {
   blocks: any[];
@@ -37,6 +41,13 @@ export const Blocks = ({ blocks }: BlocksProps) => {
 };
 
 const Block = (block: any) => {
+  const { globalSettings } = useLayout();
+  const listings = globalSettings?.listings;
+  const useLois =
+    listings?.listingsSource === 'lois' &&
+    listings?.lois?.baseUrl &&
+    listings?.lois?.organizationId;
+
   switch (block.blockType) {
     case "video":
       return <Video data={block} />;
@@ -65,7 +76,15 @@ const Block = (block: any) => {
     case "map":
       return <Map data={block} />;
     case "propertyListing":
-      return <PropertyListing data={block} />;
+      return useLois ? (
+        <LoisWidget
+          baseUrl={listings.lois!.baseUrl!}
+          organizationId={listings.lois!.organizationId!}
+          background={block.style?.background}
+        />
+      ) : (
+        <PropertyListing data={block} />
+      );
     case "communityList":
       return <CommunityList data={block} />;
     case "boardDirectory":
@@ -73,7 +92,15 @@ const Block = (block: any) => {
     case "resourceLibrary":
       return <ResourceLibrary data={block} />;
     case "propertyExplorer":
-      return <PropertyExplorer data={block} />;
+      return useLois ? (
+        <LoisWidget
+          baseUrl={listings.lois!.baseUrl!}
+          organizationId={listings.lois!.organizationId!}
+          background={block.style?.background}
+        />
+      ) : (
+        <PropertyExplorer data={block} />
+      );
     default:
       return null;
   }

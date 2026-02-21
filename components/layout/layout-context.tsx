@@ -69,11 +69,20 @@ export interface ScriptsData {
   }> | null;
 }
 
+export interface ListingsData {
+  listingsSource?: 'cms' | 'lois' | null;
+  lois?: {
+    baseUrl?: string | null;
+    organizationId?: string | null;
+  } | null;
+}
+
 export interface GlobalSettings {
   header: HeaderData;
   footer: FooterData;
   theme: ThemeData;
   scripts: ScriptsData;
+  listings: ListingsData;
 }
 
 interface LayoutState {

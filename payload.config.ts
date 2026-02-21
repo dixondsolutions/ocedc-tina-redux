@@ -20,6 +20,7 @@ import { Header } from './globals/Header'
 import { Footer } from './globals/Footer'
 import { Theme } from './globals/Theme'
 import { Scripts } from './globals/Scripts'
+import { Listings } from './globals/Listings'
 
 export default buildConfig({
   admin: {
@@ -67,7 +68,7 @@ export default buildConfig({
     BoardMembers,
     Resources,
   ],
-  globals: [Header, Footer, Theme, Scripts],
+  globals: [Header, Footer, Theme, Scripts, Listings],
   secret: process.env.PAYLOAD_SECRET || 'default-secret-change-me',
   plugins: [
     vercelBlobStorage({
