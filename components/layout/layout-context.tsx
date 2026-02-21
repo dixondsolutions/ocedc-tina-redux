@@ -53,6 +53,9 @@ export interface ScriptsData {
   customScripts?: Array<{
     name?: string | null;
     enabled?: boolean | null;
+    scriptType?: string | null;
+    src?: string | null;
+    dataAttributes?: Array<{ key?: string | null; value?: string | null; id?: string | null }> | null;
     placement?: string | null;
     strategy?: string | null;
     code?: string | null;

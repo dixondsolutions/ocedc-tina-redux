@@ -131,6 +131,61 @@ export const Scripts: GlobalConfig = {
                   defaultValue: true,
                 },
                 {
+                  name: 'scriptType',
+                  type: 'select',
+                  label: 'Script Type',
+                  defaultValue: 'external',
+                  options: [
+                    { label: 'External (src URL)', value: 'external' },
+                    { label: 'Inline Code', value: 'inline' },
+                  ],
+                  admin: {
+                    description:
+                      'External loads a script from a URL. Inline lets you enter raw JavaScript.',
+                  },
+                },
+                {
+                  name: 'src',
+                  type: 'text',
+                  label: 'Script URL',
+                  admin: {
+                    placeholder: 'https://example.com/widget.js',
+                    description: 'The URL of the external script to load.',
+                    condition: (data, siblingData) =>
+                      siblingData?.scriptType === 'external',
+                  },
+                },
+                {
+                  name: 'dataAttributes',
+                  type: 'array',
+                  label: 'Data Attributes',
+                  admin: {
+                    description:
+                      'Add data-* attributes to the script tag (e.g., data-client-id).',
+                    condition: (data, siblingData) =>
+                      siblingData?.scriptType === 'external',
+                  },
+                  fields: [
+                    {
+                      name: 'key',
+                      type: 'text',
+                      label: 'Attribute Name',
+                      required: true,
+                      admin: {
+                        placeholder: 'data-client-id',
+                        description:
+                          'The attribute name including the data- prefix.',
+                      },
+                    },
+                    {
+                      name: 'value',
+                      type: 'text',
+                      label: 'Attribute Value',
+                      required: true,
+                    },
+                  ],
+                },
+                {
                   name: 'placement',
                   type: 'select',
                   label: 'Placement',
@@ -166,11 +221,12 @@ export const Scripts: GlobalConfig = {
                   name: 'code',
                   type: 'code',
                   label: 'Script Code',
-                  required: true,
                   admin: {
                     language: 'javascript',
                     description:
                       'Enter raw JavaScript code (without <script> tags).',
+                    condition: (data, siblingData) =>
+                      siblingData?.scriptType === 'inline',
                   },
                 },
               ],

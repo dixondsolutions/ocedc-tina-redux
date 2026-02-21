@@ -31,15 +31,42 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
       {/* Custom Scripts */}
       {customScripts
-        ?.filter((s) => s?.enabled && s?.code)
-        .map((script) => (
-          <Script
-            key={script.id || script.name}
-            id={`custom-${script.id || script.name?.toLowerCase().replace(/\s+/g, '-')}`}
-            strategy={(script.strategy as 'afterInteractive' | 'lazyOnload') || 'afterInteractive'}
-            dangerouslySetInnerHTML={{ __html: script.code! }}
-          />
-        ))}
+        ?.filter((s) => s?.enabled && (s?.code || s?.src))
+        .map((script) => {
+          const scriptId = `custom-${script.id || script.name?.toLowerCase().replace(/\s+/g, '-')}`
+          const strategy = (script.strategy as 'afterInteractive' | 'lazyOnload') || 'afterInteractive'
+
+          if (script.scriptType === 'external' && script.src) {
+            const dataAttrs: Record<string, string> = {}
+            script.dataAttributes?.forEach((attr) => {
+              if (attr?.key && attr?.value) {
+                dataAttrs[attr.key] = attr.value
+              }
+            })
+            return (
+              <Script
+                key={script.id || script.name}
+                id={scriptId}
+                src={script.src}
+                strategy={strategy}
+                {...dataAttrs}
+              />
+            )
+          }
+
+          if (script.code) {
+            return (
+              <Script
+                key={script.id || script.name}
+                id={scriptId}
+                strategy={strategy}
+                dangerouslySetInnerHTML={{ __html: script.code }}
+              />
+            )
+          }
+
+          return null
+        })}
     </>
   )
 }
