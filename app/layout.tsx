@@ -65,7 +65,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description:
         "Explore shovel-ready sites, target industries, and business support services in Ogle County, Illinois.",
       type: "website",
-      images: [{ url: "/images/ocedc-logo-gold.png", width: 843, height: 595 }],
+      images: [{ url: "/images/ocedc-logo-gold.png", width: 496, height: 207 }],
     },
     twitter: {
       card: "summary_large_image",
@@ -100,7 +100,7 @@ export default async function RootLayout({
 
   const cspContent = [
     `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com${extraSrc}`,
-    `connect-src 'self' https://www.google-analytics.com https://analytics.google.com${extraSrc}`,
+    `connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://*.convex.site${extraSrc}`,
     "img-src 'self' data: blob: https://www.google-analytics.com https://*.public.blob.vercel-storage.com",
   ].join('; ');
 

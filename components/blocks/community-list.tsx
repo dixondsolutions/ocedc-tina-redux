@@ -96,8 +96,8 @@ export const CommunityList = ({ data }: { data: any }) => {
                                         <div>
                                             <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Key Employers</p>
                                             <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
-                                                {community.keyEmployers.slice(0, 3).map((employer: string) => (
-                                                    <li key={employer}>{employer}</li>
+                                                {community.keyEmployers.slice(0, 3).map((employer: any) => (
+                                                    <li key={employer.id || employer.name}>{employer.name}</li>
                                                 ))}
                                             </ul>
                                         </div>
