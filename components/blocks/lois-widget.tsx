@@ -11,7 +11,8 @@ interface LoisWidgetProps {
 }
 
 export const LoisWidget = ({ baseUrl, organizationId, background }: LoisWidgetProps) => {
-  const base = baseUrl.replace(/\/+$/, '');
+  const normalized = /^https?:\/\//i.test(baseUrl) ? baseUrl : `https://${baseUrl}`;
+  const base = normalized.replace(/\/+$/, '');
 
   return (
     <Section background={background}>

@@ -106,7 +106,9 @@ export default async function RootLayout({
   const loisData = listingsData as any;
   if (loisData?.listingsSource === 'lois' && loisData?.lois?.baseUrl) {
     try {
-      const loisOrigin = new URL(loisData.lois.baseUrl).origin;
+      const raw = loisData.lois.baseUrl as string;
+      const withProtocol = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
+      const loisOrigin = new URL(withProtocol).origin;
       loisSrc = ` ${loisOrigin} https://unpkg.com https://fonts.googleapis.com https://fonts.gstatic.com`;
     } catch {
       // skip invalid LOIS URL
