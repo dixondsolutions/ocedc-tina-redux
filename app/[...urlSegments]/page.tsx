@@ -5,6 +5,7 @@ import { getPayload } from 'payload';
 import config from '@payload-config';
 import Layout from '@/components/layout/layout';
 import { Blocks } from '@/components/blocks';
+import { RefreshRouteOnSave } from '@/components/live-preview';
 import { generatePageMetadata } from '@/lib/generate-page-metadata';
 
 export const revalidate = 300;
@@ -50,6 +51,7 @@ export default async function Page({
 
   return (
     <Layout>
+      <RefreshRouteOnSave />
       <Blocks blocks={page.blocks || []} />
     </Layout>
   );

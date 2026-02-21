@@ -7,6 +7,7 @@ import { getPayload } from 'payload';
 import config from '@payload-config';
 import Layout from '@/components/layout/layout';
 import { RichText } from '@/components/rich-text';
+import { RefreshRouteOnSave } from '@/components/live-preview';
 import { generatePageMetadata } from '@/lib/generate-page-metadata';
 
 export const revalidate = 300;
@@ -52,6 +53,7 @@ export default async function PropertyDetailPage({
 
   return (
     <Layout>
+      <RefreshRouteOnSave />
       <section className="bg-default">
         <div className="mx-auto flex max-w-6xl flex-col gap-10 px-6 py-16">
           <div className="space-y-4">

@@ -24,6 +24,30 @@ import { Scripts } from './globals/Scripts'
 export default buildConfig({
   admin: {
     user: 'users',
+    livePreview: {
+      collections: ['pages', 'posts', 'properties', 'communities'],
+      url: ({ data, collectionConfig }) => {
+        const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || ''
+        const slug = data?.slug
+        if (!slug) return `${baseUrl}/`
+
+        const collectionSlug = collectionConfig?.slug
+        if (collectionSlug === 'pages') {
+          return slug === 'home' ? `${baseUrl}/` : `${baseUrl}/${slug}`
+        }
+        const prefixes: Record<string, string> = {
+          posts: '/news',
+          properties: '/properties',
+          communities: '/communities',
+        }
+        return `${baseUrl}${prefixes[collectionSlug ?? ''] ?? ''}/${slug}`
+      },
+      breakpoints: [
+        { label: 'Mobile', name: 'mobile', width: 375, height: 667 },
+        { label: 'Tablet', name: 'tablet', width: 768, height: 1024 },
+        { label: 'Desktop', name: 'desktop', width: 1440, height: 900 },
+      ],
+    },
   },
   editor: lexicalEditor(),
   db: vercelPostgresAdapter({
@@ -55,6 +79,7 @@ export default buildConfig({
     seoPlugin({
       collections: ['pages', 'posts', 'properties', 'communities'],
       uploadsCollection: 'media',
+      tabbedUI: true,
       generateTitle: ({ doc }) =>
         `${(doc as any)?.title || (doc as any)?.name || ''} | Ogle County EDC`,
       generateDescription: ({ doc }) => (doc as any)?.excerpt || '',

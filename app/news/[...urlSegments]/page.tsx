@@ -5,6 +5,7 @@ import { getPayload } from 'payload';
 import config from '@payload-config';
 import Layout from '@/components/layout/layout';
 import PostContent from './post-content';
+import { RefreshRouteOnSave } from '@/components/live-preview';
 import { generatePageMetadata } from '@/lib/generate-page-metadata';
 
 export const revalidate = 300;
@@ -50,6 +51,7 @@ export default async function PostPage({
 
   return (
     <Layout>
+      <RefreshRouteOnSave />
       <div className="pt-32 lg:pt-40">
         <PostContent post={JSON.parse(JSON.stringify(post))} />
       </div>
