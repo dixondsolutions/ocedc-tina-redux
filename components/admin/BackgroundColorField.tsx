@@ -4,9 +4,10 @@ import { useField, FieldLabel } from '@payloadcms/ui'
 import type { SelectFieldClientComponent } from 'payload'
 import { BG_COLOR_HEX_MAP } from './color-map'
 
-function labelToString(label: string | Record<string, string>, fallback: string): string {
+function labelToString(label: unknown, fallback: string): string {
   if (typeof label === 'string') return label
-  return Object.values(label)[0] || fallback
+  if (label && typeof label === 'object') return Object.values(label)[0] || fallback
+  return fallback
 }
 
 export const BackgroundColorField: SelectFieldClientComponent = ({ field, path }) => {
