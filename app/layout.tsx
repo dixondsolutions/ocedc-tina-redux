@@ -31,6 +31,22 @@ const playfair = Playfair_Display({
   variable: "--font-serif",
 });
 
+function getScriptOrigins(scriptsData: any): string[] {
+  const origins = new Set<string>();
+  const customScripts = scriptsData?.customScripts as any[] | undefined;
+  customScripts?.forEach((script) => {
+    if (script?.enabled && script?.scriptType === 'external' && script?.src) {
+      try {
+        const url = new URL(script.src);
+        origins.add(url.origin);
+      } catch {
+        // skip invalid URLs
+      }
+    }
+  });
+  return Array.from(origins);
+}
+
 export async function generateMetadata(): Promise<Metadata> {
   const payload = await getPayload({ config });
   const scriptsData = await payload.findGlobal({ slug: 'scripts' });
@@ -71,13 +87,27 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const payload = await getPayload({ config });
+  const scriptsData = await payload.findGlobal({ slug: 'scripts' });
+  const scriptOrigins = getScriptOrigins(scriptsData);
+  const extraSrc = scriptOrigins.length > 0 ? ' ' + scriptOrigins.join(' ') : '';
+
+  const cspContent = [
+    `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com${extraSrc}`,
+    `connect-src 'self' https://www.google-analytics.com https://analytics.google.com${extraSrc}`,
+    "img-src 'self' data: blob: https://www.google-analytics.com https://*.public.blob.vercel-storage.com",
+  ].join('; ');
+
   return (
     <html lang="en" className={cn(fontSans.variable, nunito.variable, lato.variable, playfair.variable)}>
+      <head>
+        <meta httpEquiv="Content-Security-Policy" content={cspContent} />
+      </head>
       <body className="min-h-screen bg-background font-sans antialiased selection:bg-primary/30">
         <VideoDialogProvider>
           {children}
