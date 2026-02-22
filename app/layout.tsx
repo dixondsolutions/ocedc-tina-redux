@@ -120,7 +120,7 @@ export default async function RootLayout({
     `connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://*.convex.site${extraSrc}`,
     `font-src 'self' https://fonts.gstatic.com`,
     `img-src 'self' data: blob: https://www.google-analytics.com https://*.public.blob.vercel-storage.com`,
-    `frame-src 'self' https://www.google.com https://www.youtube.com${loisFrame}`,
+    `frame-src 'self' https://www.google.com https://www.youtube.com https://responsebase.app https://*.vercel.app${loisFrame}`,
   ].join('; ');
 
   return (
