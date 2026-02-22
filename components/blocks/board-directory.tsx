@@ -21,7 +21,7 @@ type BoardMember = {
   sector?: string | null;
   photo?: any;
   term?: string | null;
-  committees?: (string | null)[] | null;
+  committees?: ({ id?: string | null; name?: string | null } | null)[] | null;
 };
 
 const sectorFilters = [
@@ -184,12 +184,12 @@ export const BoardDirectory = ({ data }: { data: any }) => {
                   <div className="flex flex-wrap gap-2">
                     {member.committees.map(
                       (committee) =>
-                        committee && (
+                        committee?.name && (
                           <span
-                            key={committee}
+                            key={committee.id || committee.name}
                             className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary"
                           >
-                            {committee}
+                            {committee.name}
                           </span>
                         ),
                     )}
