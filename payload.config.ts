@@ -3,7 +3,11 @@ import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { seoPlugin } from '@payloadcms/plugin-seo'
+import { redirectsPlugin } from '@payloadcms/plugin-redirects'
+import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
 import sharp from 'sharp'
+
+import { revalidateRedirects } from './hooks/revalidate-redirects'
 
 import { Media } from './collections/Media'
 import { Users } from './collections/Users'
@@ -95,6 +99,28 @@ export default buildConfig({
         }
         const prefix = prefixes[collectionSlug ?? ''] ?? ''
         return `https://ocedc.org${prefix}/${slug}`
+      },
+    }),
+    redirectsPlugin({
+      collections: ['pages', 'posts', 'properties', 'communities'],
+      overrides: {
+        hooks: {
+          afterChange: [revalidateRedirects],
+        },
+      },
+    }),
+    formBuilderPlugin({
+      fields: {
+        text: true,
+        textarea: true,
+        select: true,
+        email: true,
+        state: true,
+        country: false,
+        checkbox: true,
+        number: true,
+        message: true,
+        payment: false,
       },
     }),
   ],

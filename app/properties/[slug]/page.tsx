@@ -8,9 +8,10 @@ import config from '@payload-config';
 import Layout from '@/components/layout/layout';
 import { RichText } from '@/components/rich-text';
 import { RefreshRouteOnSave } from '@/components/live-preview';
+import { PayloadRedirects } from '@/components/payload-redirects';
 import { generatePageMetadata } from '@/lib/generate-page-metadata';
 
-export const revalidate = 300;
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({
   params,
@@ -46,13 +47,14 @@ export default async function PropertyDetailPage({
 
   const property = docs[0];
   if (!property) {
-    notFound();
+    return <PayloadRedirects url={`/properties/${slug}`} />;
   }
 
   const specSheetUrl = typeof property.specSheet === 'object' && property.specSheet?.url ? property.specSheet.url : null;
 
   return (
     <Layout>
+      <PayloadRedirects disableNotFound url={`/properties/${slug}`} />
       <RefreshRouteOnSave />
       <section className="bg-default">
         <div className="mx-auto flex max-w-6xl flex-col gap-10 px-6 py-16">

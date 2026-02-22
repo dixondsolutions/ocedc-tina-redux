@@ -8,9 +8,10 @@ import config from '@payload-config';
 import Layout from '@/components/layout/layout';
 import { RichText } from '@/components/rich-text';
 import { RefreshRouteOnSave } from '@/components/live-preview';
+import { PayloadRedirects } from '@/components/payload-redirects';
 import { generatePageMetadata } from '@/lib/generate-page-metadata';
 
-export const revalidate = 300;
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({
   params,
@@ -46,11 +47,12 @@ export default async function CommunityDetailPage({
 
   const community = docs[0];
   if (!community) {
-    notFound();
+    return <PayloadRedirects url={`/communities/${slug}`} />;
   }
 
   return (
     <Layout>
+      <PayloadRedirects disableNotFound url={`/communities/${slug}`} />
       <RefreshRouteOnSave />
       <section className="bg-default">
         <div className="mx-auto flex max-w-5xl flex-col gap-10 px-6 py-16">

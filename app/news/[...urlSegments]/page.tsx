@@ -6,9 +6,10 @@ import config from '@payload-config';
 import Layout from '@/components/layout/layout';
 import PostContent from './post-content';
 import { RefreshRouteOnSave } from '@/components/live-preview';
+import { PayloadRedirects } from '@/components/payload-redirects';
 import { generatePageMetadata } from '@/lib/generate-page-metadata';
 
-export const revalidate = 300;
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({
   params,
@@ -46,11 +47,12 @@ export default async function PostPage({
 
   const post = docs[0];
   if (!post) {
-    notFound();
+    return <PayloadRedirects url={`/news/${slug}`} />;
   }
 
   return (
     <Layout>
+      <PayloadRedirects disableNotFound url={`/news/${slug}`} />
       <RefreshRouteOnSave />
       <div className="pt-32 lg:pt-40">
         <PostContent post={JSON.parse(JSON.stringify(post))} />

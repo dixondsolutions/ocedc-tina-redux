@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { autoSlugHook } from '@/hooks/auto-slug'
 import { HeroBlock } from '@/payload-blocks/Hero'
 import { CalloutBlock } from '@/payload-blocks/Callout'
 import { FeaturesBlock } from '@/payload-blocks/Features'
@@ -17,6 +18,7 @@ import { CommunityListBlock } from '@/payload-blocks/CommunityList'
 import { BoardDirectoryBlock } from '@/payload-blocks/BoardDirectory'
 import { ResourceLibraryBlock } from '@/payload-blocks/ResourceLibrary'
 import { PropertyExplorerBlock } from '@/payload-blocks/PropertyExplorer'
+import { FormBuilderBlock } from '@/payload-blocks/FormBuilder'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -43,6 +45,9 @@ export const Pages: CollectionConfig = {
     },
     maxPerDoc: 25,
   },
+  hooks: {
+    beforeChange: [autoSlugHook('title')],
+  },
   fields: [
     {
       name: 'title',
@@ -57,7 +62,7 @@ export const Pages: CollectionConfig = {
       required: true,
       unique: true,
       admin: {
-        description: 'URL path for this page (e.g., "home", "contact", "sites-buildings")',
+        description: 'Auto-generated from title. Edit manually to override.',
       },
     },
     {
@@ -83,6 +88,7 @@ export const Pages: CollectionConfig = {
         BoardDirectoryBlock,
         ResourceLibraryBlock,
         PropertyExplorerBlock,
+        FormBuilderBlock,
       ],
     },
   ],

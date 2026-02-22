@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { autoSlugHook } from '@/hooks/auto-slug'
 
 export const Communities: CollectionConfig = {
   slug: 'communities',
@@ -8,6 +9,9 @@ export const Communities: CollectionConfig = {
   },
   access: {
     read: () => true,
+  },
+  hooks: {
+    beforeChange: [autoSlugHook('name')],
   },
   fields: [
     {

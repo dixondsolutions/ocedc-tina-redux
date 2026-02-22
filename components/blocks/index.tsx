@@ -19,6 +19,7 @@ import { BoardDirectory } from "./board-directory";
 import { ResourceLibrary } from "./resource-library";
 import { PropertyExplorer } from "./property-explorer";
 import { LoisWidget } from "./lois-widget";
+import { FormBuilder } from "./form-builder";
 import { useLayout } from "../layout/layout-context";
 
 interface BlocksProps {
@@ -101,6 +102,8 @@ const Block = (block: any) => {
       ) : (
         <PropertyExplorer data={block} />
       );
+    case "formBuilder":
+      return <FormBuilder data={block} />;
     default:
       return null;
   }

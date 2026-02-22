@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { autoSlugHook } from '@/hooks/auto-slug'
 
 export const Posts: CollectionConfig = {
   slug: 'posts',
@@ -24,6 +25,9 @@ export const Posts: CollectionConfig = {
       schedulePublish: true,
     },
     maxPerDoc: 25,
+  },
+  hooks: {
+    beforeChange: [autoSlugHook('title')],
   },
   fields: [
     {
