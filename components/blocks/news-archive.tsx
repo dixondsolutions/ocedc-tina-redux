@@ -283,8 +283,7 @@ export const NewsArchive = ({ data }: { data: any }) => {
                         </Link>
                       </h3>
 
-                      {/* Excerpt */}
-                      {post.excerpt && (
+                      {post.excerpt ? (
                         <div className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
                           {typeof post.excerpt === 'string' ? (
                             <p>{post.excerpt}</p>
@@ -292,7 +291,7 @@ export const NewsArchive = ({ data }: { data: any }) => {
                             <RichText data={post.excerpt} />
                           )}
                         </div>
-                      )}
+                      ) : null}
 
                       {/* Meta row */}
                       <div className="mt-auto flex items-center gap-3 pt-5 text-xs text-muted-foreground">
