@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import { Section } from '../layout/section'
+import { RichText } from '../rich-text'
 
 const inputClasses =
   'w-full rounded-xl border border-border bg-background px-4 py-3 text-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30 placeholder:text-muted-foreground'
@@ -127,6 +128,37 @@ function NumberField({ field }: { field: any }) {
   )
 }
 
+const US_STATES = [
+  'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA',
+  'HI','ID','IL','IN','IA','KS','KY','LA','ME','MD',
+  'MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ',
+  'NM','NY','NC','ND','OH','OK','OR','PA','RI','SC',
+  'SD','TN','TX','UT','VT','VA','WA','WV','WI','WY','DC',
+]
+
+function StateField({ field }: { field: any }) {
+  return (
+    <div>
+      <label htmlFor={field.name} className={labelClasses}>
+        {field.label}
+        {field.required && '*'}
+      </label>
+      <select
+        id={field.name}
+        name={field.name}
+        required={field.required}
+        defaultValue=""
+        className={inputClasses}
+      >
+        <option value="">Select state...</option>
+        {US_STATES.map((s) => (
+          <option key={s} value={s}>{s}</option>
+        ))}
+      </select>
+    </div>
+  )
+}
+
 const fieldComponents: Record<string, React.FC<{ field: any }>> = {
   text: TextField,
   textarea: TextareaField,
@@ -134,7 +166,7 @@ const fieldComponents: Record<string, React.FC<{ field: any }>> = {
   select: SelectField,
   checkbox: CheckboxField,
   number: NumberField,
-  state: SelectField,
+  state: StateField,
 }
 
 export const FormBuilder = ({ data }: { data: any }) => {
@@ -207,10 +239,19 @@ export const FormBuilder = ({ data }: { data: any }) => {
 
         {submitted && form.confirmationType !== 'redirect' ? (
           <div className="rounded-3xl bg-card p-8 text-center shadow-xl ring-1 ring-border/50 md:p-12">
-            <h3 className="text-2xl font-bold text-foreground">Thank you!</h3>
-            <p className="mt-4 text-muted-foreground">
-              Your submission has been received.
-            </p>
+            {form.confirmationMessage ? (
+              <RichText
+                data={form.confirmationMessage}
+                className="prose prose-sm mx-auto text-foreground"
+              />
+            ) : (
+              <>
+                <h3 className="text-2xl font-bold text-foreground">Thank you!</h3>
+                <p className="mt-4 text-muted-foreground">
+                  Your submission has been received.
+                </p>
+              </>
+            )}
           </div>
         ) : !submitted ? (
           <form
@@ -226,7 +267,7 @@ export const FormBuilder = ({ data }: { data: any }) => {
                       className="col-span-full text-sm text-muted-foreground"
                     >
                       {field.message && (
-                        <p>{typeof field.message === 'string' ? field.message : ''}</p>
+                        <RichText data={field.message} />
                       )}
                     </div>
                   )
