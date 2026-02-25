@@ -31,7 +31,7 @@ function TextField({ field }: { field: any }) {
 
 function TextareaField({ field }: { field: any }) {
   return (
-    <div className="col-span-full">
+    <div>
       <label htmlFor={field.name} className={labelClasses}>
         {field.label}
         {field.required && '*'}
@@ -93,7 +93,7 @@ function SelectField({ field }: { field: any }) {
 
 function CheckboxField({ field }: { field: any }) {
   return (
-    <div className="col-span-full flex items-center gap-2">
+    <div className="flex items-center gap-2">
       <input
         type="checkbox"
         id={field.name}
@@ -167,6 +167,14 @@ const fieldComponents: Record<string, React.FC<{ field: any }>> = {
   checkbox: CheckboxField,
   number: NumberField,
   state: StateField,
+}
+
+/** Fields that default to full-width when no explicit width is set */
+const fullWidthByDefault = new Set(['textarea', 'checkbox', 'message'])
+
+function isFullWidth(field: any): boolean {
+  if (field.width != null) return field.width >= 100
+  return fullWidthByDefault.has(field.blockType)
 }
 
 export const FormBuilder = ({ data }: { data: any }) => {
@@ -274,7 +282,14 @@ export const FormBuilder = ({ data }: { data: any }) => {
                 }
                 const FieldComponent = fieldComponents[field.blockType]
                 if (!FieldComponent) return null
-                return <FieldComponent key={index} field={field} />
+                return (
+                  <div
+                    key={index}
+                    className={isFullWidth(field) ? 'col-span-full' : undefined}
+                  >
+                    <FieldComponent field={field} />
+                  </div>
+                )
               })}
             </div>
 

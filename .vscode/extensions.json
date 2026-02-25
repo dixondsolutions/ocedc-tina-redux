@@ -1,3 +1,7 @@
 {
-	"recommendations": ["graphql.vscode-graphql", "biomejs.biome"]
+	"recommendations": [
+		"graphql.vscode-graphql",
+		"biomejs.biome",
+		"anthropic.claude-code"
+	]
 }

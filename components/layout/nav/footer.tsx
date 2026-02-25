@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Icon } from "../../icon";
@@ -10,6 +10,85 @@ const getLogoUrl = (logo: any): string | null => {
   if (typeof logo === 'string') return null;
   return logo.url || null;
 };
+
+function NewsletterForm({
+  title,
+  description,
+  buttonText,
+}: {
+  title?: string | null;
+  description?: string | null;
+  buttonText?: string | null;
+}) {
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [email, setEmail] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus("loading");
+    setErrorMsg("");
+
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!res.ok) {
+        const body = await res.json();
+        throw new Error(body.error || "Subscription failed.");
+      }
+
+      setStatus("success");
+      setEmail("");
+    } catch (err: any) {
+      setErrorMsg(err.message || "Something went wrong.");
+      setStatus("error");
+    }
+  };
+
+  return (
+    <div className="rounded-2xl bg-white/5 p-6">
+      <h3 className="mb-2 text-lg font-semibold text-white">
+        {title || "Stay Updated"}
+      </h3>
+      {status === "success" ? (
+        <p className="text-sm text-primary">
+          You have been subscribed. Thank you!
+        </p>
+      ) : (
+        <>
+          <p className="mb-4 text-sm text-gray-400">
+            {description ||
+              "Subscribe to our newsletter for the latest economic development news."}
+          </p>
+          <form onSubmit={handleSubmit} className="space-y-2">
+            <input
+              type="email"
+              required
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full rounded-lg border border-white/10 bg-[#1b1f24] px-4 py-2 text-sm text-white placeholder:text-gray-500 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+            />
+            <button
+              type="submit"
+              disabled={status === "loading"}
+              className="w-full rounded-lg bg-primary px-4 py-2 text-sm font-bold text-[#1b1f24] transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
+            >
+              {status === "loading" ? "Subscribing..." : buttonText || "Subscribe"}
+            </button>
+            {status === "error" && (
+              <p className="text-xs text-red-400">{errorMsg}</p>
+            )}
+          </form>
+        </>
+      )}
+    </div>
+  );
+}
 
 export const Footer = () => {
   const { globalSettings } = useLayout();
@@ -25,9 +104,9 @@ export const Footer = () => {
               <Image
                 src={logoUrl}
                 alt="OCEDC - Ogle County Economic Development Corporation"
-                width={180}
-                height={54}
-                className="h-12 w-auto"
+                width={496}
+                height={207}
+                className="h-14 w-auto"
                 unoptimized={logoUrl.startsWith("http")}
               />
             </Link>
@@ -124,28 +203,11 @@ export const Footer = () => {
 
           <div>
             {footer?.newsletter && (
-              <div className="rounded-2xl bg-white/5 p-6">
-                <h3 className="mb-2 text-lg font-semibold text-white">
-                  {footer.newsletter.title || "Stay Updated"}
-                </h3>
-                <p className="mb-4 text-sm text-gray-400">
-                  {footer.newsletter.description ||
-                    "Subscribe to our newsletter for the latest economic development news."}
-                </p>
-                <form className="space-y-2">
-                  <input
-                    type="email"
-                    placeholder="Enter your email"
-                    className="w-full rounded-lg border border-white/10 bg-[#1b1f24] px-4 py-2 text-sm text-white placeholder:text-gray-500 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                  />
-                  <button
-                    type="submit"
-                    className="w-full rounded-lg bg-primary px-4 py-2 text-sm font-bold text-[#1b1f24] transition-transform hover:scale-[1.02] active:scale-[0.98]"
-                  >
-                    {footer.newsletter.buttonText || "Subscribe"}
-                  </button>
-                </form>
-              </div>
+              <NewsletterForm
+                title={footer.newsletter.title}
+                description={footer.newsletter.description}
+                buttonText={footer.newsletter.buttonText}
+              />
             )}
           </div>
         </div>
