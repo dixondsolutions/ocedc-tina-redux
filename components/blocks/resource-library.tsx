@@ -19,7 +19,9 @@ type ResourceRecord = {
   title: string;
   description?: string | null;
   category?: string | null;
+  linkType?: string | null;
   file?: any;
+  url?: string | null;
   date?: string | null;
 };
 
@@ -38,7 +40,9 @@ export const ResourceLibrary = ({ data }: { data: any }) => {
           title: doc.title,
           description: doc.description,
           category: doc.category,
+          linkType: doc.linkType,
           file: doc.file,
+          url: doc.url,
           date: doc.date,
         }));
         setResources(docs as ResourceRecord[]);
@@ -117,6 +121,9 @@ export const ResourceLibrary = ({ data }: { data: any }) => {
           <div className="grid gap-6 md:grid-cols-2">
             {filteredResources.map((resource) => {
               const fileUrl = getMediaUrl(resource.file);
+              const isUrl = resource.linkType === 'url';
+              const href = isUrl ? resource.url : fileUrl;
+              const linkLabel = isUrl ? 'Visit Resource →' : 'Download PDF →';
               return (
               <article
                 key={resource.id}
@@ -133,14 +140,14 @@ export const ResourceLibrary = ({ data }: { data: any }) => {
                 </div>
                 <div className="mt-6 flex items-center justify-between text-sm text-muted-foreground">
                   <span>{resource.date ? format(new Date(resource.date), 'MMM dd, yyyy') : 'Updated quarterly'}</span>
-                  {fileUrl && (
+                  {href && (
                     <a
-                      href={fileUrl}
+                      href={href}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="font-semibold text-primary hover:underline"
                     >
-                      Download PDF →
+                      {linkLabel}
                     </a>
                   )}
                 </div>

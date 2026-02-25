@@ -39,7 +39,11 @@ export const NewsArchiveBlock: Block = {
     {
       name: 'postsToLoad',
       type: 'number',
-      label: 'Posts to Load',
+      label: 'Posts per Page',
+      defaultValue: 9,
+      admin: {
+        description: 'Number of posts to load per page (default: 9)',
+      },
     },
   ],
 }

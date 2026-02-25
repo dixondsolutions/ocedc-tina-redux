@@ -36,10 +36,32 @@ export const Resources: CollectionConfig = {
       ],
     },
     {
+      name: 'linkType',
+      type: 'select',
+      label: 'Link Type',
+      defaultValue: 'file',
+      options: [
+        { label: 'File Upload (PDF)', value: 'file' },
+        { label: 'External URL', value: 'url' },
+      ],
+    },
+    {
       name: 'file',
       type: 'upload',
       label: 'File (PDF)',
       relationTo: 'media',
+      admin: {
+        condition: (data) => data?.linkType !== 'url',
+      },
+    },
+    {
+      name: 'url',
+      type: 'text',
+      label: 'URL',
+      admin: {
+        condition: (data) => data?.linkType === 'url',
+        description: 'External link to the resource',
+      },
     },
     {
       name: 'date',
