@@ -8,6 +8,8 @@ import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
 import sharp from 'sharp'
 
 import { revalidateRedirects } from './hooks/revalidate-redirects'
+import { populateSubmissionFields } from './hooks/populate-submission-fields'
+import { exportSubmissionsCSV } from './endpoints/export-submissions-csv'
 
 import { Media } from './collections/Media'
 import { Users } from './collections/Users'
@@ -121,6 +123,53 @@ export default buildConfig({
         number: true,
         message: true,
         payment: false,
+      },
+      formSubmissionOverrides: {
+        admin: {
+          defaultColumns: ['formTitle', 'submitterName', 'submitterEmail', 'createdAt'],
+          components: {
+            beforeListTable: ['@/components/admin/ExportSubmissions#ExportSubmissions'],
+          },
+        },
+        hooks: {
+          afterRead: [populateSubmissionFields],
+        },
+        fields: ({ defaultFields }) => [
+          ...defaultFields,
+          {
+            name: 'formTitle',
+            type: 'text',
+            label: 'Form',
+            virtual: true,
+            admin: {
+              components: {
+                Cell: '@/components/admin/FormTypePill#FormTypePill',
+              },
+              readOnly: true,
+            },
+          },
+          {
+            name: 'submitterName',
+            type: 'text',
+            label: 'Name',
+            virtual: true,
+            admin: { readOnly: true },
+          },
+          {
+            name: 'submitterEmail',
+            type: 'text',
+            label: 'Email',
+            virtual: true,
+            admin: { readOnly: true },
+          },
+        ],
+        endpoints: [
+          {
+            path: '/export-csv',
+            method: 'get',
+            handler: exportSubmissionsCSV,
+          },
+        ],
       },
     }),
   ],
